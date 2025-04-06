@@ -1,7 +1,8 @@
-<html lang="en"><head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Side Menu</title>
+    <title>Constitution</title>
     <style>
         * {
             margin: 0;
@@ -19,42 +20,7 @@
             flex-grow: 1;
             min-height: 100vh;
         }
-        .menu {
-            width: 18%;
-            height: 100vh;
-            background-color: black;
-            color: white;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            position: fixed;
-            left: 0;
-            top: 0;
-            overflow-y: auto;
-        }
-        .menu h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .menu a {
-            text-decoration: none;
-            color: white;
-            font-size: 18px;
-            display: block;
-            padding: 10px 0;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .menu a:hover::before {
-            content: '\2192';
-            position: absolute;
-            left: -20px;
-            font-size: 18px;
-        }
         .content {
-            margin-left: 18%;
             display: flex;
             flex-grow: 1;
             padding: 20px;
@@ -87,13 +53,6 @@
         .content p {
             font-size: 18px;
             margin-bottom: 10px;
-        }
-        .footer {
-            background-color: black;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            width: 100%;
         }
         .constitutional-tooltip {
             position: relative;
@@ -179,12 +138,6 @@
     </script>
 </head>
 <body>
-    <nav class="menu">
-        <h2>Constitutionally Curious</h2>
-        <a href="#">About Me</a>
-        <a href="https://khanacademy.org" target="_blank">Resources</a>
-        <a href="https://wikipedia.org" target="_blank">More Information</a>
-    </nav>
     <div class="wrapper">
         <div class="content">
             <div class="constitution-column">
@@ -254,7 +207,5 @@
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <p>© 2025 Constitutionally Curious</p>
-    </footer>
-</body></html>
+</body>
+</html>
