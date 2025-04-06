@@ -1,0 +1,262 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Side Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'Times New Roman', serif;
+            background-color: white;
+        }
+        .wrapper {
+            display: flex;
+            flex-grow: 1;
+            min-height: 100vh;
+        }
+        .menu {
+            width: 18%;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        .menu h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .menu a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            display: block;
+            padding: 10px 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .menu a:hover::before {
+            content: '\2192';
+            position: absolute;
+            left: -20px;
+            font-size: 18px;
+        }
+        .content {
+            margin-left: 18%;
+            display: flex;
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .constitution-column {
+            flex: 1;
+            padding-right: 20px;
+        }
+        .interpretation-column {
+            flex: 1;
+            border-left: 2px solid #000;
+            padding-left: 20px;
+            min-height: 100vh;
+        }
+        .content h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .content h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .content h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .content p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+        .constitutional-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: #333;
+            text-decoration: underline;
+        }
+        .tooltip-content {
+            display: none;
+            position: absolute;
+            top: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            max-width: calc(100vw - 20px);
+            background: #fdf5e6;
+            border: 1px solid #c2a06d;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            z-index: 100;
+            animation: fadeIn 0.5s ease-in-out;
+            font-family: 'Times New Roman', serif;
+            font-size: 14px;
+            color: #333;
+        }
+        .tooltip-content::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #fdf5e6 transparent;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .tooltip-text {
+            display: block;
+            margin-bottom: 5px;
+            line-height: 1.4;
+            font-weight: normal;
+        }
+        .tooltip-content a {
+            display: inline-block;
+            background: #ccc;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .tooltip-content a:hover {
+            background: #bbb;
+        }
+        .tooltip-content img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            display: block;
+            margin-bottom: 5px;
+            border-radius: 3px;
+        }
+        .constitutional-tooltip:hover .tooltip-content {
+            display: block;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltips = document.querySelectorAll('.constitutional-tooltip');
+            const sound = new Audio('pop.mp3'); // Replace 'pop.mp3' with your sound file
+
+            tooltips.forEach(tooltip => {
+                tooltip.addEventListener('mouseenter', function() {
+                    sound.play();
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <nav class="menu">
+        <h2>Constitutionally Curious</h2>
+        <a href="#">About Me</a>
+        <a href="https://khanacademy.org" target="_blank">Resources</a>
+        <a href="https://wikipedia.org" target="_blank">More Information</a>
+    </nav>
+    <div class="wrapper">
+        <div class="content">
+            <div class="constitution-column">
+                <h1>The Constitution of the United States</h1>
+
+                <h2>Preamble</h2>
+                <p>We the People of the United States, in Order to form a more perfect Union...</p>
+
+                <h2>Article I</h2>
+                <h3>Section 1 - Legislative Powers</h3>
+                <p>[Full text]</p>
+
+                <h3>Section 2 - The House of Representatives</h3>
+                <p>[Full text]</p>
+
+                <h3>Section 3 - The Senate</h3>
+                <p>[Full text]</p>
+
+                <h3>Section 4 - Elections</h3>
+                <p>[Full text]</p>
+
+                <h2>Article II</h2>
+                <h3>Section 1 - The President</h3>
+                <p>[Full text]</p>
+
+                <h3>Section 2 - Powers</h3>
+                <p>[Full text]</p>
+
+                <h2>Article III</h2>
+                <h3>Section 1 - The Judiciary</h3>
+                <p>[Full text]</p>
+
+                <h3>Section 2 - <span class="constitutional-tooltip">Trial by Jury<div class="tooltip-content">
+                    <img src="https://www.ancient-origins.net/sites/default/files/styles/large/public/trial.jpg?itok=LlsW6eIF" alt="Vintage Trial Image">
+                    <span class="tooltip-text">
+                        Trial by jury is a blatant contrast in comparison to the admirality courts established by Great Britian during the passing of the Sugar Act.
+                    </span>
+                    <a href="https://khanacademy.org" target="_blank">Learn more</a>
+                </div></span></h3>
+                <p>[Full text]</p>
+
+                <h3>Section 3 - Treason</h3>
+                <p>[Full text]</p>
+
+                <h2>Amendments</h2>
+                <h3>Amendment I</h3>
+                <p>[Full text]</p>
+
+                <h3>Amendment II</h3>
+                <p>[Full text]</p>
+
+                <h3>Amendment III</h3>
+                <p>[Full text]</p>
+
+                <h3>Amendment IV</h3>
+                <p>[Full text]</p>
+
+                <h3>Amendment V</h3>
+                <p>[Full text]</p>
+
+                <h3>Amendment VI</h3>
+                <p>[Full text]</p>
+            </div>
+            <div class="interpretation-column">
+                <h2>Commentary</h2>
+                <p>Here you can add your commentary, analysis, or notes related to the Constitution.</p>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>© 2025 Constitutionally Curious</p>
+    </footer>
+</body>
+</html>
