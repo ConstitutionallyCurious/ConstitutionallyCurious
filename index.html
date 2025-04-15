@@ -9,19 +9,24 @@
             padding: 0;
             box-sizing: border-box;
         }
-        body {
+        /* Ensure html and body fill the iframe */
+        html, body {
+            height: 100%;
+            width: 100%;
             display: flex;
             flex-direction: column;
             font-family: 'Times New Roman', serif;
             background-color: white;
-            padding: 20px;
+            overflow: auto; /* Allow scrolling if content overflows */
         }
         .wrapper {
+            flex: 1; /* Stretch to take up available space */
             display: flex;
             flex-direction: column;
             gap: 20px;
             max-width: 800px;
             margin: auto;
+            padding: 20px; /* Add padding for readability */
         }
         .content h1, .content h2, .content h3 {
             font-family: 'UnifrakturMaguntia', cursive;
