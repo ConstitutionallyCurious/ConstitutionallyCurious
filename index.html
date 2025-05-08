@@ -24,8 +24,8 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-width: 800px;
-            margin: auto;
+            width: 100%; /* Make it take the full width */
+            margin: 0; /* Remove auto centering */
             padding: 20px; /* Add padding for readability */
         }
         .content h1, .content h2, .content h3 {
@@ -49,6 +49,7 @@
         .content p {
             font-size: 18px;
             line-height: 1.6;
+            text-align: justify;
         }
         /* Styling for "We the People" tooltip (no button style) */
         .constitutional-tooltip-we-the-people {
@@ -138,7 +139,7 @@
                         <a href="https://example.com" target="_blank">Learn more</a>
                     </span>
                 </span>
-                &nbsp;of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.
+                &nbsp;of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and[...]
             </p>
 
             <!-- Articles -->
@@ -200,10 +201,10 @@
                 <span class="constitutional-tooltip">
                     <b>involuntary servitude</b>
                     <span class="tooltip-content">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Contract_between_Rachel_Greene_and_Isabella_Greene.jpg" alt="Contract between Rachel Greene and Isabella Greene">
-                        <span>Many poor white Europeans emigrated to the Americas as indentured servants. They played a pivotal role in independence but were left out of the constitution until 1865.</span>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Contract_between_Rachel_Greene_and_Isabella_Greene.jpg" alt="Contract between Rachel Greene and Isabella Gree[...]
+                        <span>Many poor white Europeans emigrated to the Americas as indentured servants. They played a pivotal role in independence but were left out of the constitution until 18[...]
                         <br>
-                        <a href="https://sites.google.com/view/constitutionallycurious/private-archives/amendment-13/indentured-servitude-the-poor-whites-of-colonial-america?authuser=1" target="_blank">Learn more</a>
+                        <a href="https://sites.google.com/view/constitutionallycurious/private-archives/amendment-13/indentured-servitude-the-poor-whites-of-colonial-america?authuser=1" target="_[...]
                     </span>
                 </span>, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States, or any place subject to their jurisdiction.</p>
             <h3>Section 2</h3>
@@ -224,5 +225,4 @@
             <h2>Amendment 27</h2>
         </div>
     </div>
-
 </body></html>
