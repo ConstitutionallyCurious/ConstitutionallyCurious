@@ -1,84 +1,133 @@
-<html lang="en"><head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Constitution</title>
-    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet">
+    <title>The Constitution</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        /* Ensure html and body fill the iframe */
-        html, body {
-            height: 100%;
-            width: 100%;
+        body {
             display: flex;
             flex-direction: column;
             font-family: 'Times New Roman', serif;
             background-color: white;
-            overflow: auto; /* Allow scrolling if content overflows */
         }
         .wrapper {
-            flex: 1; /* Stretch to take up available space */
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            width: 100%; /* Make it take the full width */
-            margin: 0; /* Remove auto centering */
-            padding: 20px; /* Add padding for readability */
+            flex-grow: 1;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .content h1, .content h2, .content h3 {
-            font-family: 'UnifrakturMaguntia', cursive;
+        .toggle-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .toggle-label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background-color: #ccc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .toggle-switch:before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 19px;
+            height: 19px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease-in-out;
+        }
+        .toggle-switch.active {
+            background-color: #4caf50;
+        }
+        .toggle-switch.active:before {
+            transform: translateX(25px);
         }
         .content h1 {
-            font-size: 28px; /* Unified size for Articles and Amendments */
+            font-size: 32px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
         .content h2 {
-            font-size: 22px; /* Unified size for Sections under Articles and Amendments */
+            font-size: 28px;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 20px;
         }
         .content h3 {
-            font-size: 20px; /* Unified size for Sections within Amendments */
+            font-size: 24px;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         .content p {
             font-size: 18px;
-            line-height: 1.6;
-            text-align: justify;
+            margin-bottom: 10px;
         }
-        /* Styling for "We the People" tooltip (no button style) */
-        .constitutional-tooltip-we-the-people {
+        .interpretation {
+            font-size: 16px;
+            color: gray;
+            display: block; /* Default to visible since toggle is on by default */
+            margin-top: 5px;
+        }
+        .constitutional-tooltip {
             position: relative;
             display: inline-block;
             cursor: pointer;
-            color: #000;
-            font-family: 'UnifrakturMaguntia', cursive;
-            font-size: 32px;
-            font-weight: bold;
-            margin-right: 0.5em;
-        }
-        .constitutional-tooltip-we-the-people:hover {
-            transform: scale(1.1);
+            color: #333;
+            text-decoration: underline;
         }
         .tooltip-content {
             display: none;
             position: absolute;
-            padding: 10px;
+            top: 130%;
+            left: 50%;
+            transform: translateX(-50%);
             width: 300px;
+            max-width: calc(100vw - 20px);
             background: #fdf5e6;
             border: 1px solid #c2a06d;
+            padding: 10px;
             border-radius: 5px;
             box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            z-index: 100;
+            animation: fadeIn 0.5s ease-in-out;
             font-family: 'Times New Roman', serif;
             font-size: 14px;
             color: #333;
-            z-index: 1000;
-            white-space: normal;
+        }
+        .tooltip-content::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #fdf5e6 transparent;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .tooltip-text {
+            display: block;
+            margin-bottom: 5px;
+            line-height: 1.4;
             font-weight: normal;
         }
         .tooltip-content img {
@@ -89,140 +138,71 @@
             margin-bottom: 5px;
             border-radius: 3px;
         }
-        .tooltip-content a {
-            display: inline-block;
-            background: #ccc;
-            color: #333;
-            padding: 5px 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .tooltip-content a:hover {
-            background: #bbb;
-        }
-        .constitutional-tooltip-we-the-people:hover .tooltip-content {
-            display: block;
-        }
-        /* Styling for all future tooltips with button-style format */
-        .constitutional-tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-            font-weight: bold; /* Bold to indicate tooltip */
-            background: #f0f0f0; /* Gray background for button style */
-            padding: 2px 5px; /* Padding for button effect */
-            border-radius: 4px; /* Rounded corners */
-            transition: transform 0.2s ease-in-out, background 0.2s ease-in-out; /* Smooth hover effects */
-        }
-        .constitutional-tooltip:hover {
-            text-decoration: none; /* Remove underline on hover */
-            transform: scale(1.1); /* Enlarge on hover */
-            background: #e0e0e0; /* Slightly darker gray on hover */
-        }
         .constitutional-tooltip:hover .tooltip-content {
             display: block;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleSwitch = document.querySelector('.toggle-switch');
+            const interpretations = document.querySelectorAll('.interpretation');
+
+            toggleSwitch.addEventListener('click', function() {
+                toggleSwitch.classList.toggle('active');
+                const showInterpretations = toggleSwitch.classList.contains('active');
+                interpretations.forEach(interpretation => {
+                    interpretation.style.display = showInterpretations ? 'block' : 'none';
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="wrapper">
+        <!-- Toggle Switch -->
+        <div class="toggle-container">
+            <span class="toggle-label">Interpretation</span>
+            <div class="toggle-switch active"></div>
+        </div>
+
+        <!-- Content -->
         <div class="content">
-            <!-- Preamble -->
+            <h1>The Constitution of the United States</h1>
+
+            <h2>Preamble</h2>
+            <p>We the People of the United States, in Order to form a more perfect Union...</p>
+            <span class="interpretation">[Interpretation for the Preamble]</span>
+
+            <h2>Article I</h2>
+            <h3>Section 1 - Legislative Powers</h3>
+            <p>All legislative Powers herein granted shall be vested in a Congress of the United States...</p>
+            <span class="interpretation">[Interpretation for Section 1]</span>
+
+            <h3>Section 2 - The House of Representatives</h3>
+            <p>The House of Representatives shall be composed of Members chosen every second Year...</p>
+            <span class="interpretation">[Interpretation for Section 2]</span>
+
+            <h3>Section 3 - The Senate</h3>
+            <p>The Senate of the United States shall be composed of two Senators from each State...</p>
+            <span class="interpretation">[Interpretation for Section 3]</span>
+
+            <h2>Amendments</h2>
+            <h3>Amendment XIII</h3>
             <p>
-                <span class="constitutional-tooltip-we-the-people">
-                    We the People
-                    <span class="tooltip-content">
-                        <img src="placeholder-image.jpg" alt="Placeholder Image">
-                        <span>This is a placeholder description for the tooltip. It provides context and information.</span>
-                        <br>
-                        <a href="https://example.com" target="_blank">Learn more</a>
-                    </span>
-                </span>
-                &nbsp;of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and[...]
-            </p>
-
-            <!-- Articles -->
-            <h1>Article 1</h1>
-            <h2>Section 1</h2>
-            <h2>Section 2</h2>
-            <h2>Section 3</h2>
-            <h2>Section 4</h2>
-            <h2>Section 5</h2>
-            <h2>Section 6</h2>
-            <h2>Section 7</h2>
-            <h2>Section 8</h2>
-            <h2>Section 9</h2>
-            <h2>Section 10</h2>
-
-            <h1>Article 2</h1>
-            <h2>Section 1</h2>
-            <h2>Section 2</h2>
-            <h2>Section 3</h2>
-            <h2>Section 4</h2>
-
-            <h1>Article 3</h1>
-            <h2>Section 1</h2>
-            <h2>Section 2</h2>
-            <h2>Section 3</h2>
-
-            <h1>Article 4</h1>
-            <h2>Section 1</h2>
-            <h2>Section 2</h2>
-            <h2>Section 3</h2>
-            <h2>Section 4</h2>
-
-            <h1>Article 5</h1>
-            <h2>Section 1</h2>
-
-            <h1>Article 6</h1>
-            <h2>Section 1</h2>
-
-            <h1>Article 7</h1>
-            <h2>Section 1</h2>
-
-            <!-- Amendments -->
-            <h1>Amendments</h1>
-            <h2>Amendment 1</h2>
-            <h2>Amendment 2</h2>
-            <h2>Amendment 3</h2>
-            <h2>Amendment 4</h2>
-            <h2>Amendment 5</h2>
-            <h2>Amendment 6</h2>
-            <h2>Amendment 7</h2>
-            <h2>Amendment 8</h2>
-            <h2>Amendment 9</h2>
-            <h2>Amendment 10</h2>
-            <h2>Amendment 11</h2>
-            <h2>Amendment 12</h2>
-            <h2>Amendment 13</h2>
-            <h3>Section 1</h3>
-            <p>Neither slavery nor 
+                Neither slavery nor involuntary servitude, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
                 <span class="constitutional-tooltip">
-                    <b>involuntary servitude</b>
-                    <span class="tooltip-content">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Contract_between_Rachel_Greene_and_Isabella_Greene.jpg" alt="Contract between Rachel Greene and Isabella Gree[...]
-                        <span>Many poor white Europeans emigrated to the Americas as indentured servants. They played a pivotal role in independence but were left out of the constitution until 18[...]
-                        <br>
-                        <a href="https://sites.google.com/view/constitutionallycurious/private-archives/amendment-13/indentured-servitude-the-poor-whites-of-colonial-america?authuser=1" target="_[...]
-                    </span>
-                </span>, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States, or any place subject to their jurisdiction.</p>
-            <h3>Section 2</h3>
-            <p>Congress shall have power to enforce this article by appropriate legislation.</p>
-            <h2>Amendment 14</h2>
-            <h2>Amendment 15</h2>
-            <h2>Amendment 16</h2>
-            <h2>Amendment 17</h2>
-            <h2>Amendment 18</h2>
-            <h2>Amendment 19</h2>
-            <h2>Amendment 20</h2>
-            <h2>Amendment 21</h2>
-            <h2>Amendment 22</h2>
-            <h2>Amendment 23</h2>
-            <h2>Amendment 24</h2>
-            <h2>Amendment 25</h2>
-            <h2>Amendment 26</h2>
-            <h2>Amendment 27</h2>
+                    Learn More
+                    <div class="tooltip-content">
+                        <img src="https://www.example.com/amendment13.jpg" alt="Historical Image of Amendment XIII">
+                        <p>This amendment abolished slavery in the United States. It was a pivotal moment in American history, marking the end of an institution that had existed for centuries.</p>
+                    </div>
+                </span>
+            </p>
+            <span class="interpretation">[Interpretation for Amendment XIII]</span>
         </div>
     </div>
-</body></html>
+    <footer class="footer">
+        <p>© 2025 Constitutionally Curious</p>
+    </footer>
+</body>
+</html>
