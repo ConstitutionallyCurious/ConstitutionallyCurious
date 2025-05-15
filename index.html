@@ -408,5 +408,112 @@ window.addEventListener('resize', () => {
   if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
 });
 </script>
+    <script>
+const tooltip = document.getElementById('tidbit-tooltip');
+const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
+const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
+const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
+const audio = document.getElementById('tooltip-audio');
+
+let currentTrigger = null;
+let hideTimeout = null;
+let mouseOverTrigger = false;
+let mouseOverTooltip = false;
+
+function positionTooltip(trigger) {
+  const rect = trigger.getBoundingClientRect();
+  tooltip.style.display = 'flex';
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const padding = 12;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let top, left;
+  if (rect.bottom + tooltipRect.height + padding < vh) {
+    top = rect.bottom + window.scrollY + padding;
+    left = rect.left + window.scrollX + (rect.width - tooltipRect.width)/2;
+    if (left < 0) left = padding;
+    if (left + tooltipRect.width > vw)
+      left = vw - tooltipRect.width - padding;
+  } else if (rect.top - tooltipRect.height - padding > 0) {
+    top = rect.top + window.scrollY - tooltipRect.height - padding;
+    left = rect.left + window.scrollX + (rect.width - tooltipRect.width)/2;
+    if (left < 0) left = padding;
+    if (left + tooltipRect.width > vw)
+      left = vw - tooltipRect.width - padding;
+  } else if (rect.right + tooltipRect.width + padding < vw) {
+    top = rect.top + window.scrollY + (rect.height - tooltipRect.height)/2;
+    left = rect.right + window.scrollX + padding;
+    if (top < 0) top = padding;
+    if (top + tooltipRect.height > vh)
+      top = vh - tooltipRect.height - padding;
+  } else if (rect.left - tooltipRect.width - padding > 0) {
+    top = rect.top + window.scrollY + (rect.height - tooltipRect.height)/2;
+    left = rect.left + window.scrollX - tooltipRect.width - padding;
+    if (top < 0) top = padding;
+    if (top + tooltipRect.height > vh)
+      top = vh - tooltipRect.height - padding;
+  } else {
+    top = Math.max((vh - tooltipRect.height)/2, padding) + window.scrollY;
+    left = Math.max((vw - tooltipRect.width)/2, padding) + window.scrollX;
+  }
+  tooltip.style.top = `${top}px`;
+  tooltip.style.left = `${left}px`;
+}
+
+function showTooltip(trigger) {
+  clearTimeout(hideTimeout);
+  currentTrigger = trigger;
+  tooltipImg.src = trigger.getAttribute('data-img') || '';
+  tooltipText.textContent = trigger.getAttribute('data-text') || '';
+  tooltipBtn.onclick = () => window.open(trigger.getAttribute('data-link') || '#', '_blank');
+  const btnPos = trigger.getAttribute('data-btn-pos') || 'bottom';
+  tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
+  tooltip.style.display = 'flex';
+  setTimeout(() => tooltip.classList.add('visible'), 10);
+  audio.currentTime = 0; audio.play();
+  positionTooltip(trigger);
+}
+
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+  hideTimeout = setTimeout(() => { 
+    tooltip.style.display = 'none'; 
+    currentTrigger = null; 
+  }, 100);
+}
+
+// Attach events to all triggers
+document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
+  el.addEventListener('mouseenter', function() {
+    mouseOverTrigger = true;
+    showTooltip(el);
+  });
+  el.addEventListener('mouseleave', function() {
+    mouseOverTrigger = false;
+    setTimeout(() => {
+      if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+    }, 10);
+  });
+});
+
+// Tooltip stays visible if hovered
+tooltip.addEventListener('mouseenter', function() {
+  mouseOverTooltip = true;
+  clearTimeout(hideTimeout);
+});
+tooltip.addEventListener('mouseleave', function() {
+  mouseOverTooltip = false;
+  setTimeout(() => {
+    if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+  }, 10);
+});
+
+// Reposition on scroll/resize
+window.addEventListener('scroll', () => {
+  if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
+});
+window.addEventListener('resize', () => {
+  if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
+});
+</script>
 </body>
 </html>
