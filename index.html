@@ -298,16 +298,18 @@
             <h3>Amendment XIII</h3>
             <p>
                 Neither slavery nor
-                <span class="tidbit-tooltip-wrapper"
-  data-img="https://designshack.net/wp-content/uploads/placehold.jpg"
-  data-text="This is a tid-bit about the Constitution."
-  data-link="https://example.com"
-  data-btn-pos="bottom"><span class = "tidbit-tooltip-wrapper" ...><b><u></u>                   
-  involuntary servitude
-    <div class ="tidbit-tooltip-bridge"></div>
-</span></span> 
-        </b>
-        </u>
+               <p>
+  Neither slavery nor
+  <span class="tidbit-tooltip-wrapper"
+    data-img="https://designshack.net/wp-content/uploads/placehold.jpg"
+    data-text="This is a tid-bit about the Constitution."
+    data-link="https://example.com"
+    data-btn-pos="bottom">
+      <b><u>involuntary servitude</u></b>
+      <div class="tidbit-tooltip-bridge"></div>
+  </span> 
+  ...
+</p>
 , except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
                
             <span class="interpretation">[Interpretation for Amendment XIII]</span>
@@ -322,6 +324,7 @@
   <button class="tidbit-tooltip-btn btn-bottom">Learn More</button>
 </div>
 <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
+// Tidbit Tooltip with "Bridge" Anti-Gap Logic
 <script>
 const tooltip = document.getElementById('tidbit-tooltip');
 const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
@@ -334,43 +337,34 @@ let hideTimeout = null;
 let mouseOverTrigger = false;
 let mouseOverTooltip = false;
 
+// Position the tooltip right below the trigger
 function positionTooltip(trigger) {
   const rect = trigger.getBoundingClientRect();
-  tooltip.style.display = 'flex'; // ensure visible for measurement
+  tooltip.style.display = 'flex';
   const tooltipRect = tooltip.getBoundingClientRect();
-  const padding = 0;
-  const vw = window.innerWidth, vh = window.innerHeight;
-  let top, left;
-  if (rect.bottom + tooltipRect.height + padding < vh) {
-    top = rect.bottom + window.scrollY + padding;
-    left = rect.left + window.scrollX + (rect.width - tooltipRect.width)/2;
-    if (left < 0) left = padding;
-    if (left + tooltipRect.width > vw)
-      left = vw - tooltipRect.width - padding;
-  } else if (rect.top - tooltipRect.height - padding > 0) {
-    top = rect.top + window.scrollY - tooltipRect.height - padding;
-    left = rect.left + window.scrollX + (rect.width - tooltipRect.width)/2;
-    if (left < 0) left = padding;
-    if (left + tooltipRect.width > vw)
-      left = vw - tooltipRect.width - padding;
-  } else if (rect.right + tooltipRect.width + padding < vw) {
-    top = rect.top + window.scrollY + (rect.height - tooltipRect.height)/2;
-    left = rect.right + window.scrollX + padding;
-    if (top < 0) top = padding;
-    if (top + tooltipRect.height > vh)
-      top = vh - tooltipRect.height - padding;
-  } else if (rect.left - tooltipRect.width - padding > 0) {
-    top = rect.top + window.scrollY + (rect.height - tooltipRect.height)/2;
-    left = rect.left + window.scrollX - tooltipRect.width - padding;
-    if (top < 0) top = padding;
-    if (top + tooltipRect.height > vh)
-      top = vh - tooltipRect.height - padding;
-  } else {
-    top = Math.max((vh - tooltipRect.height)/2, padding) + window.scrollY;
-    left = Math.max((vw - tooltipRect.width)/2, padding) + window.scrollX;
-  }
+  const top = rect.bottom + window.scrollY;
+  const left = rect.left + window.scrollX + (rect.width - tooltipRect.width) / 2;
   tooltip.style.top = `${top}px`;
   tooltip.style.left = `${left}px`;
+}
+
+// Position the invisible bridge between trigger and tooltip
+function positionBridge(trigger, tooltip) {
+  const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
+  if (!bridge) return;
+  const triggerRect = trigger.getBoundingClientRect();
+  const tooltipRect = tooltip.getBoundingClientRect();
+  // Height: vertical gap between trigger's bottom and tooltip's top
+  let distance = tooltipRect.top - triggerRect.bottom;
+  if (distance < 0) distance = 0;
+  bridge.style.position = "absolute";
+  bridge.style.top = (trigger.offsetHeight) + "px";
+  bridge.style.height = distance + "px";
+  bridge.style.left = 0;
+  bridge.style.width = "100%";
+  bridge.style.background = "transparent";
+  bridge.style.pointerEvents = "auto";
+  bridge.style.zIndex = 999;
 }
 
 function showTooltip(trigger) {
@@ -384,9 +378,10 @@ function showTooltip(trigger) {
   tooltip.style.display = 'flex';
   setTimeout(() => tooltip.classList.add('visible'), 10);
   audio.currentTime = 0; audio.play();
-  positionTooltip(trigger);            // Position the tooltip
-  positionBridge(trigger, tooltip);    // Position the bridge directly after
-  // Attach bridge listeners (see below)
+  positionTooltip(trigger);
+  positionBridge(trigger, tooltip);
+
+  // Always (re-)attach bridge handlers
   const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
   if (bridge) {
     bridge.onmouseenter = function() {
@@ -404,17 +399,13 @@ function showTooltip(trigger) {
 
 function hideTooltip() {
   tooltip.classList.remove('visible');
-  hideTimeout = setTimeout(() => { 
-    tooltip.style.display = 'none'; 
-    currentTrigger = null; 
+  hideTimeout = setTimeout(() => {
+    tooltip.style.display = 'none';
+    currentTrigger = null;
   }, 100);
 }
-function positionTooltip(trigger) {
-  const rect = trigger.getBoundingClientRect();
-  tooltip.style.top = `${rect.bottom + window.scrollY}px`;
-  tooltip.style.left = `${rect.left + window.scrollX}px`;
-}
-// Attach events to all triggers
+
+// Event listeners for all triggers and their bridges
 document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
   el.addEventListener('mouseenter', function() {
     mouseOverTrigger = true;
@@ -426,129 +417,23 @@ document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
       if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
     }, 10);
   });
-    const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
-if (bridge) {
-  bridge.addEventListener('mouseenter', function() {
-    mouseOverTrigger = true;
-    clearTimeout(hideTimeout);
-  });
-  bridge.addEventListener('mouseleave', function() {
-    mouseOverTrigger = false;
-    setTimeout(() => {
-      if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-    }, 10);
-  });
-}
-});
-
-// Tooltip stays visible if hovered
-tooltip.addEventListener('mouseenter', function() {
-  mouseOverTooltip = true;
-  clearTimeout(hideTimeout);
-});
-tooltip.addEventListener('mouseleave', function() {
-  mouseOverTooltip = false;
-  setTimeout(() => {
-    if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-  }, 10);
-});
-
-// Reposition on scroll/resize
-window.addEventListener('scroll', () => {
-  if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
-});
-window.addEventListener('resize', () => {
-  if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
-});
-</script>
-    <script>
-const tooltip = document.getElementById('tidbit-tooltip');
-const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
-const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
-const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
-const audio = document.getElementById('tooltip-audio');
-
-let currentTrigger = null;
-let hideTimeout = null;
-let mouseOverTrigger = false;
-let mouseOverTooltip = false;
-
-function positionTooltip(trigger) {
-  const rect = trigger.getBoundingClientRect();
-  tooltip.style.display = 'flex';
-  const tooltipRect = tooltip.getBoundingClientRect();
-  const padding = 12;
-  const vw = window.innerWidth, vh = window.innerHeight;
-  let top, left;
-  if (rect.bottom + tooltipRect.height + padding < vh) {
-    top = rect.bottom + window.scrollY + padding;
-    left = rect.left + window.scrollX + (rect.width - tooltipRect.width)/2;
-    if (left < 0) left = padding;
-    if (left + tooltipRect.width > vw)
-      left = vw - tooltipRect.width - padding;
-  } else if (rect.top - tooltipRect.height - padding > 0) {
-    top = rect.top + window.scrollY - tooltipRect.height - padding;
-    left = rect.left + window.scrollX + (rect.width - tooltipRect.width)/2;
-    if (left < 0) left = padding;
-    if (left + tooltipRect.width > vw)
-      left = vw - tooltipRect.width - padding;
-  } else if (rect.right + tooltipRect.width + padding < vw) {
-    top = rect.top + window.scrollY + (rect.height - tooltipRect.height)/2;
-    left = rect.right + window.scrollX + padding;
-    if (top < 0) top = padding;
-    if (top + tooltipRect.height > vh)
-      top = vh - tooltipRect.height - padding;
-  } else if (rect.left - tooltipRect.width - padding > 0) {
-    top = rect.top + window.scrollY + (rect.height - tooltipRect.height)/2;
-    left = rect.left + window.scrollX - tooltipRect.width - padding;
-    if (top < 0) top = padding;
-    if (top + tooltipRect.height > vh)
-      top = vh - tooltipRect.height - padding;
-  } else {
-    top = Math.max((vh - tooltipRect.height)/2, padding) + window.scrollY;
-    left = Math.max((vw - tooltipRect.width)/2, padding) + window.scrollX;
+  // Attach bridge listeners at startup for robustness
+  const bridge = el.querySelector('.tidbit-tooltip-bridge');
+  if (bridge) {
+    bridge.onmouseenter = function() {
+      mouseOverTrigger = true;
+      clearTimeout(hideTimeout);
+    };
+    bridge.onmouseleave = function() {
+      mouseOverTrigger = false;
+      setTimeout(() => {
+        if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+      }, 10);
+    };
   }
-  tooltip.style.top = `${top}px`;
-  tooltip.style.left = `${left}px`;
-}
-
-function showTooltip(trigger) {
-  clearTimeout(hideTimeout);
-  currentTrigger = trigger;
-  tooltipImg.src = trigger.getAttribute('data-img') || '';
-  tooltipText.textContent = trigger.getAttribute('data-text') || '';
-  tooltipBtn.onclick = () => window.open(trigger.getAttribute('data-link') || '#', '_blank');
-  const btnPos = trigger.getAttribute('data-btn-pos') || 'bottom';
-  tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
-  tooltip.style.display = 'flex';
-  setTimeout(() => tooltip.classList.add('visible'), 10);
-  audio.currentTime = 0; audio.play();
-  positionTooltip(trigger);
-}
-
-function hideTooltip() {
-  tooltip.classList.remove('visible');
-  hideTimeout = setTimeout(() => { 
-    tooltip.style.display = 'none'; 
-    currentTrigger = null; 
-  }, 100);
-}
-
-// Attach events to all triggers
-document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
-  el.addEventListener('mouseenter', function() {
-    mouseOverTrigger = true;
-    showTooltip(el);
-  });
-  el.addEventListener('mouseleave', function() {
-    mouseOverTrigger = false;
-    setTimeout(() => {
-      if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-    }, 10);
-  });
 });
 
-// Tooltip stays visible if hovered
+// Tooltip hover handlers
 tooltip.addEventListener('mouseenter', function() {
   mouseOverTooltip = true;
   clearTimeout(hideTimeout);
@@ -560,12 +445,18 @@ tooltip.addEventListener('mouseleave', function() {
   }, 10);
 });
 
-// Reposition on scroll/resize
+// Reposition on scroll/resize (for floating tooltips)
 window.addEventListener('scroll', () => {
-  if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
+  if (currentTrigger && tooltip.classList.contains('visible')) {
+    positionTooltip(currentTrigger);
+    positionBridge(currentTrigger, tooltip);
+  }
 });
 window.addEventListener('resize', () => {
-  if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
+  if (currentTrigger && tooltip.classList.contains('visible')) {
+    positionTooltip(currentTrigger);
+    positionBridge(currentTrigger, tooltip);
+  }
 });
 </script>
 </body>
