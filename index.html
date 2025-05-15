@@ -155,6 +155,74 @@
   font-family: 'WeThePeople', cursive;
   font-size: 3.0em;
 }
+         .tidbit-tooltip-wrapper {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+    }
+    .tidbit-tooltip-box {
+      position: fixed;
+      z-index: 1000;
+      min-width: 250px;
+      max-width: 320px;
+      min-height: 180px;
+      background: #fff;
+      border: 1px solid #888;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      padding: 16px;
+      font-size: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .tidbit-tooltip-box.visible {
+      opacity: 1;
+      pointer-events: auto;
+      animation: fadeIn 0.3s;
+    }
+    .tidbit-tooltip-img {
+      width: 100%;
+      height: 96px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
+    .tidbit-tooltip-text {
+      width: 100%;
+      margin: 0;
+      text-align: center;
+      flex-grow: 0;
+    }
+    .tidbit-tooltip-btn {
+      background: #a0a0a0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.2s;
+      align-self: center;
+    }
+    .tidbit-tooltip-btn:hover {
+      background: #767676;
+    }
+    .btn-top    { order: -1; align-self: center; margin-bottom: 8px; margin-top: 0; }
+    .btn-bottom { order: 99; align-self: center; margin-top: 8px; margin-bottom: 0; }
+    .btn-left   { order: 1; align-self: flex-start; margin-right: auto; }
+    .btn-right  { order: 1; align-self: flex-end; margin-left: auto; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -208,7 +276,11 @@
             <h2>Amendments</h2>
             <h3>Amendment XIII</h3>
             <p>
-                Neither slavery nor involuntary servitude, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
+                Neither slavery nor  <span class="tidbit-tooltip-wrapper"
+    data-img="https://designshack.net/wp-content/uploads/placehold.jpg"
+    data-text="This is a tid-bit about the Constitution."
+    data-link="https://example.com"
+    data-btn-pos="bottom"> involuntary servitude </span>, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
                 <span class="constitutional-tooltip">
                     Learn More
                     <div class="tooltip-content">
