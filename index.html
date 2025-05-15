@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Jacquard+24&display=swap" rel="stylesheet">
     <title>The Constitution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jacquard+24&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -85,180 +86,108 @@
             display: block; /* Default to visible since toggle is on by default */
             margin-top: 5px;
         }
-        .constitutional-tooltip {
-            position: relative;
+        .jacquard {
+            font-family: 'Jacquard 24', cursive;
+        }
+        @font-face {
+            font-family: 'WeThePeople';
+            src: url('fonts/WeThePeople.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        .wethepeople {
+            font-family: 'WeThePeople', cursive;
+            font-size: 3.0em;
+        }
+        .tidbit-tooltip-wrapper {
             display: inline-block;
+            position: relative;
             cursor: pointer;
-            color: #333;
-            text-decoration: underline;
         }
-        .tooltip-content {
-            display: none;
-            position: absolute;
-            top: 130%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            max-width: calc(100vw - 20px);
-            background: #fdf5e6;
-            border: 1px solid #c2a06d;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
-            z-index: 100;
-            animation: fadeIn 0.5s ease-in-out;
-            font-family: 'Times New Roman', serif;
-            font-size: 14px;
-            color: #333;
+        .tidbit-tooltip-box {
+            position: fixed;
+            z-index: 1000;
+            min-width: 250px;
+            max-width: 320px;
+            min-height: 180px;
+            background: #fff;
+            border: 1px solid #888;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            padding: 16px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-        .tooltip-content::before {
-            content: "";
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 0 10px 10px 10px;
-            border-style: solid;
-            border-color: transparent transparent #fdf5e6 transparent;
+        .tidbit-tooltip-box.visible {
+            opacity: 1;
+            pointer-events: auto;
+            animation: fadeIn 0.3s;
         }
+        .tidbit-tooltip-img {
+            width: 100%;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+        .tidbit-tooltip-text {
+            width: 100%;
+            margin: 0;
+            text-align: center;
+            flex-grow: 0;
+        }
+        .tidbit-tooltip-btn {
+            background: #a0a0a0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 18px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: background 0.2s;
+            align-self: center;
+            z-index: 1002;
+        }
+        .tidbit-tooltip-btn:hover {
+            background: #767676;
+        }
+        .btn-top    { order: -1; align-self: center; margin-bottom: 8px; margin-top: 0; }
+        .btn-bottom { order: 99; align-self: center; margin-top: 8px; margin-bottom: 0; }
+        .btn-left   { order: 1; align-self: flex-start; margin-right: auto; }
+        .btn-right  { order: 1; align-self: flex-end; margin-left: auto; }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .tooltip-text {
-            display: block;
-            margin-bottom: 5px;
-            line-height: 1.4;
-            font-weight: normal;
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
         }
         .tidbit-tooltip-bridge {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 18px;
-  /* height = distance between trigger bottom and tooltip top */
-  background: transparent;
-  pointer-events: auto;
-  z-index: 999;
-}
-        .tooltip-content img {
-            width: 100%;
-            height: auto;
-            max-height: 150px;
-            display: block;
-            margin-bottom: 5px;
-            border-radius: 3px;
+            position: absolute;
+            pointer-events: auto;
+            background: transparent;
+            height: 20px;
+            left: 0;
+            right: 0;
+            /* place it just below the trigger */
+            top: 100%;
+            z-index: 999;
         }
-        .constitutional-tooltip:hover .tooltip-content {
-            display: block;
+        /* Make sure the tooltip box is above the bridge for clicks */
+        .tidbit-tooltip-box {
+            z-index: 2000;
         }
-        .jacquard {
-  font-family: 'Jacquard 24', cursive;
-} 
-        @font-face {
-  font-family: 'WeThePeople';
-  src: url('fonts/WeThePeople.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-}
-.wethepeople {
-  font-family: 'WeThePeople', cursive;
-  font-size: 3.0em;
-}
-         .tidbit-tooltip-wrapper {
-      display: inline-block;
-      position: relative;
-      cursor: pointer;
-    }
-    .tidbit-tooltip-box {
-      position: fixed;
-      z-index: 1000;
-      min-width: 250px;
-      max-width: 320px;
-      min-height: 180px;
-      background: #fff;
-      border: 1px solid #888;
-      border-radius: 8px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-      padding: 16px;
-      font-size: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-    .tidbit-tooltip-box.visible {
-      opacity: 1;
-      pointer-events: auto;
-      animation: fadeIn 0.3s;
-    }
-    .tidbit-tooltip-img {
-      width: 100%;
-      height: 96px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 6px;
-      flex-shrink: 0;
-      flex-grow: 0;
-    }
-    .tidbit-tooltip-text {
-      width: 100%;
-      margin: 0;
-      text-align: center;
-      flex-grow: 0;
-    }
-    .tidbit-tooltip-btn {
-      background: #a0a0a0;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 6px 18px;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 6px;
-      transition: background 0.2s;
-      align-self: center;
-    }
-    .tidbit-tooltip-btn:hover {
-      background: #767676;
-    }
-    .btn-top    { order: -1; align-self: center; margin-bottom: 8px; margin-top: 0; }
-    .btn-bottom { order: 99; align-self: center; margin-top: 8px; margin-bottom: 0; }
-    .btn-left   { order: 1; align-self: flex-start; margin-right: auto; }
-    .btn-right  { order: 1; align-self: flex-end; margin-left: auto; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
-    .tidbit-tooltip-bridge {
-  position: absolute;
-  pointer-events: auto;
-  background: transparent;
-  height: 20px;
-  left: 0;
-  right: 0;
-  /* place it just below the trigger */
-  top: 100%;
-  z-index: 999;
-}
+        /* Make sure wrapper has a high z-index too when hovered */
+        .tidbit-tooltip-wrapper:hover {
+            z-index: 1500;
+        }
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleSwitch = document.querySelector('.toggle-switch');
-            const interpretations = document.querySelectorAll('.interpretation');
-
-            toggleSwitch.addEventListener('click', function() {
-                toggleSwitch.classList.toggle('active');
-                const showInterpretations = toggleSwitch.classList.contains('active');
-                interpretations.forEach(interpretation => {
-                    interpretation.style.display = showInterpretations ? 'block' : 'none';
-                });
-            });
-        });
-    </script>
 </head>
 <body>
     <div class="wrapper">
@@ -270,13 +199,10 @@
 
         <!-- Content -->
         <div class="content">
-  <p>
-  <span class="wethepeople">We the People</span> of the United States, in Order to form a more perfect Union...
-</p>
-</p>We the People</span> of the United States, in Order to form a more perfect Union...
-</p>
-<span class="interpretation">[Interpretation for the Preamble]</span>
-            
+            <p>
+                <span class="wethepeople">We the People</span> of the United States, in Order to form a more perfect Union...
+            </p>
+            <span class="interpretation">[Interpretation for the Preamble]</span>
 
             <h2>Article I</h2>
             <h3>Section 1 - Legislative Powers</h3>
@@ -293,20 +219,18 @@
 
             <h2>Amendments</h2>
             <h3>Amendment XIII</h3>
-               <p>
-  Neither slavery nor
-  <span class="tidbit-tooltip-wrapper"
-    data-img="https://designshack.net/wp-content/uploads/placehold.jpg"
-    data-text="This is a tid-bit about the Constitution."
-    data-link="https://example.com"
-    data-btn-pos="bottom">
-      <b><u>involuntary servitude</u></b>
-      <div class="tidbit-tooltip-bridge"></div>
-  </span> 
-, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
-</p>
-
-               
+            <p>
+                Neither slavery nor
+                <span class="tidbit-tooltip-wrapper"
+                    data-img="https://designshack.net/wp-content/uploads/placehold.jpg"
+                    data-text="This is a tid-bit about the Constitution."
+                    data-link="https://example.com"
+                    data-btn-pos="bottom">
+                    <b><u>involuntary servitude</u></b>
+                    <div class="tidbit-tooltip-bridge"></div>
+                </span>
+                , except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
+            </p>
             <span class="interpretation">[Interpretation for Amendment XIII]</span>
         </div>
     </div>
@@ -314,145 +238,167 @@
         <p>© 2025 Constitutionally Curious</p>
     </footer>
     <div id="tidbit-tooltip" class="tidbit-tooltip-box" style="display:none;">
-  <img class="tidbit-tooltip-img" src="" alt="Tid-bit image">
-  <p class="tidbit-tooltip-text"></p>
-  <button class="tidbit-tooltip-btn btn-bottom">Learn More</button>
-</div>
-<audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
-// Tidbit Tooltip with "Bridge" Anti-Gap Logic
-<script>
-const tooltip = document.getElementById('tidbit-tooltip');
-const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
-const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
-const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
-const audio = document.getElementById('tooltip-audio');
+        <img class="tidbit-tooltip-img" src="" alt="Tid-bit image">
+        <p class="tidbit-tooltip-text"></p>
+        <button class="tidbit-tooltip-btn btn-bottom" tabindex="0">Learn More</button>
+    </div>
+    <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
+    <script>
+        // Toggle interpretation visibility
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleSwitch = document.querySelector('.toggle-switch');
+            const interpretations = document.querySelectorAll('.interpretation');
+            toggleSwitch.addEventListener('click', function() {
+                toggleSwitch.classList.toggle('active');
+                const showInterpretations = toggleSwitch.classList.contains('active');
+                interpretations.forEach(interpretation => {
+                    interpretation.style.display = showInterpretations ? 'block' : 'none';
+                });
+            });
+        });
 
-let currentTrigger = null;
-let hideTimeout = null;
-let mouseOverTrigger = false;
-let mouseOverTooltip = false;
+        // Tidbit Tooltip with "Bridge" Anti-Gap Logic
+        const tooltip = document.getElementById('tidbit-tooltip');
+        const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
+        const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
+        const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
+        const audio = document.getElementById('tooltip-audio');
 
-// Position the tooltip right below the trigger
-function positionTooltip(trigger) {
-  const rect = trigger.getBoundingClientRect();
-  tooltip.style.display = 'flex';
-  const tooltipRect = tooltip.getBoundingClientRect();
-  const top = rect.bottom + window.scrollY;
-  const left = rect.left + window.scrollX + (rect.width - tooltipRect.width) / 2;
-  tooltip.style.top = `${top}px`;
-  tooltip.style.left = `${left}px`;
-}
+        let currentTrigger = null;
+        let hideTimeout = null;
+        let mouseOverTrigger = false;
+        let mouseOverTooltip = false;
 
-// Position the invisible bridge between trigger and tooltip
-function positionBridge(trigger, tooltip) {
-  const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
-  if (!bridge) return;
-  const triggerRect = trigger.getBoundingClientRect();
-  const tooltipRect = tooltip.getBoundingClientRect();
-  // Height: vertical gap between trigger's bottom and tooltip's top
-  let distance = tooltipRect.top - triggerRect.bottom;
-  if (distance < 0) distance = 0;
-  bridge.style.position = "absolute";
-  bridge.style.top = (trigger.offsetHeight) + "px";
-  bridge.style.height = distance + "px";
-  bridge.style.left = 0;
-  bridge.style.width = "100%";
-  bridge.style.background = "transparent";
-  bridge.style.pointerEvents = "auto";
-  bridge.style.zIndex = 999;
-}
+        // Position the tooltip right below the trigger
+        function positionTooltip(trigger) {
+            const rect = trigger.getBoundingClientRect();
+            tooltip.style.display = 'flex';
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const top = rect.bottom + window.scrollY;
+            const left = rect.left + window.scrollX + (rect.width - tooltipRect.width) / 2;
+            tooltip.style.top = `${top}px`;
+            tooltip.style.left = `${left}px`;
+        }
 
-function showTooltip(trigger) {
-  clearTimeout(hideTimeout);
-  currentTrigger = trigger;
-  tooltipImg.src = trigger.getAttribute('data-img') || '';
-  tooltipText.textContent = trigger.getAttribute('data-text') || '';
-  tooltipBtn.onclick = () => window.open(trigger.getAttribute('data-link') || '#', '_blank');
-  const btnPos = trigger.getAttribute('data-btn-pos') || 'bottom';
-  tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
-  tooltip.style.display = 'flex';
-  setTimeout(() => tooltip.classList.add('visible'), 10);
-  audio.currentTime = 0; audio.play();
-  positionTooltip(trigger);
-  positionBridge(trigger, tooltip);
+        // Position the invisible bridge between trigger and tooltip
+        function positionBridge(trigger, tooltip) {
+            const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
+            if (!bridge) return;
+            const triggerRect = trigger.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            let distance = tooltipRect.top - triggerRect.bottom;
+            if (distance < 0) distance = 0;
+            bridge.style.position = "absolute";
+            bridge.style.top = (trigger.offsetHeight) + "px";
+            bridge.style.height = distance + "px";
+            bridge.style.left = 0;
+            bridge.style.width = "100%";
+            bridge.style.background = "transparent";
+            bridge.style.pointerEvents = "auto";
+            bridge.style.zIndex = 1999;
+        }
 
-  // Always (re-)attach bridge handlers
-  const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
-  if (bridge) {
-    bridge.onmouseenter = function() {
-      mouseOverTrigger = true;
-      clearTimeout(hideTimeout);
-    };
-    bridge.onmouseleave = function() {
-      mouseOverTrigger = false;
-      setTimeout(() => {
-        if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-      }, 10);
-    };
-  }
-}
+        function showTooltip(trigger) {
+            clearTimeout(hideTimeout);
+            currentTrigger = trigger;
+            tooltipImg.src = trigger.getAttribute('data-img') || '';
+            tooltipText.textContent = trigger.getAttribute('data-text') || '';
+            tooltipBtn.onclick = () => window.open(trigger.getAttribute('data-link') || '#', '_blank');
+            const btnPos = trigger.getAttribute('data-btn-pos') || 'bottom';
+            tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
+            tooltip.style.display = 'flex';
+            setTimeout(() => tooltip.classList.add('visible'), 10);
+            audio.currentTime = 0; audio.play();
+            positionTooltip(trigger);
+            positionBridge(trigger, tooltip);
+            // Always (re-)attach bridge handlers
+            const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
+            if (bridge) {
+                bridge.onmouseenter = function() {
+                    mouseOverTrigger = true;
+                    clearTimeout(hideTimeout);
+                };
+                bridge.onmouseleave = function() {
+                    mouseOverTrigger = false;
+                    setTimeout(() => {
+                        if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+                    }, 10);
+                };
+            }
+        }
 
-function hideTooltip() {
-  tooltip.classList.remove('visible');
-  hideTimeout = setTimeout(() => {
-    tooltip.style.display = 'none';
-    currentTrigger = null;
-  }, 100);
-}
+        function hideTooltip() {
+            tooltip.classList.remove('visible');
+            hideTimeout = setTimeout(() => {
+                tooltip.style.display = 'none';
+                currentTrigger = null;
+            }, 100);
+        }
 
-// Event listeners for all triggers and their bridges
-document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
-  el.addEventListener('mouseenter', function() {
-    mouseOverTrigger = true;
-    showTooltip(el);
-  });
-  el.addEventListener('mouseleave', function() {
-    mouseOverTrigger = false;
-    setTimeout(() => {
-      if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-    }, 10);
-  });
-  // Attach bridge listeners at startup for robustness
-  const bridge = el.querySelector('.tidbit-tooltip-bridge');
-  if (bridge) {
-    bridge.onmouseenter = function() {
-      mouseOverTrigger = true;
-      clearTimeout(hideTimeout);
-    };
-    bridge.onmouseleave = function() {
-      mouseOverTrigger = false;
-      setTimeout(() => {
-        if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-      }, 10);
-    };
-  }
-});
+        // Event listeners for all triggers and their bridges
+        document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
+            el.addEventListener('mouseenter', function() {
+                mouseOverTrigger = true;
+                showTooltip(el);
+            });
+            el.addEventListener('mouseleave', function() {
+                mouseOverTrigger = false;
+                setTimeout(() => {
+                    if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+                }, 10);
+            });
+            // Attach bridge listeners at startup for robustness
+            const bridge = el.querySelector('.tidbit-tooltip-bridge');
+            if (bridge) {
+                bridge.onmouseenter = function() {
+                    mouseOverTrigger = true;
+                    clearTimeout(hideTimeout);
+                };
+                bridge.onmouseleave = function() {
+                    mouseOverTrigger = false;
+                    setTimeout(() => {
+                        if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+                    }, 10);
+                };
+            }
+        });
 
-// Tooltip hover handlers
-tooltip.addEventListener('mouseenter', function() {
-  mouseOverTooltip = true;
-  clearTimeout(hideTimeout);
-});
-tooltip.addEventListener('mouseleave', function() {
-  mouseOverTooltip = false;
-  setTimeout(() => {
-    if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-  }, 10);
-});
+        // Tooltip hover handlers
+        tooltip.addEventListener('mouseenter', function() {
+            mouseOverTooltip = true;
+            clearTimeout(hideTimeout);
+        });
+        tooltip.addEventListener('mouseleave', function() {
+            mouseOverTooltip = false;
+            setTimeout(() => {
+                if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+            }, 10);
+        });
 
-// Reposition on scroll/resize (for floating tooltips)
-window.addEventListener('scroll', () => {
-  if (currentTrigger && tooltip.classList.contains('visible')) {
-    positionTooltip(currentTrigger);
-    positionBridge(currentTrigger, tooltip);
-  }
-});
-window.addEventListener('resize', () => {
-  if (currentTrigger && tooltip.classList.contains('visible')) {
-    positionTooltip(currentTrigger);
-    positionBridge(currentTrigger, tooltip);
-  }
-});
-</script>
+        // When the tooltip is visible, make sure pointer events are on for all children (fixes unclickable button issue)
+        const observer = new MutationObserver(() => {
+            if (tooltip.classList.contains('visible')) {
+                tooltip.style.pointerEvents = 'auto';
+                tooltipBtn.style.pointerEvents = 'auto';
+            } else {
+                tooltip.style.pointerEvents = 'none';
+            }
+        });
+        observer.observe(tooltip, { attributes: true, attributeFilter: ['class'] });
+
+        // Reposition on scroll/resize (for floating tooltips)
+        window.addEventListener('scroll', () => {
+            if (currentTrigger && tooltip.classList.contains('visible')) {
+                positionTooltip(currentTrigger);
+                positionBridge(currentTrigger, tooltip);
+            }
+        });
+        window.addEventListener('resize', () => {
+            if (currentTrigger && tooltip.classList.contains('visible')) {
+                positionTooltip(currentTrigger);
+                positionBridge(currentTrigger, tooltip);
+            }
+        });
+    </script>
 </body>
 </html>
