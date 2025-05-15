@@ -295,5 +295,88 @@
     <footer class="footer">
         <p>© 2025 Constitutionally Curious</p>
     </footer>
+    <div id="tidbit-tooltip" class="tidbit-tooltip-box" style="display:none;">
+  <img class="tidbit-tooltip-img" src="" alt="Tid-bit image">
+  <p class="tidbit-tooltip-text"></p>
+  <button class="tidbit-tooltip-btn btn-bottom">Learn More</button>
+</div>
+<audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
+ <script>
+const tooltip = document.getElementById('tidbit-tooltip');
+const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
+const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
+const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
+const audio = document.getElementById('tooltip-audio');
+
+function positionTooltip(trigger) {
+  const rect = trigger.getBoundingClientRect();
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const padding = 12;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let top, left;
+  if (rect.bottom + tooltipRect.height + padding < vh) {
+    top = rect.bottom + window.scrollY + padding;
+    left = rect.left + window.scrollX + (rect.width - tooltipRect.width)/2;
+    if (left < 0) left = padding;
+    if (left + tooltipRect.width > vw)
+      left = vw - tooltipRect.width - padding;
+  } else if (rect.top - tooltipRect.height - padding > 0) {
+    top = rect.top + window.scrollY - tooltipRect.height - padding;
+    left = rect.left + window.scrollX + (rect.width - tooltipRect.width)/2;
+    if (left < 0) left = padding;
+    if (left + tooltipRect.width > vw)
+      left = vw - tooltipRect.width - padding;
+  } else if (rect.right + tooltipRect.width + padding < vw) {
+    top = rect.top + window.scrollY + (rect.height - tooltipRect.height)/2;
+    left = rect.right + window.scrollX + padding;
+    if (top < 0) top = padding;
+    if (top + tooltipRect.height > vh)
+      top = vh - tooltipRect.height - padding;
+  } else if (rect.left - tooltipRect.width - padding > 0) {
+    top = rect.top + window.scrollY + (rect.height - tooltipRect.height)/2;
+    left = rect.left + window.scrollX - tooltipRect.width - padding;
+    if (top < 0) top = padding;
+    if (top + tooltipRect.height > vh)
+      top = vh - tooltipRect.height - padding;
+  } else {
+    top = Math.max((vh - tooltipRect.height)/2, padding) + window.scrollY;
+    left = Math.max((vw - tooltipRect.width)/2, padding) + window.scrollX;
+  }
+  tooltip.style.top = `${top}px`;
+  tooltip.style.left = `${left}px`;
+}
+
+let hoverTimeout;
+document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
+  el.addEventListener('mouseenter', function(e) {
+    clearTimeout(hoverTimeout);
+    tooltipImg.src = el.getAttribute('data-img') || '';
+    tooltipText.textContent = el.getAttribute('data-text') || '';
+    tooltipBtn.onclick = () => window.open(el.getAttribute('data-link') || '#', '_blank');
+    const btnPos = el.getAttribute('data-btn-pos') || 'bottom';
+    tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
+    tooltip.style.display = 'flex';
+    setTimeout(() => tooltip.classList.add('visible'), 10);
+    audio.currentTime = 0; audio.play();
+    positionTooltip(el);
+  });
+  el.addEventListener('mouseleave', function(e) {
+    tooltip.classList.remove('visible');
+    hoverTimeout = setTimeout(() => { tooltip.style.display = 'none'; }, 250);
+  });
+});
+tooltip.addEventListener('mouseleave', function() {
+  tooltip.classList.remove('visible');
+  hoverTimeout = setTimeout(() => { tooltip.style.display = 'none'; }, 250);
+});
+window.addEventListener('scroll', () => {
+  const last = document.querySelector('.tidbit-tooltip-wrapper:hover');
+  if (last && tooltip.classList.contains('visible')) positionTooltip(last);
+});
+window.addEventListener('resize', () => {
+  const last = document.querySelector('.tidbit-tooltip-wrapper:hover');
+  if (last && tooltip.classList.contains('visible')) positionTooltip(last);
+});
+</script>   
 </body>
 </html>
