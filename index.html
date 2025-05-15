@@ -312,6 +312,10 @@ const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
 const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
 const audio = document.getElementById('tooltip-audio');
 
+let currentTrigger = null;
+let hideTimeout = null;
+
+// Position logic unchanged
 function positionTooltip(trigger) {
   const rect = trigger.getBoundingClientRect();
   const tooltipRect = tooltip.getBoundingClientRect();
@@ -350,37 +354,56 @@ function positionTooltip(trigger) {
   tooltip.style.left = `${left}px`;
 }
 
-let hoverTimeout;
+function showTooltip(trigger) {
+  clearTimeout(hideTimeout);
+  currentTrigger = trigger;
+  tooltipImg.src = trigger.getAttribute('data-img') || '';
+  tooltipText.textContent = trigger.getAttribute('data-text') || '';
+  tooltipBtn.onclick = () => window.open(trigger.getAttribute('data-link') || '#', '_blank');
+  const btnPos = trigger.getAttribute('data-btn-pos') || 'bottom';
+  tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
+  tooltip.style.display = 'flex';
+  setTimeout(() => tooltip.classList.add('visible'), 10);
+  audio.currentTime = 0; audio.play();
+  positionTooltip(trigger);
+}
+
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+  hideTimeout = setTimeout(() => { tooltip.style.display = 'none'; currentTrigger = null; }, 200);
+}
+
+// Attach events
 document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
-  el.addEventListener('mouseenter', function(e) {
-    clearTimeout(hoverTimeout);
-    tooltipImg.src = el.getAttribute('data-img') || '';
-    tooltipText.textContent = el.getAttribute('data-text') || '';
-    tooltipBtn.onclick = () => window.open(el.getAttribute('data-link') || '#', '_blank');
-    const btnPos = el.getAttribute('data-btn-pos') || 'bottom';
-    tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
-    tooltip.style.display = 'flex';
-    setTimeout(() => tooltip.classList.add('visible'), 10);
-    audio.currentTime = 0; audio.play();
-    positionTooltip(el);
+  el.addEventListener('mouseenter', function() {
+    showTooltip(el);
   });
   el.addEventListener('mouseleave', function(e) {
-    tooltip.classList.remove('visible');
-    hoverTimeout = setTimeout(() => { tooltip.style.display = 'none'; }, 250);
+    // Only hide if not moving to the tooltip itself
+    if (!tooltip.contains(e.relatedTarget)) {
+      hideTooltip();
+    }
   });
 });
-tooltip.addEventListener('mouseleave', function() {
-  tooltip.classList.remove('visible');
-  hoverTimeout = setTimeout(() => { tooltip.style.display = 'none'; }, 250);
+
+// Tooltip stays visible if hovered
+tooltip.addEventListener('mouseenter', function() {
+  clearTimeout(hideTimeout);
 });
+tooltip.addEventListener('mouseleave', function(e) {
+  // Only hide if not moving to the trigger
+  if (!currentTrigger || !currentTrigger.contains(e.relatedTarget)) {
+    hideTooltip();
+  }
+});
+
+// Reposition on scroll/resize
 window.addEventListener('scroll', () => {
-  const last = document.querySelector('.tidbit-tooltip-wrapper:hover');
-  if (last && tooltip.classList.contains('visible')) positionTooltip(last);
+  if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
 });
 window.addEventListener('resize', () => {
-  const last = document.querySelector('.tidbit-tooltip-wrapper:hover');
-  if (last && tooltip.classList.contains('visible')) positionTooltip(last);
+  if (currentTrigger && tooltip.classList.contains('visible')) positionTooltip(currentTrigger);
 });
-</script>   
+</script>
 </body>
 </html>
