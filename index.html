@@ -309,12 +309,13 @@ const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
 const audio = document.getElementById('tooltip-audio');
 
 let currentTrigger = null;
-let isOverTrigger = false;
-let isOverTooltip = false;
 let hideTimeout = null;
+let mouseOverTrigger = false;
+let mouseOverTooltip = false;
 
 function positionTooltip(trigger) {
   const rect = trigger.getBoundingClientRect();
+  tooltip.style.display = 'flex'; // ensure visible for measurement
   const tooltipRect = tooltip.getBoundingClientRect();
   const padding = 12;
   const vw = window.innerWidth, vh = window.innerHeight;
@@ -365,36 +366,38 @@ function showTooltip(trigger) {
   positionTooltip(trigger);
 }
 
-function hideTooltipIfOut() {
-  if (!isOverTrigger && !isOverTooltip) {
-    tooltip.classList.remove('visible');
-    hideTimeout = setTimeout(() => { 
-      tooltip.style.display = 'none'; 
-      currentTrigger = null; 
-    }, 100);
-  }
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+  hideTimeout = setTimeout(() => { 
+    tooltip.style.display = 'none'; 
+    currentTrigger = null; 
+  }, 100);
 }
 
 // Attach events to all triggers
 document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
   el.addEventListener('mouseenter', function() {
-    isOverTrigger = true;
+    mouseOverTrigger = true;
     showTooltip(el);
   });
   el.addEventListener('mouseleave', function() {
-    isOverTrigger = false;
-    hideTooltipIfOut();
+    mouseOverTrigger = false;
+    setTimeout(() => {
+      if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+    }, 10);
   });
 });
 
 // Tooltip stays visible if hovered
 tooltip.addEventListener('mouseenter', function() {
-  isOverTooltip = true;
+  mouseOverTooltip = true;
   clearTimeout(hideTimeout);
 });
 tooltip.addEventListener('mouseleave', function() {
-  isOverTooltip = false;
-  hideTooltipIfOut();
+  mouseOverTooltip = false;
+  setTimeout(() => {
+    if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+  }, 10);
 });
 
 // Reposition on scroll/resize
