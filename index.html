@@ -131,6 +131,16 @@
             line-height: 1.4;
             font-weight: normal;
         }
+        .tidbit-tooltip-bridge {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 18px;
+  /* height = distance between trigger bottom and tooltip top */
+  background: transparent;
+  pointer-events: auto;
+  z-index: 999;
+}
         .tooltip-content img {
             width: 100%;
             height: auto;
@@ -292,9 +302,9 @@
   data-img="https://designshack.net/wp-content/uploads/placehold.jpg"
   data-text="This is a tid-bit about the Constitution."
   data-link="https://example.com"
-  data-btn-pos="bottom"><span class = "tidbit-tooltip-wrapper" ...><b><u></u>
-                    
+  data-btn-pos="bottom"><span class = "tidbit-tooltip-wrapper" ...><b><u></u>                   
   involuntary servitude
+    <div class ="tidbit-tooltip-bridge"></div>
 </span></span> 
         </b>
         </u>
@@ -374,7 +384,22 @@ function showTooltip(trigger) {
   tooltip.style.display = 'flex';
   setTimeout(() => tooltip.classList.add('visible'), 10);
   audio.currentTime = 0; audio.play();
-  positionTooltip(trigger);
+  positionTooltip(trigger);            // Position the tooltip
+  positionBridge(trigger, tooltip);    // Position the bridge directly after
+  // Attach bridge listeners (see below)
+  const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
+  if (bridge) {
+    bridge.onmouseenter = function() {
+      mouseOverTrigger = true;
+      clearTimeout(hideTimeout);
+    };
+    bridge.onmouseleave = function() {
+      mouseOverTrigger = false;
+      setTimeout(() => {
+        if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+      }, 10);
+    };
+  }
 }
 
 function hideTooltip() {
@@ -401,6 +426,19 @@ document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
       if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
     }, 10);
   });
+    const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
+if (bridge) {
+  bridge.addEventListener('mouseenter', function() {
+    mouseOverTrigger = true;
+    clearTimeout(hideTimeout);
+  });
+  bridge.addEventListener('mouseleave', function() {
+    mouseOverTrigger = false;
+    setTimeout(() => {
+      if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+    }, 10);
+  });
+}
 });
 
 // Tooltip stays visible if hovered
