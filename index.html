@@ -301,7 +301,7 @@
   <button class="tidbit-tooltip-btn btn-bottom">Learn More</button>
 </div>
 <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
- <script>
+<script>
 const tooltip = document.getElementById('tidbit-tooltip');
 const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
 const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
@@ -309,9 +309,10 @@ const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
 const audio = document.getElementById('tooltip-audio');
 
 let currentTrigger = null;
+let isOverTrigger = false;
+let isOverTooltip = false;
 let hideTimeout = null;
 
-// Position logic unchanged
 function positionTooltip(trigger) {
   const rect = trigger.getBoundingClientRect();
   const tooltipRect = tooltip.getBoundingClientRect();
@@ -364,33 +365,36 @@ function showTooltip(trigger) {
   positionTooltip(trigger);
 }
 
-function hideTooltip() {
-  tooltip.classList.remove('visible');
-  hideTimeout = setTimeout(() => { tooltip.style.display = 'none'; currentTrigger = null; }, 200);
+function hideTooltipIfOut() {
+  if (!isOverTrigger && !isOverTooltip) {
+    tooltip.classList.remove('visible');
+    hideTimeout = setTimeout(() => { 
+      tooltip.style.display = 'none'; 
+      currentTrigger = null; 
+    }, 100);
+  }
 }
 
-// Attach events
+// Attach events to all triggers
 document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
   el.addEventListener('mouseenter', function() {
+    isOverTrigger = true;
     showTooltip(el);
   });
-  el.addEventListener('mouseleave', function(e) {
-    // Only hide if not moving to the tooltip itself
-    if (!tooltip.contains(e.relatedTarget)) {
-      hideTooltip();
-    }
+  el.addEventListener('mouseleave', function() {
+    isOverTrigger = false;
+    hideTooltipIfOut();
   });
 });
 
 // Tooltip stays visible if hovered
 tooltip.addEventListener('mouseenter', function() {
+  isOverTooltip = true;
   clearTimeout(hideTimeout);
 });
-tooltip.addEventListener('mouseleave', function(e) {
-  // Only hide if not moving to the trigger
-  if (!currentTrigger || !currentTrigger.contains(e.relatedTarget)) {
-    hideTooltip();
-  }
+tooltip.addEventListener('mouseleave', function() {
+  isOverTooltip = false;
+  hideTooltipIfOut();
 });
 
 // Reposition on scroll/resize
