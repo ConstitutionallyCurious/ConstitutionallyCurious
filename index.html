@@ -317,7 +317,7 @@ function positionTooltip(trigger) {
   const rect = trigger.getBoundingClientRect();
   tooltip.style.display = 'flex'; // ensure visible for measurement
   const tooltipRect = tooltip.getBoundingClientRect();
-  const padding = 6;
+  const padding = 0;
   const vw = window.innerWidth, vh = window.innerHeight;
   let top, left;
   if (rect.bottom + tooltipRect.height + padding < vh) {
@@ -373,7 +373,11 @@ function hideTooltip() {
     currentTrigger = null; 
   }, 100);
 }
-
+function positionTooltip(trigger) {
+  const rect = trigger.getBoundingClientRect();
+  tooltip.style.top = `${rect.bottom + window.scrollY}px`;
+  tooltip.style.left = `${rect.left + window.scrollX}px`;
+}
 // Attach events to all triggers
 document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
   el.addEventListener('mouseenter', function() {
