@@ -53,6 +53,18 @@
         .tidbit-tooltip-text { width: 100%; margin: 0; text-align: center; flex-grow: 0; }
         .tidbit-tooltip-btn { background: #a0a0a0; color: white; border: none; border-radius: 4px; padding: 6px 18px; font-size: 15px; cursor: pointer; margin-top: 6px; transition: background 0.2s; align-self: center; z-index: 1002; }
         .tidbit-tooltip-btn:hover { background: #767676; }
+        .tidbit-tooltip-close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 20px;
+            color: #888;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1005;
+        }
+        .tidbit-tooltip-close:active { color: #222; }
         .btn-top    { order: -1; align-self: center; margin-bottom: 8px; margin-top: 0; }
         .btn-bottom { order: 99; align-self: center; margin-top: 8px; margin-bottom: 0; }
         .btn-left   { order: 1; align-self: flex-start; margin-right: auto; }
@@ -116,6 +128,7 @@
         <p>© 2025 Constitutionally Curious</p>
     </footer>
     <div id="tidbit-tooltip" class="tidbit-tooltip-box" style="display:none;">
+        <button class="tidbit-tooltip-close" title="Close" tabindex="0" aria-label="Close tooltip">&times;</button>
         <img class="tidbit-tooltip-img" src="" alt="Tid-bit image">
         <p class="tidbit-tooltip-text"></p>
         <button class="tidbit-tooltip-btn btn-bottom" tabindex="0">Learn More</button>
@@ -140,6 +153,7 @@
         const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
         const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
         const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
+        const tooltipClose = tooltip.querySelector('.tidbit-tooltip-close');
         const audio = document.getElementById('tooltip-audio');
         let currentTrigger = null;
         let hideTimeout = null;
@@ -212,48 +226,52 @@
             }, 100);
         }
 
-        // --- Tooltip event listeners for desktop and touch ---
-        document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
-            // Desktop hover
-            el.addEventListener('mouseenter', function() {
-                mouseOverTrigger = true;
-                showTooltip(el);
-            });
-            el.addEventListener('mouseleave', function() {
-                mouseOverTrigger = false;
-                setTimeout(() => {
-                    if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-                }, 10);
-            });
-
-            // Touch/tap support
-            el.addEventListener('touchstart', function(e) {
-                e.preventDefault(); // Prevents simulated mouse events
-                showTooltip(el);
-            });
-            el.addEventListener('click', function(e) {
-                // On touch devices, click can be a fallback if touchstart doesn't fire.
-                if (window.ontouchstart !== undefined) {
-                    e.preventDefault();
-                }
-                showTooltip(el);
-            });
-
-            // Attach bridge listeners at startup for robustness
-            const bridge = el.querySelector('.tidbit-tooltip-bridge');
-            if (bridge) {
-                bridge.onmouseenter = function() {
+        // Tooltip event listeners for desktop and touch
+        function setupTooltipListeners() {
+            document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
+                // Desktop hover
+                el.addEventListener('mouseenter', function() {
                     mouseOverTrigger = true;
-                    clearTimeout(hideTimeout);
-                };
-                bridge.onmouseleave = function() {
+                    showTooltip(el);
+                });
+                el.addEventListener('mouseleave', function() {
                     mouseOverTrigger = false;
                     setTimeout(() => {
                         if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
                     }, 10);
-                };
-            }
-        });
+                });
+
+                // Touch/tap support
+                el.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    showTooltip(el);
+                }, { passive: false });
+
+                el.addEventListener('click', function(e) {
+                    // On touch devices, click can be a fallback if touchstart doesn't fire.
+                    if (window.ontouchstart !== undefined) {
+                        e.preventDefault();
+                    }
+                    showTooltip(el);
+                });
+
+                // Attach bridge listeners at startup for robustness
+                const bridge = el.querySelector('.tidbit-tooltip-bridge');
+                if (bridge) {
+                    bridge.onmouseenter = function() {
+                        mouseOverTrigger = true;
+                        clearTimeout(hideTimeout);
+                    };
+                    bridge.onmouseleave = function() {
+                        mouseOverTrigger = false;
+                        setTimeout(() => {
+                            if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+                        }, 10);
+                    };
+                }
+            });
+        }
+
         // Hide tooltip when tapping outside on touch devices
         document.body.addEventListener('touchstart', function(e) {
             if (
@@ -262,7 +280,7 @@
             ) {
                 hideTooltip();
             }
-        });
+        }, { passive: false });
 
         // Tooltip hover handlers
         tooltip.addEventListener('mouseenter', function() {
@@ -275,6 +293,12 @@
                 if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
             }, 10);
         });
+
+        // Close button for tooltip (for touch users)
+        tooltipClose.addEventListener('click', function() {
+            hideTooltip();
+        });
+
         // When the tooltip is visible, make sure pointer events are on for all children (fixes unclickable button issue)
         const observer = new MutationObserver(() => {
             if (tooltip.classList.contains('visible')) {
@@ -285,6 +309,7 @@
             }
         });
         observer.observe(tooltip, { attributes: true, attributeFilter: ['class'] });
+
         // Reposition on scroll/resize (for floating tooltips)
         window.addEventListener('scroll', () => {
             if (currentTrigger && tooltip.classList.contains('visible')) {
@@ -298,6 +323,11 @@
                 positionBridge(currentTrigger, tooltip);
             }
         });
+
+        // Re-run listeners after DOM loaded (important for some embed systems)
+        document.addEventListener('DOMContentLoaded', setupTooltipListeners);
+        // Also run immediately in case script is at the end of body
+        setupTooltipListeners();
     </script>
 </body>
 </html>
