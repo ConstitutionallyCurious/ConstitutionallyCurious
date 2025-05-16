@@ -134,7 +134,8 @@
                 });
             });
         });
-        // Tidbit Tooltip with "Bridge" Anti-Gap Logic
+
+        // Tooltip logic (desktop and touch)
         const tooltip = document.getElementById('tidbit-tooltip');
         const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
         const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
@@ -144,7 +145,8 @@
         let hideTimeout = null;
         let mouseOverTrigger = false;
         let mouseOverTooltip = false;
-        // Position the tooltip right below the trigger
+
+        // Position the tooltip below the trigger
         function positionTooltip(trigger) {
             const rect = trigger.getBoundingClientRect();
             tooltip.style.display = 'flex';
@@ -154,6 +156,7 @@
             tooltip.style.top = `${top}px`;
             tooltip.style.left = `${left}px`;
         }
+
         // Position the invisible bridge between trigger and tooltip
         function positionBridge(trigger, tooltip) {
             const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
@@ -171,6 +174,7 @@
             bridge.style.pointerEvents = "auto";
             bridge.style.zIndex = 1999;
         }
+
         function showTooltip(trigger) {
             clearTimeout(hideTimeout);
             currentTrigger = trigger;
@@ -181,7 +185,7 @@
             tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
             tooltip.style.display = 'flex';
             setTimeout(() => tooltip.classList.add('visible'), 10);
-            audio.currentTime = 0; audio.play();
+            try { audio.currentTime = 0; audio.play(); } catch(e){}
             positionTooltip(trigger);
             positionBridge(trigger, tooltip);
             // Always (re-)attach bridge handlers
@@ -199,6 +203,7 @@
                 };
             }
         }
+
         function hideTooltip() {
             tooltip.classList.remove('visible');
             hideTimeout = setTimeout(() => {
@@ -206,8 +211,10 @@
                 currentTrigger = null;
             }, 100);
         }
-        // Event listeners for all triggers and their bridges
+
+        // --- Tooltip event listeners for desktop and touch ---
         document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
+            // Desktop hover
             el.addEventListener('mouseenter', function() {
                 mouseOverTrigger = true;
                 showTooltip(el);
@@ -218,6 +225,20 @@
                     if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
                 }, 10);
             });
+
+            // Touch/tap support
+            el.addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Prevents simulated mouse events
+                showTooltip(el);
+            });
+            el.addEventListener('click', function(e) {
+                // On touch devices, click can be a fallback if touchstart doesn't fire.
+                if (window.ontouchstart !== undefined) {
+                    e.preventDefault();
+                }
+                showTooltip(el);
+            });
+
             // Attach bridge listeners at startup for robustness
             const bridge = el.querySelector('.tidbit-tooltip-bridge');
             if (bridge) {
@@ -233,6 +254,16 @@
                 };
             }
         });
+        // Hide tooltip when tapping outside on touch devices
+        document.body.addEventListener('touchstart', function(e) {
+            if (
+                !e.target.closest('.tidbit-tooltip-wrapper') &&
+                !e.target.closest('.tidbit-tooltip-box')
+            ) {
+                hideTooltip();
+            }
+        });
+
         // Tooltip hover handlers
         tooltip.addEventListener('mouseenter', function() {
             mouseOverTooltip = true;
