@@ -30,7 +30,7 @@
         }
         .tidbit-tooltip-box {
             position: fixed;
-            z-index: 2000;
+            z-index: 9999 !important;
             min-width: 250px;
             max-width: 320px;
             min-height: 180px;
@@ -47,11 +47,12 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
+            top: 0; left: 0;
         }
         .tidbit-tooltip-box.visible { opacity: 1; pointer-events: auto; animation: fadeIn 0.3s; }
         .tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; flex-shrink: 0; flex-grow: 0; }
         .tidbit-tooltip-text { width: 100%; margin: 0; text-align: center; flex-grow: 0; }
-        .tidbit-tooltip-btn { background: #a0a0a0; color: white; border: none; border-radius: 4px; padding: 6px 18px; font-size: 15px; cursor: pointer; margin-top: 6px; transition: background 0.2s; align-self: center; z-index: 1002; }
+        .tidbit-tooltip-btn { background: #a0a0a0; color: white; border: none; border-radius: 4px; padding: 6px 18px; font-size: 15px; cursor: pointer; margin-top: 6px; transition: background 0.2s; }
         .tidbit-tooltip-btn:hover { background: #767676; }
         .tidbit-tooltip-close {
             position: absolute;
@@ -105,14 +106,13 @@
             <p>All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of </p>
             <h3>Section 2 - The House of Representatives</h3>
             <span class="interpretation">[Interpretation for Section 1]</span>
-            <p>The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications requisite for Electors of the most numerous Branch of the State Legislature.</p>
+            <p>The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications required for Electors of the most numerous Branch of the State Legislature.</p>
             <p>No Person shall be a Representative who shall not have attained to the Age of twenty five Years, and been seven Years a Citizen of the United States, and who shall not, when elected, be an Inhabitant of that State in which he shall be chosen.</p>
-            <p>Representatives and direct Taxes shall be apportioned among the several States which may be included within this Union, according to their respective Numbers, which shall be determined by adding to the whole Number of free Persons, including those bound to Service for a Term of Years, and excluding Indians not taxed, three fifths of all other Persons.  The actual Enumeration shall be made within three Years after the first Meeting of the Congress of the United States, and within every subsequent Term of ten Years, in such Manner as they shall by Law direct.The Number of Representatives shall not exceed one for every thirty Thousand, but each State shall have at Least one Representative; and until such enumeration shall be made, the State of New Hampshire shall be entitled to chuse three, Massachusetts eight, Rhode-Island and Providence Plantations one, Connecticut five, New-York six, New Jersey four, Pennsylvania eight, Delaware one, Maryland six, Virginia ten, North Carolina five, South Carolina five, and Georgia three.</p>
+            <p>Representatives and direct Taxes shall be apportioned among the several States which may be included within this Union, according to their respective Numbers, which shall be determined by adding to the whole Number of free Persons, including those bound to Service for a Term of Years, and excluding Indians not taxed, three fifths of all other Persons. (The previous sentence in parentheses was modified by the 14th Amendment, section 2.) The actual Enumeration shall be made within three Years after the first Meeting of the Congress of the United States, and within every subsequent Term of ten Years, in such Manner as they shall by Law direct. The Number of Representatives shall not exceed one for every thirty Thousand, but each State shall have at least one Representative; and until such enumeration shall be made, the State of New Hampshire shall be entitled to choose 3, Massachusetts 8, Rhode Island and Providence Plantations 1, Connecticut 5, New York 6, New Jersey 4, Pennsylvania 8, Delaware 1, Maryland 6, Virginia 10, North Carolina 5, South Carolina 5, and Georgia 3.</p>
             <p>When vacancies happen in the Representation from any State, the Executive Authority thereof shall issue Writs of Election to fill such Vacancies.</p>
             <p>The House of Representatives shall chuse their Speaker and other Officers; and shall have the sole Power of Impeachment.</p>
             <p></p>
             <span class="interpretation">[Interpretation for Section 2]</span>
-            
             <h3>Section 3 - The Senate</h3>
             <span class="interpretation">[Interpretation for Section 1]</span>
             <p>The Senate of the United States shall be composed of two Senators from each State, chosen by the Legislature thereof, for six Years; and each Senator shall have one Vote.</p>
@@ -136,7 +136,7 @@
             <h3>Section 6 - Rights and Disabilities of Members</h3>
             <span class="interpretation">[Interpretation for Section 1]</span>
             <p>The Senators and Representatives shall receive a Compensation for their Services, to be ascertained by Law, and paid out of the Treasury of the United States.They shall in all Cases, except Treason, Felony and Breach of the Peace, be privileged from Arrest during their Attendance at the Session of their respective Houses, and in going to and returning from the same; and for any Speech or Debate in either House, they shall not be questioned in any other Place.</p>
-            <p>No Senator or Representative shall, during the Time for which he was elected, be appointed to any civil Office under the Authority of the United States, which shall have been created, or the Emoluments whereof shall have been encreased during such time; and no Person holding any Office under the United States, shall be a Member of either House during his Continuance in Office.</p>
+            <p>No Senator or Representative shall, during the Time for which he was elected, be appointed to any civil Office under the Authority of the United States, which shall have been created, or the Emoluments whereof shall have been increased during such time; and no Person holding any Office under the United States, shall be a Member of either House during his Continuance in Office.</p>
             <h3>Section 7 - Legislative Process</h3>
             <span class="interpretation">[Interpretation for Section 1]</span>
             <p>All Bills for raising Revenue shall originate in the House of Representatives; but the Senate may propose or concur with Amendments as on other Bills.</p>
@@ -145,18 +145,18 @@
             <h3>Section 8 - Powers of Congress</h3>
             <p>The Congress shall have Power To lay and collect Taxes, Duties, Imposts and Excises, to pay the Debts and provide for the common Defence and general Welfare of the United States; but all Duties, Imposts and Excises shall be uniform throughout the United States;</p>
             <p>To borrow Money on the credit of the United States;</p>
-          <p>
-  To regulate Commerce with foreign Nations, and among the several States, and with the Indian Tribes;
-  <span class="tidbit-tooltip-wrapper"
-      data-img="https://upload.wikimedia.org/wikipedia/commons/9/9e/Johnadamsvp.flipped.jpg"
-      data-text="Since 1798 Congress has used this clause in the past to target and deport immigrants based solely on their race or political opinion during times of foreign entanglement."
-      data-link="https://constitutionallycurious.weebly.com/blog/immigration-the-constitution"
-      data-btn-pos="bottom">
-      <b><u>Naturalization,</u></b>
-      <span class="tidbit-tooltip-bridge"></span>
-  </span>
-  and uniform Laws on the subject of Bankruptcies throughout the United States;
-</p>
+            <p>
+              To regulate Commerce with foreign Nations, and among the several States, and with the Indian Tribes;
+              <span class="tidbit-tooltip-wrapper"
+                  data-img="https://upload.wikimedia.org/wikipedia/commons/9/9e/Johnadamsvp.flipped.jpg"
+                  data-text="Since 1798 Congress has used this clause in the past to target and deport immigrants based solely on their race or political opinion during times of foreign entanglement."
+                  data-link="https://constitutionallycurious.weebly.com/blog/immigration-the-constitution"
+                  data-btn-pos="bottom">
+                  <b><u>Naturalization,</u></b>
+                  <span class="tidbit-tooltip-bridge"></span>
+              </span>
+              and uniform Laws on the subject of Bankruptcies throughout the United States;
+            </p>
             <p>To coin Money, regulate the Value thereof, and of foreign Coin, and fix the Standard of Weights and Measures;</p>
             <p>To provide for the Punishment of counterfeiting the Securities and current Coin of the United States;</p>
             <p>To establish Post Offices and post Roads;</p>
@@ -169,12 +169,11 @@
             <p>To make Rules for the Government and Regulation of the land and naval Forces;</p>
             <p>To provide for calling forth the Militia to execute the Laws of the Union, suppress Insurrections and repel Invasions;</p>
             <p>To provide for organizing, arming, and disciplining, the Militia, and for governing such Part of them as may be employed in the Service of the United States, reserving to the States respectively, the Appointment of the Officers, and the Authority of training the Militia according to the discipline prescribed by Congress;</p>
-            <p>To exercise exclusive Legislation in all Cases whatsoever, over such District (not exceeding ten Miles square) as may, by Cession of particular States, and the Acceptance of Congress, become the Seat of the Government of the United States, and to exercise like Authority over all Places purchased by the Consent of the Legislature of the State in which the Same shall be, for the Erection of Forts, Magazines, Arsenals, dock-Yards and other needful Buildings;-And</p>
+            <p>To exercise exclusive Legislation in all Cases whatsoever, over such District (not exceeding ten Miles square) as may, by Cession of particular States, and the Acceptance of Congress, become the Seat of the Government of the United States, and to exercise like Authority over all Places purchased by the Consent of the Legislature of the State in which the Same shall be, for the Erection of Forts, Magazines, Arsenals, dock-Yards, and other needful Buildings;—And</p>
             <p>To make all Laws which shall be necessary and proper for carrying into Execution the foregoing Powers, and all other Powers vested by this Constitution in the Government of the United States, or in any Department or Officer thereof.</p>
             <h2>Amendments</h2>
             <h3>Amendment XIII</h3>
-            <p>No Person shall be a Senator who shall not have attained to the Age of thirty Years, and been nine Years a Citizen of the United States, and who shall not, when elected, be an Inhabitant of that State for which he shall be chosen.</p>
-                Neither slavery nor
+            <p>No Person shall be a Senator who shall not have attained to the Age of thirty Years, and been nine Years a Citizen of the United States, and who shall not, when elected, be an Inhabitant of that State for which he shall be chosen. Neither slavery nor
                 <span class="tidbit-tooltip-wrapper"
                     data-img="https://designshack.net/wp-content/uploads/placehold.jpg"
                     data-text="This is a tid-bit about the Constitution."
@@ -210,115 +209,68 @@
             });
         });
 
-        // Tooltip logic (desktop and touch)
-        const tooltip = document.getElementById('tidbit-tooltip');
-        const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
-        const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
-        const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
-        const tooltipClose = tooltip.querySelector('.tidbit-tooltip-close');
-        const audio = document.getElementById('tooltip-audio');
-        let currentTrigger = null;
-        let hideTimeout = null;
-        let mouseOverTrigger = false;
-        let mouseOverTooltip = false;
+        // Tooltip logic
+        (function() {
+            const tooltip = document.getElementById('tidbit-tooltip');
+            const tooltipImg = tooltip.querySelector('.tidbit-tooltip-img');
+            const tooltipText = tooltip.querySelector('.tidbit-tooltip-text');
+            const tooltipBtn = tooltip.querySelector('.tidbit-tooltip-btn');
+            const tooltipClose = tooltip.querySelector('.tidbit-tooltip-close');
+            const audio = document.getElementById('tooltip-audio');
+            let currentTrigger = null;
+            let hideTimeout = null;
+            let mouseOverTrigger = false;
+            let mouseOverTooltip = false;
 
-        // Position the tooltip below the trigger
-        function positionTooltip(trigger) {
-            const rect = trigger.getBoundingClientRect();
-            tooltip.style.display = 'flex';
-            const tooltipRect = tooltip.getBoundingClientRect();
-            const top = rect.bottom + window.scrollY;
-            const left = rect.left + window.scrollX + (rect.width - tooltipRect.width) / 2;
-            tooltip.style.top = `${top}px`;
-            tooltip.style.left = `${left}px`;
-        }
-
-        // Position the invisible bridge between trigger and tooltip
-        function positionBridge(trigger, tooltip) {
-            const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
-            if (!bridge) return;
-            const triggerRect = trigger.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-            let distance = tooltipRect.top - triggerRect.bottom;
-            if (distance < 0) distance = 0;
-            bridge.style.position = "absolute";
-            bridge.style.top = (trigger.offsetHeight) + "px";
-            bridge.style.height = distance + "px";
-            bridge.style.left = 0;
-            bridge.style.width = "100%";
-            bridge.style.background = "transparent";
-            bridge.style.pointerEvents = "auto";
-            bridge.style.zIndex = 1999;
-        }
-
-        function showTooltip(trigger) {
-            clearTimeout(hideTimeout);
-            currentTrigger = trigger;
-            tooltipImg.src = trigger.getAttribute('data-img') || '';
-            tooltipText.textContent = trigger.getAttribute('data-text') || '';
-            tooltipBtn.onclick = () => window.open(trigger.getAttribute('data-link') || '#', '_blank');
-            const btnPos = trigger.getAttribute('data-btn-pos') || 'bottom';
-            tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
-            tooltip.style.display = 'flex';
-            setTimeout(() => tooltip.classList.add('visible'), 10);
-            try { audio.currentTime = 0; audio.play(); } catch(e){}
-            positionTooltip(trigger);
-            positionBridge(trigger, tooltip);
-            // Always (re-)attach bridge handlers
-            const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
-            if (bridge) {
-                bridge.onmouseenter = function() {
-                    mouseOverTrigger = true;
-                    clearTimeout(hideTimeout);
-                };
-                bridge.onmouseleave = function() {
-                    mouseOverTrigger = false;
-                    setTimeout(() => {
-                        if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-                    }, 10);
-                };
+            // Position the tooltip below the trigger
+            function positionTooltip(trigger) {
+                const rect = trigger.getBoundingClientRect();
+                tooltip.style.display = 'flex';
+                const tooltipRect = tooltip.getBoundingClientRect();
+                let top = rect.bottom + window.scrollY + 4;
+                let left = rect.left + window.scrollX + (rect.width - tooltipRect.width) / 2;
+                // Clamp inside viewport
+                left = Math.max(8, Math.min(left, window.innerWidth - tooltipRect.width - 8));
+                top = Math.max(8, Math.min(top, window.innerHeight + window.scrollY - tooltipRect.height - 8));
+                tooltip.style.top = `${top}px`;
+                tooltip.style.left = `${left}px`;
             }
-        }
 
-        function hideTooltip() {
-            tooltip.classList.remove('visible');
-            hideTimeout = setTimeout(() => {
-                tooltip.style.display = 'none';
-                currentTrigger = null;
-            }, 100);
-        }
+            // Set up invisible bridge between trigger and tooltip
+            function positionBridge(trigger, tooltip) {
+                const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
+                if (!bridge) return;
+                const triggerRect = trigger.getBoundingClientRect();
+                const tooltipRect = tooltip.getBoundingClientRect();
+                let distance = tooltipRect.top - triggerRect.bottom;
+                if (distance < 0) distance = 0;
+                bridge.style.position = "absolute";
+                bridge.style.top = (trigger.offsetHeight) + "px";
+                bridge.style.height = distance + "px";
+                bridge.style.left = 0;
+                bridge.style.width = "100%";
+                bridge.style.background = "transparent";
+                bridge.style.pointerEvents = "auto";
+                bridge.style.zIndex = 1999;
+            }
 
-        // Tooltip event listeners for desktop and touch
-        function setupTooltipListeners() {
-            document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
-                // Desktop hover
-                el.addEventListener('mouseenter', function() {
-                    mouseOverTrigger = true;
-                    showTooltip(el);
-                });
-                el.addEventListener('mouseleave', function() {
-                    mouseOverTrigger = false;
-                    setTimeout(() => {
-                        if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-                    }, 10);
-                });
+            function showTooltip(trigger) {
+                clearTimeout(hideTimeout);
+                currentTrigger = trigger;
+                tooltipImg.src = trigger.getAttribute('data-img') || '';
+                tooltipText.textContent = trigger.getAttribute('data-text') || '';
+                tooltipBtn.onclick = () => window.open(trigger.getAttribute('data-link') || '#', '_blank');
+                const btnPos = trigger.getAttribute('data-btn-pos') || 'bottom';
+                tooltipBtn.className = 'tidbit-tooltip-btn btn-' + btnPos;
+                tooltip.style.display = 'flex';
+                tooltip.style.pointerEvents = 'auto';
+                setTimeout(() => tooltip.classList.add('visible'), 10);
+                try { audio.currentTime = 0; audio.play(); } catch(e){}
+                positionTooltip(trigger);
+                positionBridge(trigger, tooltip);
 
-                // Touch/tap support
-                el.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    showTooltip(el);
-                }, { passive: false });
-
-                el.addEventListener('click', function(e) {
-                    // On touch devices, click can be a fallback if touchstart doesn't fire.
-                    if (window.ontouchstart !== undefined) {
-                        e.preventDefault();
-                    }
-                    showTooltip(el);
-                });
-
-                // Attach bridge listeners at startup for robustness
-                const bridge = el.querySelector('.tidbit-tooltip-bridge');
+                // Always (re-)attach bridge handlers
+                const bridge = trigger.querySelector('.tidbit-tooltip-bridge');
                 if (bridge) {
                     bridge.onmouseenter = function() {
                         mouseOverTrigger = true;
@@ -331,65 +283,119 @@
                         }, 10);
                     };
                 }
+            }
+
+            function hideTooltip() {
+                tooltip.classList.remove('visible');
+                hideTimeout = setTimeout(() => {
+                    tooltip.style.display = 'none';
+                    tooltip.style.pointerEvents = 'none';
+                    currentTrigger = null;
+                }, 100);
+            }
+
+            // Tooltip event listeners for desktop and touch
+            function setupTooltipListeners() {
+                document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(el => {
+                    // Desktop hover
+                    el.addEventListener('mouseenter', function() {
+                        mouseOverTrigger = true;
+                        showTooltip(el);
+                    });
+                    el.addEventListener('mouseleave', function() {
+                        mouseOverTrigger = false;
+                        setTimeout(() => {
+                            if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+                        }, 10);
+                    });
+
+                    // Touch/tap support
+                    el.addEventListener('touchstart', function(e) {
+                        e.preventDefault();
+                        showTooltip(el);
+                    }, { passive: false });
+
+                    el.addEventListener('click', function(e) {
+                        // On touch devices, click can be a fallback if touchstart doesn't fire.
+                        if (window.ontouchstart !== undefined) {
+                            e.preventDefault();
+                        }
+                        showTooltip(el);
+                    });
+
+                    // Attach bridge listeners at startup for robustness
+                    const bridge = el.querySelector('.tidbit-tooltip-bridge');
+                    if (bridge) {
+                        bridge.onmouseenter = function() {
+                            mouseOverTrigger = true;
+                            clearTimeout(hideTimeout);
+                        };
+                        bridge.onmouseleave = function() {
+                            mouseOverTrigger = false;
+                            setTimeout(() => {
+                                if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+                            }, 10);
+                        };
+                    }
+                });
+            }
+
+            // Hide tooltip when tapping outside on touch devices
+            document.body.addEventListener('touchstart', function(e) {
+                if (
+                    !e.target.closest('.tidbit-tooltip-wrapper') &&
+                    !e.target.closest('.tidbit-tooltip-box')
+                ) {
+                    hideTooltip();
+                }
+            }, { passive: false });
+
+            // Tooltip hover handlers
+            tooltip.addEventListener('mouseenter', function() {
+                mouseOverTooltip = true;
+                clearTimeout(hideTimeout);
             });
-        }
+            tooltip.addEventListener('mouseleave', function() {
+                mouseOverTooltip = false;
+                setTimeout(() => {
+                    if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
+                }, 10);
+            });
 
-        // Hide tooltip when tapping outside on touch devices
-        document.body.addEventListener('touchstart', function(e) {
-            if (
-                !e.target.closest('.tidbit-tooltip-wrapper') &&
-                !e.target.closest('.tidbit-tooltip-box')
-            ) {
+            // Close button for tooltip (for touch users)
+            tooltipClose.addEventListener('click', function() {
                 hideTooltip();
-            }
-        }, { passive: false });
+            });
 
-        // Tooltip hover handlers
-        tooltip.addEventListener('mouseenter', function() {
-            mouseOverTooltip = true;
-            clearTimeout(hideTimeout);
-        });
-        tooltip.addEventListener('mouseleave', function() {
-            mouseOverTooltip = false;
-            setTimeout(() => {
-                if (!mouseOverTrigger && !mouseOverTooltip) hideTooltip();
-            }, 10);
-        });
+            // MutationObserver to ensure pointer events set correctly
+            const observer = new MutationObserver(() => {
+                if (tooltip.classList.contains('visible')) {
+                    tooltip.style.pointerEvents = 'auto';
+                    tooltipBtn.style.pointerEvents = 'auto';
+                } else {
+                    tooltip.style.pointerEvents = 'none';
+                }
+            });
+            observer.observe(tooltip, { attributes: true, attributeFilter: ['class'] });
 
-        // Close button for tooltip (for touch users)
-        tooltipClose.addEventListener('click', function() {
-            hideTooltip();
-        });
+            // Reposition on scroll/resize
+            window.addEventListener('scroll', () => {
+                if (currentTrigger && tooltip.classList.contains('visible')) {
+                    positionTooltip(currentTrigger);
+                    positionBridge(currentTrigger, tooltip);
+                }
+            });
+            window.addEventListener('resize', () => {
+                if (currentTrigger && tooltip.classList.contains('visible')) {
+                    positionTooltip(currentTrigger);
+                    positionBridge(currentTrigger, tooltip);
+                }
+            });
 
-        // When the tooltip is visible, make sure pointer events are on for all children (fixes unclickable button issue)
-        const observer = new MutationObserver(() => {
-            if (tooltip.classList.contains('visible')) {
-                tooltip.style.pointerEvents = 'auto';
-                tooltipBtn.style.pointerEvents = 'auto';
-            } else {
-                tooltip.style.pointerEvents = 'none';
-            }
-        });
-        observer.observe(tooltip, { attributes: true, attributeFilter: ['class'] });
-
-        // Reposition on scroll/resize (for floating tooltips)
-        window.addEventListener('scroll', () => {
-            if (currentTrigger && tooltip.classList.contains('visible')) {
-                positionTooltip(currentTrigger);
-                positionBridge(currentTrigger, tooltip);
-            }
-        });
-        window.addEventListener('resize', () => {
-            if (currentTrigger && tooltip.classList.contains('visible')) {
-                positionTooltip(currentTrigger);
-                positionBridge(currentTrigger, tooltip);
-            }
-        });
-
-        // Re-run listeners after DOM loaded (important for some embed systems)
-        document.addEventListener('DOMContentLoaded', setupTooltipListeners);
-        // Also run immediately in case script is at the end of body
-        setupTooltipListeners();
+            // Setup listeners
+            document.addEventListener('DOMContentLoaded', setupTooltipListeners);
+            setupTooltipListeners();
+        })();
     </script>
 </body>
 </html>
