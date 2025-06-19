@@ -296,17 +296,18 @@
     <script>
     // Toggle interpretation visibility
     document.addEventListener('DOMContentLoaded', function() {
-        const toggleSwitch = document.querySelector('.toggle-switch');
-        const interpretations = document.querySelectorAll('.interpretation');
-        function updateInterpretations() {
-            const show = toggleSwitch.classList.contains('active');
-            interpretations.forEach(el => el.style.display = show ? 'block' : 'none');
-        }
-        toggleSwitch.addEventListener('click', function() {
-            toggleSwitch.classList.toggle('active');
-            updateInterpretations();
-        });
+    // Update selector to match new structure
+    const toggleSwitch = document.querySelector('.toggle-switch');
+    const interpretations = document.querySelectorAll('.interpretation');
+    function updateInterpretations() {
+        const show = toggleSwitch.classList.contains('active');
+        interpretations.forEach(el => el.style.display = show ? 'block' : 'none');
+    }
+    toggleSwitch.addEventListener('click', function() {
+        toggleSwitch.classList.toggle('active');
         updateInterpretations();
+    });
+    updateInterpretations();
     });
 
     // Tooltip sound and mobile tap-to-toggle
