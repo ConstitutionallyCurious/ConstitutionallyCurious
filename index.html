@@ -23,6 +23,7 @@
       --sidebar-link-bg-active: #eaf2fb;
       --z-sidebar: 1001;
       --z-topbar: 1010;
+      --z-tooltip: 9999;
     }
     html { font-size: 16px; }
     body {
@@ -182,8 +183,14 @@
       margin-bottom: 1em;
       font-style: italic;
     }
-    /* Tidbit tooltip styles - position: fixed, not cut off */
-    .tidbit-tooltip-wrapper { position: relative; display: inline-block; cursor: pointer; }
+    /* Tidbit tooltip styles - position absolute, always visible on hover */
+    .tidbit-tooltip-wrapper {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      vertical-align: baseline;
+      z-index: var(--z-tooltip);
+    }
     .tidbit-tooltip-box {
       visibility: hidden;
       opacity: 0;
@@ -195,39 +202,20 @@
       box-shadow: 0 4px 24px rgba(0,0,0,0.12);
       padding: 16px;
       font-size: 16px;
-      position: absolute; /* not fixed for static, overlay will be fixed */
+      position: absolute;
+      top: 100%;
       left: 50%;
-      top: 110%;
-      z-index: 2000;
-      transition: opacity 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      pointer-events: none;
-    }
-    /* Real tooltip overlay, fixed positioning */
-    #tidbit-tooltip {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 270px;
-      z-index: 5000;
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
-      background: #fff;
-      color: #222;
-      border: 1px solid #888;
-      border-radius: 8px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-      padding: 16px;
-      font-size: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      z-index: var(--z-tooltip);
+      transform: translate(-50%, 8px);
       transition: opacity 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 200px;
+      pointer-events: none;
     }
-    #tidbit-tooltip.visible {
+    .tidbit-tooltip-wrapper:hover .tidbit-tooltip-box,
+    .tidbit-tooltip-wrapper:focus-within .tidbit-tooltip-box {
       visibility: visible;
       opacity: 1;
       pointer-events: auto;
@@ -240,6 +228,7 @@
     }
     .tidbit-tooltip-btn:hover { background: #767676; }
     .tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
+    /* Mobile tap-to-toggle */
     @media (hover: none) and (pointer: coarse) {
       .tidbit-tooltip-box { pointer-events: none; }
       .tidbit-tooltip-wrapper.active .tidbit-tooltip-box {
@@ -374,8 +363,6 @@
       </footer>
     </div>
   </div>
-  <!-- Only one tooltip box for entire page, dynamically filled/positioned -->
-  <div id="tidbit-tooltip"></div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
   <!-- JS for Interpretation Toggle -->
   <script>
@@ -393,89 +380,48 @@
       updateInterpretations();
     });
   </script>
-  <!-- Tooltip sound and overlay: fix for version 9 style -->
+  <!-- Tooltip sound and proper always-on hover logic -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const tooltip = document.getElementById('tidbit-tooltip');
       const audio = document.getElementById('tooltip-audio');
-      let hideTimeout = null;
-
-      function playTooltipSound() {
-        if(audio) {
-          audio.currentTime = 0;
-          audio.play().catch(()=>{});
-        }
-      }
-
-      function showTooltipFor(trigger) {
-        const wrapper = trigger.closest('.tidbit-tooltip-wrapper');
-        const staticBox = wrapper.querySelector('.tidbit-tooltip-box');
-        if (!staticBox) return;
-        tooltip.innerHTML = staticBox.innerHTML;
-        tooltip.classList.add('visible');
-        // Smart positioning
-        setTimeout(() => {
-          const triggerRect = trigger.getBoundingClientRect();
-          const tooltipRect = tooltip.getBoundingClientRect();
-          const spacing = 10;
-          let top = triggerRect.bottom + spacing;
-          let left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
-          if(left + tooltipRect.width > window.innerWidth - 8) left = window.innerWidth - tooltipRect.width - 8;
-          if(left < 8) left = 8;
-          if(top + tooltipRect.height > window.innerHeight - 8) {
-            top = triggerRect.top - tooltipRect.height - spacing;
-            if(top < 8) top = 8;
+      // always play on hover/focus/click
+      document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
+        function playSound() {
+          if(audio) {
+            audio.currentTime = 0;
+            audio.play().catch(()=>{});
           }
-          tooltip.style.left = (left + window.scrollX) + "px";
-          tooltip.style.top = (top + window.scrollY) + "px";
-        }, 0);
-      }
-
-      function hideTooltip() {
-        tooltip.classList.remove('visible');
-        tooltip.style.left = "-9999px";
-        tooltip.style.top = "-9999px";
-        tooltip.innerHTML = '';
-      }
-
-      document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger){
-        trigger.addEventListener('mouseenter', function(){
-          clearTimeout(hideTimeout);
-          playTooltipSound();
-          showTooltipFor(trigger);
-        });
-        trigger.addEventListener('focus', function(){
-          clearTimeout(hideTimeout);
-          playTooltipSound();
-          showTooltipFor(trigger);
-        });
-        trigger.addEventListener('mouseleave', function(){
-          hideTimeout = setTimeout(hideTooltip, 120);
-        });
-        trigger.addEventListener('blur', function(){
-          hideTimeout = setTimeout(hideTooltip, 120);
-        });
-        trigger.addEventListener('click', function(e){
-          playTooltipSound();
-        });
+        }
+        trigger.addEventListener('mouseenter', playSound);
+        trigger.addEventListener('focus', playSound);
+        trigger.addEventListener('click', playSound);
       });
-      tooltip.addEventListener('mouseleave', hideTooltip);
-      window.addEventListener('scroll', hideTooltip, {passive:true});
-      // Mobile tap-to-toggle
+
+      // For mobile tap-to-toggle support
       function isTouchDevice() {
         return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
       }
-      if(isTouchDevice()) {
-        document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger){
-          trigger.addEventListener('click', function(e){
-            e.preventDefault();
-            playTooltipSound();
-            showTooltipFor(trigger);
+      if (isTouchDevice()) {
+        document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
+          trigger.addEventListener('click', function(e) {
+            var parent = trigger.closest('.tidbit-tooltip-wrapper');
+            if(parent.classList.contains('active')) {
+              parent.classList.remove('active');
+            } else {
+              // Close others
+              document.querySelectorAll('.tidbit-tooltip-wrapper.active').forEach(function(other) {
+                if(other!==parent) other.classList.remove('active');
+              });
+              parent.classList.add('active');
+            }
           });
         });
-        document.addEventListener('click', function(e){
-          if(!e.target.closest('.tidbit-tooltip-trigger') && !e.target.closest('#tidbit-tooltip')) {
-            hideTooltip();
+        // Tap outside closes all
+        document.addEventListener('click', function(e) {
+          if(!e.target.closest('.tidbit-tooltip-wrapper')) {
+            document.querySelectorAll('.tidbit-tooltip-wrapper.active').forEach(function(el){
+              el.classList.remove('active');
+            });
           }
         });
       }
