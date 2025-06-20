@@ -195,9 +195,9 @@
       box-shadow: 0 4px 24px rgba(0,0,0,0.12);
       padding: 16px;
       font-size: 16px;
-      position: fixed;
-      left: 0; /* will be positioned by JS */
-      top: 0;
+      position: absolute;
+      left: 50%;
+      top: 110%;
       z-index: 2000;
       transition: opacity 0.2s;
       display: flex;
@@ -205,10 +205,32 @@
       align-items: center;
       pointer-events: none;
     }
-    .tidbit-tooltip-box.visible {
+    /* Real tooltip overlay, fixed positioning */
+    #tidbit-tooltip {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 270px;
+      z-index: 5000;
+      visibility: hidden;
+      opacity: 0;
+      display: none;
+      pointer-events: auto;
+      transition: opacity 0.2s;
+      background: #fff;
+      color: #222;
+      border: 1px solid #888;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      padding: 16px;
+      font-size: 16px;
+      flex-direction: column;
+      align-items: center;
+    }
+    #tidbit-tooltip.visible {
       visibility: visible;
       opacity: 1;
-      pointer-events: auto;
+      display: flex;
     }
     .tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
     .tidbit-tooltip-btn {
@@ -289,7 +311,6 @@
         <li><a href="#article-ii" class="toc-link">Article II</a></li>
         <li><a href="#article-iii" class="toc-link">Article III</a></li>
         <li><a href="#amendment-xiii" class="toc-link">Amendment XIII</a></li>
-        <!-- Add more articles/amendments as needed -->
       </ul>
     </nav>
     <div class="main-content">
@@ -403,14 +424,13 @@
         </p>
         <span class="interpretation">[Interpretation for Amendment XIII]</span>
       </section>
-      <!-- Add more cards as needed -->
       <footer class="footer">
         <p>© 2025 Constitutionally Curious</p>
       </footer>
     </div>
   </div>
   <!-- Only one tooltip box for entire page, dynamically filled/positioned -->
-  <div id="tidbit-tooltip" class="tidbit-tooltip-box"></div>
+  <div id="tidbit-tooltip" class="tidbit-tooltip-box" style="display:none;"></div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
   <!-- JS for Interpretation Toggle -->
   <script>
@@ -430,125 +450,110 @@
   </script>
   <!-- Tooltip sound and mobile tap-to-toggle, improved fixed tooltip logic -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Use only one tooltip box for the page
-      const tooltip = document.getElementById('tidbit-tooltip');
-      const audio = document.getElementById('tooltip-audio');
-      let hideTimeout = null;
+  document.addEventListener('DOMContentLoaded', function() {
+    // One tooltip box for the page
+    const tooltip = document.getElementById('tidbit-tooltip');
+    const audio = document.getElementById('tooltip-audio');
+    let hideTimeout = null;
 
-      function playTooltipSound() {
-        if (audio && audio.paused) {
-          audio.currentTime = 0;
-          audio.play().catch(() => {}); // ignore autoplay errors
-        }
+    function playTooltipSound() {
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
       }
+    }
 
-      // Position the tooltip so it will not get cut off by side/top menus
-      function showTooltip(trigger) {
-        // Fill tooltip with content
-        const box = tooltip;
-        box.innerHTML = ''; // Clear box
+    // Position and show tooltip so it is never cut off
+    function showTooltip(trigger) {
+      // Fill tooltip with content
+      tooltip.innerHTML = '';
+      const wrapper = trigger.closest('.tidbit-tooltip-wrapper');
+      const boxData = wrapper.querySelector('.tidbit-tooltip-box');
+      if (!boxData) return;
+      for (const node of boxData.childNodes) {
+        tooltip.appendChild(node.cloneNode(true));
+      }
+      tooltip.style.display = 'flex';
+      tooltip.classList.add('visible');
 
-        // Find the box in the original trigger
-        const boxData = trigger.closest('.tidbit-tooltip-wrapper').querySelector('.tidbit-tooltip-box');
-        if (!boxData) return;
-
-        // Clone content from the static box (including images/buttons)
-        for (const node of boxData.childNodes) {
-          box.appendChild(node.cloneNode(true));
-        }
-
-        // Show it
-        box.classList.add('visible');
-
-        // Positioning
+      // Wait for DOM update to get size
+      setTimeout(() => {
         const triggerRect = trigger.getBoundingClientRect();
-        const boxRect = box.getBoundingClientRect();
+        const boxRect = tooltip.getBoundingClientRect();
         const spacing = 10;
         let top = triggerRect.bottom + spacing;
         let left = triggerRect.left + (triggerRect.width - boxRect.width) / 2;
-
-        // If tooltip would overflow right
         if ((left + boxRect.width) > window.innerWidth - 8) {
           left = window.innerWidth - boxRect.width - 8;
         }
-        // If tooltip would overflow left
         if (left < 8) left = 8;
-
-        // If tooltip would overflow bottom
         if ((top + boxRect.height) > window.innerHeight - 8) {
           top = triggerRect.top - boxRect.height - spacing;
           if (top < 8) top = 8;
         }
-
-        // Always below topbar
         const topbar = document.querySelector('.topbar-nav');
         let topbarHeight = topbar ? topbar.getBoundingClientRect().bottom : 0;
         if (top < topbarHeight + 5) top = topbarHeight + 5;
+        tooltip.style.left = left + window.scrollX + 'px';
+        tooltip.style.top = top + window.scrollY + 'px';
+      }, 0);
+    }
 
-        box.style.left = left + window.scrollX + 'px';
-        box.style.top = top + window.scrollY + 'px';
-      }
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+      tooltip.style.display = 'none';
+      tooltip.innerHTML = '';
+    }
 
-      // Hide tooltip
-      function hideTooltip() {
-        tooltip.classList.remove('visible');
-        tooltip.innerHTML = '';
-      }
+    // Desktop hover/focus logic
+    document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
+      trigger.addEventListener('mouseenter', function(e) {
+        clearTimeout(hideTimeout);
+        playTooltipSound();
+        showTooltip(trigger);
+      });
+      trigger.addEventListener('focus', function(e) {
+        clearTimeout(hideTimeout);
+        playTooltipSound();
+        showTooltip(trigger);
+      });
+      trigger.addEventListener('mouseleave', function(e) {
+        hideTimeout = setTimeout(hideTooltip, 120);
+      });
+      trigger.addEventListener('blur', function(e) {
+        hideTimeout = setTimeout(hideTooltip, 120);
+      });
+      trigger.addEventListener('click', function(e) {
+        playTooltipSound();
+      });
+    });
 
-      // Desktop hover/focus logic
+    tooltip.addEventListener('mouseleave', hideTooltip);
+
+    window.addEventListener('scroll', hideTooltip, {passive:true});
+
+    // Mobile tap-to-toggle support
+    function isTouchDevice() {
+      return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    }
+    if (isTouchDevice()) {
       document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
-        trigger.addEventListener('mouseenter', function(e) {
-          clearTimeout(hideTimeout);
-          playTooltipSound();
-          showTooltip(trigger);
-        });
-        trigger.addEventListener('focus', function(e) {
-          clearTimeout(hideTimeout);
-          playTooltipSound();
-          showTooltip(trigger);
-        });
-        trigger.addEventListener('mouseleave', function(e) {
-          hideTimeout = setTimeout(hideTooltip, 120);
-        });
-        trigger.addEventListener('blur', function(e) {
-          hideTimeout = setTimeout(hideTooltip, 120);
-        });
         trigger.addEventListener('click', function(e) {
+          e.preventDefault();
           playTooltipSound();
+          showTooltip(trigger);
         });
       });
-
-      // Hide if leaving the tooltip itself
-      tooltip.addEventListener('mouseleave', hideTooltip);
-
-      // If scrolling, always hide tooltip for safety
-      window.addEventListener('scroll', hideTooltip, {passive:true});
-
-      // Mobile tap-to-toggle support (shows fixed box)
-      function isTouchDevice() {
-        return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-      }
-      if (isTouchDevice()) {
-        document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
-          trigger.addEventListener('click', function(e) {
-            e.preventDefault();
-            playTooltipSound();
-            showTooltip(trigger);
-          });
-        });
-        // Tap outside closes
-        document.addEventListener('click', function(e) {
-          if(!e.target.closest('.tidbit-tooltip-trigger') && !e.target.closest('#tidbit-tooltip')) {
-            hideTooltip();
-          }
-        });
-      }
-    });
+      document.addEventListener('click', function(e) {
+        if(!e.target.closest('.tidbit-tooltip-trigger') && !e.target.closest('#tidbit-tooltip')) {
+          hideTooltip();
+        }
+      });
+    }
+  });
   </script>
   <!-- Sidebar: Hamburger menu for mobile, sticky on desktop, highlight current section -->
   <script>
-    // Hamburger/collapsible menu logic
     function closeSidebar() {
       document.querySelector('.sidebar').classList.remove('open');
       document.body.style.overflow = '';
@@ -575,20 +580,16 @@
       window.addEventListener('resize', handleResize);
       if(hamburger) hamburger.addEventListener('click', openSidebar);
       if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
-      // Clicking a sidebar link closes the menu (mobile)
       sidebar.querySelectorAll('.toc-link').forEach(link => {
         link.addEventListener('click', function() {
           if(window.innerWidth <= 1000) closeSidebar();
         });
       });
     });
-
-    // Smooth scrolling and active link highlight with IntersectionObserver
     document.addEventListener('DOMContentLoaded', function() {
       const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
       const sectionIds = tocLinks.map(link => link.getAttribute('href').replace('#',''));
       const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
-      // Smooth scroll
       tocLinks.forEach(link => {
         link.addEventListener('click', function(e) {
           const id = this.getAttribute('href').slice(1);
@@ -602,13 +603,11 @@
           }
         });
       });
-      // IntersectionObserver for highlight
       if ("IntersectionObserver" in window) {
         let activeIndex = 0;
         const observer = new IntersectionObserver((entries) => {
           let visibleSections = entries.filter(e => e.isIntersecting);
           if (visibleSections.length > 0) {
-            // Find the topmost visible section
             visibleSections.sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
             let idx = sections.indexOf(visibleSections[0].target);
             if (idx !== -1) {
@@ -621,7 +620,6 @@
       }
     });
   </script>
-  <!-- Google Translate scripts -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
