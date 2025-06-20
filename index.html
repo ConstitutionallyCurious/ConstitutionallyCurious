@@ -2,431 +2,508 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Constitutionally Curious</title>
-  <!-- Google Fonts: Open Sans, Montserrat, Georgia -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Constitution</title>
+  <!-- Google Fonts: Roboto for body, Playfair Display for headings, Jacquard for legacy, WeThePeople custom -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Jacquard+24&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-main: #f9f9f9;
-      --bg-alt: #fafafa;
+      --body-bg: #f9f9f9;
       --card-bg: #fff;
-      --text-main: #232323;
-      --heading-serif: 'Georgia', serif;
-      --heading-sans: 'Montserrat', 'Open Sans', Arial, Helvetica, sans-serif;
-      --body-sans: 'Open Sans', Arial, Helvetica, sans-serif;
-      --accent-navy: #22335b;
-      --accent-red: #b03a2e;
-      --shadow: 0 2px 16px 0 rgba(34, 51, 91, 0.07);
-      --radius: 1em;
-      --transition: 0.2s cubic-bezier(.4,0,.2,1);
-      --tooltip-bg: #fff;
+      --card-alt-bg: #f9f9f9;
+      --primary: #004080;
+      --primary-dark: #002f5f;
+      --text-main: #333333;
+      --accent: #004080;
+      --shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      --border-radius: 8px;
+      --spacing: 1.5rem;
+      --sidebar-width: 260px;
+      --sidebar-bg: #fff;
+      --sidebar-border: #e5e5e5;
+      --sidebar-link-hover: #002f5f;
+      --sidebar-link-bg-active: #eaf2fb;
+      --z-sidebar: 1001;
+      --z-topbar: 1010;
     }
+    html { font-size: 16px; }
     body {
-      background: var(--bg-main);
+      background: var(--body-bg);
       color: var(--text-main);
-      font-family: var(--body-sans);
-      line-height: 1.7;
+      font-family: 'Roboto', Arial, sans-serif;
+      line-height: 1.65;
       margin: 0;
       padding: 0;
-      font-size: 1.12rem;
-      letter-spacing: 0.01em;
+      min-height: 100vh;
+      transition: background 0.3s;
+    }
+    .main-layout {
+      display: flex;
       min-height: 100vh;
     }
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      background: #fff;
-      border-bottom: 1px solid #e4e4e4;
-      padding: 1em 2.5em 1em 282px;
+    /* Sidebar */
+    .sidebar {
       position: sticky;
       top: 0;
-      z-index: 200;
-      gap: 1.5em;
-    }
-    .container {
-      max-width: 820px;
-      margin: 0 auto 0 280px;
-      padding: 2.5em 2em 3em 2em;
-    }
-    /* Sticky Sidebar */
-    .sidebar {
-      position: fixed;
       left: 0;
-      top: 0;
-      width: 260px;
-      height: 100vh;
-      background: #f5f6fa;
-      border-right: 1px solid #e9e9e9;
-      box-shadow: 1px 0 8px 0 rgba(34, 51, 91, 0.06);
-      padding: 2em 1.25em 2em 2em;
+      width: var(--sidebar-width);
+      min-height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      box-shadow: 2px 0 8px 0 rgba(0,0,0,0.02);
+      padding: 2rem 1rem 2rem 1.5rem;
+      z-index: var(--z-sidebar);
       display: flex;
       flex-direction: column;
-      z-index: 100;
-      overflow-y: auto;
+      gap: 1.5rem;
     }
     .sidebar h2 {
-      font-family: var(--heading-serif);
-      font-size: 1.35em;
-      margin: 0 0 1.2em 0;
-      color: var(--accent-navy);
-      font-weight: bold;
-      letter-spacing: 0.04em;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 1.25rem;
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: 0.03em;
     }
     .toc-list {
       list-style: none;
       padding: 0;
       margin: 0;
+      flex: 1 1 auto;
     }
     .toc-list li {
       margin-bottom: 0.7em;
     }
     .toc-link {
-      display: flex;
-      align-items: center;
+      display: block;
       text-decoration: none;
       color: var(--text-main);
-      font-family: var(--heading-sans);
-      font-size: 1em;
-      padding: 0.2em 0.5em;
-      border-radius: 0.5em;
-      transition: background var(--transition), color var(--transition);
-      position: relative;
+      padding: 0.4em 1.2em 0.4em 0.2em;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-family: 'Roboto', Arial, sans-serif;
+      transition: color 0.2s, background 0.2s;
     }
-    .toc-link .toc-icon {
-      margin-right: 0.6em;
-      font-size: 1.1em;
-      opacity: 0.8;
-    }
-    .toc-link.active, .toc-link:hover {
-      background: var(--accent-navy);
-      color: #fff;
+    .toc-link.active,
+    .toc-link:focus-visible {
+      background: var(--sidebar-link-bg-active);
+      color: var(--primary);
       font-weight: bold;
+      outline: none;
     }
-    /* Preamble Styling */
-    .preamble-container {
-      position: relative;
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 2em;
-      padding: 2.5em 2em 2.5em 2em;
-      z-index: 1;
-      overflow: hidden;
+    .toc-link:hover {
+      color: var(--sidebar-link-hover);
+      text-decoration: underline;
     }
-    .preamble-container::before {
-      content: "🇺🇸";
-      position: absolute;
-      font-size: 5.5em;
-      color: #f5f7fa;
-      top: 0.6em;
-      right: 1em;
-      opacity: 0.15;
-      pointer-events: none;
-      user-select: none;
-      z-index: 0;
+    .sidebar .close-btn,
+    .sidebar .hamburger {
+      display: none;
     }
-    .preamble-title {
-      font-family: var(--heading-serif);
-      font-size: 2.2em;
-      font-weight: bold;
-      color: var(--accent-navy);
-      letter-spacing: 0.03em;
-      margin-bottom: 0.5em;
-      text-shadow: 0 2px 8px #e0e3f5;
-      line-height: 1.15;
-    }
-    .preamble-text {
-      font-family: var(--body-sans);
-      font-size: 1.25em;
-      line-height: 1.8;
-      color: var(--text-main);
-      font-weight: 400;
-      margin-top: 0.7em;
-      margin-bottom: 0;
-    }
-    /* Article/Amendment Cards */
-    .section-band-odd {
-      background: var(--bg-alt);
-      padding: 2em 0;
-    }
-    .section-band-even {
-      background: transparent;
-      padding: 2em 0;
-    }
-    .article-card, .amendment-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin: 0 auto 2em auto;
-      padding: 2.2em 2em 2em 2em;
-      position: relative;
-      overflow: hidden;
-    }
-    .article-card::before, .amendment-card::before {
-      position: absolute;
-      left: 1.2em;
-      top: 1.1em;
-      opacity: 0.09;
-      font-size: 4.5em;
-      z-index: 0;
-      pointer-events: none;
-      user-select: none;
-    }
-    .article-card::before {
-      content: "🏛️";
-    }
-    .amendment-card::before {
-      content: "⚖️";
-    }
-    .section-header {
+    /* Topbar nav */
+    .topbar-nav {
+      position: sticky;
+      top: 0;
+      left: 0;
+      z-index: var(--z-topbar);
+      background: #e0e0e0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+      border-radius: 2em;
+      padding: 0.6em 1.6em 0.8em 1.6em;
+      margin: 32px auto 32px auto;
+      width: max-content;
+      min-width: 230px;
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 0.55em;
-      font-family: var(--heading-serif);
-      font-size: 1.45em;
-      color: var(--accent-navy);
-      font-weight: bold;
-      margin-bottom: 0.6em;
+      gap: 2em;
+    }
+    .topbar-interpretation { display: flex; align-items: center; }
+    .toggle-label { font-size: 18px; font-weight: bold; margin-right: 10px; }
+    .toggle-switch {
       position: relative;
-      z-index: 1;
-    }
-    .section-header .section-icon {
-      font-size: 1.35em;
-      opacity: 0.8;
-      margin-right: 0.15em;
-    }
-    .article-title {
-      font-family: var(--heading-sans);
-      text-transform: uppercase;
-      font-size: 1.12em;
-      font-weight: bold;
-      letter-spacing: 0.07em;
-      color: var(--accent-navy);
-      border-bottom: 2px solid var(--accent-navy);
-      padding-bottom: 0.12em;
-      margin-bottom: 1.2em;
-      display: inline-block;
-    }
-    .clause-text {
-      font-family: var(--body-sans);
-      font-size: 1.07em;
-      font-weight: 400;
-      color: var(--text-main);
-      line-height: 1.75;
-      margin-bottom: 1em;
-      margin-top: 0.1em;
-    }
-    /* Tooltip Styling */
-    .tooltip {
-      position: relative;
+      width: 50px; height: 25px;
+      background-color: #ccc;
+      border-radius: 25px;
       cursor: pointer;
-      border-bottom: 2px dotted var(--accent-navy);
-      color: var(--accent-navy);
-      transition: border-color var(--transition), color var(--transition);
+      transition: background-color 0.3s;
     }
-    .tooltip:hover,
-    .tooltip:focus {
-      color: var(--accent-red);
-      border-bottom: 2px solid var(--accent-red);
+    .toggle-switch:before {
+      content: '';
+      position: absolute; top: 3px; left: 3px;
+      width: 19px; height: 19px;
+      background: #fff; border-radius: 50%;
+      transition: transform 0.3s;
     }
-    .tooltip-box {
-      visibility: hidden;
-      opacity: 0;
-      min-width: 200px;
-      background: var(--tooltip-bg);
-      color: var(--text-main);
-      text-align: left;
-      border-radius: 0.7em;
-      box-shadow: 0 4px 20px 0 rgba(34, 51, 91, 0.18);
-      padding: 0.85em 1.1em;
-      position: absolute;
-      z-index: 20;
-      left: 50%;
-      transform: translate(-50%, 0) scale(0.97);
-      top: 2.1em;
-      font-size: 0.99em;
-      line-height: 1.4;
-      transition: opacity 0.14s var(--transition), transform 0.14s var(--transition), visibility 0.14s;
-      pointer-events: none;
-      white-space: pre-line;
+    .toggle-switch.active { background: #4caf50; }
+    .toggle-switch.active:before { transform: translateX(25px); }
+    .topbar-translate {
+      display: flex; align-items: center;
     }
-    .tooltip:hover .tooltip-box,
-    .tooltip:focus .tooltip-box {
-      visibility: visible;
-      opacity: 1;
-      transform: translate(-50%, 0.45em) scale(1);
-      pointer-events: all;
+    .translate-icon-img {
+      width: 32px; height: 32px; object-fit: contain; margin-right: 0.3em;
+      background: none; border-radius: 0; box-shadow: none;
     }
-    /* Responsive */
-    @media (max-width: 950px) {
-      .container {
-        margin-left: 0;
-        padding: 1.2em 0.7em;
+    #google_translate_element { background: none !important; }
+
+    /* Main content area */
+    .main-content {
+      flex: 1 1 auto;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Card styling for each article/amendment */
+    .card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+    .card.alt-bg { background: var(--card-alt-bg); }
+    .card .jacquard { font-family: 'Jacquard 24', cursive; }
+    .wethepeople { font-family: 'WeThePeople', cursive; font-size: 3.0em; }
+    @font-face {
+      font-family: 'WeThePeople';
+      src: url('fonts/WeThePeople.ttf') format('truetype');
+      font-weight: bold;
+      font-style: normal;
+    }
+    /* Typography overrides */
+    h1, .wethepeople { font-family: 'WeThePeople', cursive; font-size: 2.5rem; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-top: 2.5rem; }
+    h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 1.7rem; }
+    p { font-size: 1.125rem; }
+    .card h2, .card h3, .card h4, .card h5 { font-family: 'Playfair Display', serif; }
+    .interpretation {
+      font-size: 1rem;
+      color: #666;
+      display: block;
+      margin-top: 0.5em;
+      margin-bottom: 1em;
+      font-style: italic;
+    }
+    /* Tidbit tooltip styles */
+    .tidbit-tooltip-wrapper { position: relative; display: inline-block; cursor: pointer; }
+    .tidbit-tooltip-box {
+      visibility: hidden; opacity: 0;
+      width: 270px; background: #fff; color: #222;
+      border: 1px solid #888; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      padding: 16px; font-size: 16px;
+      position: absolute; z-index: 1000;
+      left: 50%; top: 110%; transform: translateX(-50%);
+      transition: opacity 0.2s;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .tidbit-tooltip-wrapper:hover .tidbit-tooltip-box,
+    .tidbit-tooltip-wrapper:focus-within .tidbit-tooltip-box {
+      visibility: visible; opacity: 1;
+    }
+    .tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
+    .tidbit-tooltip-btn {
+      background: #a0a0a0; color: white; border: none; border-radius: 4px;
+      padding: 6px 18px; font-size: 15px; cursor: pointer; margin-top: 6px;
+      transition: background 0.2s; text-decoration: none;
+    }
+    .tidbit-tooltip-btn:hover { background: #767676; }
+    .tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
+    @media (hover: none) and (pointer: coarse) {
+      .tidbit-tooltip-box { pointer-events: none; }
+      .tidbit-tooltip-wrapper.active .tidbit-tooltip-box {
+        visibility: visible; opacity: 1; pointer-events: auto;
       }
+    }
+    /* General link styles */
+    a, .tidbit-tooltip-btn, .toc-link { color: var(--accent); transition: color 0.2s; }
+    a:hover, .tidbit-tooltip-btn:hover, .toc-link:hover { color: var(--primary-dark); text-decoration: underline; }
+    /* Responsive for mobile */
+    @media (max-width: 1000px) {
+      .main-layout { flex-direction: column; }
       .sidebar {
         display: none;
+        position: fixed;
+        left: 0; top: 0; height: 100vh;
+        z-index: var(--z-sidebar);
+        background: var(--sidebar-bg);
+        box-shadow: 2px 0 8px 0 rgba(0,0,0,0.08);
+        width: 80vw; max-width: 320px;
       }
-      .topbar {
-        padding-left: 1em;
+      .sidebar.open { display: flex; }
+      .sidebar .close-btn {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--primary);
+        align-self: flex-end;
+        margin-bottom: 1rem;
+        cursor: pointer;
       }
+      .hamburger {
+        display: inline-flex;
+        position: fixed;
+        top: 1.3rem; left: 1rem;
+        width: 44px; height: 44px;
+        background: #fff; border: 1px solid #e0e0e0;
+        border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        z-index: var(--z-topbar) !important;
+        align-items: center; justify-content: center;
+        cursor: pointer;
+      }
+      .main-content {
+        padding-left: 1rem; padding-right: 1rem;
+      }
+      .topbar-nav { margin-left: 0; margin-right: 0; }
     }
     @media (max-width: 600px) {
-      .preamble-container, .article-card, .amendment-card {
-        padding: 1.2em 0.7em 1em 0.7em;
-      }
-      .section-band-odd, .section-band-even {
-        padding: 1.2em 0;
-      }
-      .topbar {
-        flex-direction: column;
-        gap: 0.5em;
-        align-items: stretch;
-      }
+      .main-content { padding: 1rem 0.5rem; }
+      .topbar-nav { padding: 0.4em 0.6em; min-width: 120px; font-size: 1em; }
     }
   </style>
 </head>
 <body>
-  <nav class="sidebar" aria-label="Table of Contents">
-    <h2>Contents</h2>
-    <ul class="toc-list">
-      <li><a href="#preamble" class="toc-link active"><span class="toc-icon">📜</span>Preamble</a></li>
-      <li><a href="#article1" class="toc-link"><span class="toc-icon">🏛️</span>Article I</a></li>
-      <li><a href="#article2" class="toc-link"><span class="toc-icon">🏛️</span>Article II</a></li>
-      <li><a href="#article3" class="toc-link"><span class="toc-icon">🏛️</span>Article III</a></li>
-      <li><a href="#amendment1" class="toc-link"><span class="toc-icon">⚖️</span>Amendment I</a></li>
-    </ul>
-  </nav>
-  <div class="topbar">
-    <!-- GOOGLE TRANSLATE WIDGET -->
-    <div id="google_translate_element"></div>
+  <button class="hamburger" aria-label="Open menu" tabindex="0" style="display:none;">
+    <svg width="30" height="30" viewBox="0 0 30 30"><rect y="7" width="30" height="3" rx="1.5" fill="#004080"/><rect y="14" width="30" height="3" rx="1.5" fill="#004080"/><rect y="21" width="30" height="3" rx="1.5" fill="#004080"/></svg>
+  </button>
+  <div class="main-layout">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" aria-label="Table of Contents">
+      <button class="close-btn" aria-label="Close menu" tabindex="0">&times;</button>
+      <h2>Contents</h2>
+      <ul class="toc-list">
+        <li><a href="#preamble" class="toc-link">We the People</a></li>
+        <li><a href="#article-i" class="toc-link">Article I</a></li>
+        <li><a href="#article-ii" class="toc-link">Article II</a></li>
+        <li><a href="#article-iii" class="toc-link">Article III</a></li>
+        <li><a href="#amendment-xiii" class="toc-link">Amendment XIII</a></li>
+        <!-- Add more articles/amendments as needed -->
+      </ul>
+    </nav>
+    <div class="main-content">
+      <!-- Top bar -->
+      <div class="topbar-nav">
+        <div class="topbar-interpretation">
+          <span class="toggle-label">Interpretation</span>
+          <div class="toggle-switch active"></div>
+        </div>
+        <div class="topbar-translate">
+          <img src="Translateicon.png" alt="Google Translate" class="translate-icon-img">
+          <div id="google_translate_element"></div>
+        </div>
+      </div>
+      <!-- Main Content Cards -->
+      <section class="card" id="preamble">
+        <p>
+          <span class="wethepeople">We the People</span> of the United States, in Order to form a more perfect Union...
+        </p>
+        <span class="interpretation">[Interpretation for the Preamble]</span>
+      </section>
+      <section class="card alt-bg" id="article-i">
+        <h2>Article I</h2>
+        <h3>Section 1 - Congress</h3>
+        <span class="interpretation">[Interpretation for Section 1]</span>
+        <p>All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.</p>
+        <h3>Section 2 - The House of Representatives</h3>
+        <span class="interpretation">[Interpretation for Section 1]</span>
+        <p>The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications requisite for Electors of the most numerous Branch of the State Legislature.</p>
+        <p>No Person shall be a Representative who shall not have attained to the Age of twenty five Years, and been seven Years a Citizen of the United States, and who shall not, when elected, be an Inhabitant of that State in which he shall be chosen.</p>
+        <p>Representatives and direct Taxes shall be apportioned among the several States which may be included within this Union, according to their respective Numbers, which shall be determined by adding to the whole Number of free Persons, including those bound to Service for a Term of Years, and excluding Indians not taxed, three fifths of all other Persons. The actual Enumeration shall be made within three Years after the first Meeting of the Congress of the United States, and within every subsequent Term of ten Years, in such Manner as they shall by Law direct. The Number of Representatives shall not exceed one for every thirty Thousand, but each State shall have at Least one Representative; and until such enumeration shall be made, the State of New Hampshire shall be entitled to chuse three, Massachusetts eight, Rhode Island and Providence Plantations one, Connecticut five, New York six, New Jersey four, Pennsylvania eight, Delaware one, Maryland six, Virginia ten, North Carolina five, South Carolina five and Georgia three.</p>
+        <p>When vacancies happen in the Representation from any State, the Executive Authority thereof shall issue Writs of Election to fill such Vacancies.</p>
+        <p>The House of Representatives shall chuse their Speaker and other Officers; and shall have the sole Power of Impeachment.</p>
+        <span class="interpretation">[Interpretation for Section 2]</span>
+        <h3>Section 3 - The Senate</h3>
+        <span class="interpretation">[Interpretation for Section 1]</span>
+        <p>The Senate of the United States shall be composed of two Senators from each State, chosen by the Legislature thereof, for six Years; and each Senator shall have one Vote.</p>
+        <p>Immediately after they shall be assembled in Consequence of the first Election, they shall be divided as equally as may be into three Classes. The Seats of the Senators of the first Class shall be vacated at the Expiration of the second Year, of the second Class at the Expiration of the fourth Year, and of the third Class at the Expiration of the sixth Year, so that one third may be chosen every second Year; and if Vacancies happen by Resignation, or otherwise, during the Recess of the Legislature of any State, the Executive thereof may make temporary Appointments until the next Meeting of the Legislature, which shall then fill such Vacancies.</p>
+        <p>No Person shall be a Senator who shall not have attained to the Age of thirty Years, and been nine Years a Citizen of the United States, and who shall not, when elected, be an Inhabitant of that State for which he shall be chosen.</p>
+        <p>The Vice President of the United States shall be President of the Senate, but shall have no Vote, unless they be equally divided.</p>
+        <p>The Senate shall chuse their other Officers, and also a President pro tempore, in the Absence of the Vice President, or when he shall exercise the Office of President of the United States.</p>
+        <p>The Senate shall have the sole Power to try all Impeachments. When sitting for that Purpose, they shall be on Oath or Affirmation. When the President of the United States is tried, the Chief Justice shall preside: And no Person shall be convicted without the Concurrence of two thirds of the Members present.</p>
+        <p>Judgment in Cases of Impeachment shall not extend further than to removal from Office, and disqualification to hold and enjoy any Office of honor, Trust or Profit under the United States: but the Party convicted shall nevertheless be liable and subject to Indictment, Trial, Judgment and Punishment, according to Law.</p>
+        <span class="interpretation">[Interpretation for Section 3]</span>
+        <h3>Section 4 - Elections</h3>
+        <span class="interpretation">[Interpretation for Section 1]</span>
+        <p>The Times, Places and Manner of holding Elections for Senators and Representatives, shall be prescribed in each State by the Legislature thereof; but the Congress may at any time by Law make or alter such Regulations, except as to the Places of chusing Senators.</p>
+        <p>The Congress shall assemble at least once in every Year, and such Meeting shall be on the first Monday in December, unless they shall by Law appoint a different Day.</p>
+        <h3>Section 5 - Powers and Duties of Congress</h3>
+        <span class="interpretation">[Interpretation for Section 1]</span>
+        <p>Each House shall be the Judge of the Elections, Returns and Qualifications of its own Members, and a Majority of each shall constitute a Quorum to do Business; but a smaller Number may adjourn from day to day, and may be authorized to compel the Attendance of absent Members, in such Manner, and under such Penalties as each House may provide.</p>
+        <p>Each House may determine the Rules of its Proceedings, punish its Members for disorderly Behaviour, and, with the Concurrence of two thirds, expel a Member.</p>
+        <p>Each House shall keep a Journal of its Proceedings, and from time to time publish the same, excepting such Parts as may in their Judgment require Secrecy; and the Yeas and Nays of the Members of either House on any question shall, at the Desire of one fifth of those Present, be entered on the Journal.</p>
+        <p>Neither House, during the Session of Congress, shall, without the Consent of the other, adjourn for more than three days, nor to any other Place than that in which the two Houses shall be sitting.</p>
+        <h3>Section 6 - Rights and Disabilities of Members</h3>
+        <span class="interpretation">[Interpretation for Section 1]</span>
+        <p>The Senators and Representatives shall receive a Compensation for their Services, to be ascertained by Law, and paid out of the Treasury of the United States. They shall in all Cases, except Treason, Felony and Breach of the Peace, be privileged from Arrest during their Attendance at the Session of their respective Houses, and in going to and returning from the same; and for any Speech or Debate in either House, they shall not be questioned in any other Place.</p>
+        <p>No Senator or Representative shall, during the Time for which he was elected, be appointed to any civil Office under the Authority of the United States, which shall have been created, or the Emoluments whereof shall have been increased during such time; and no Person holding any Office under the United States, shall be a Member of either House during his Continuance in Office.</p>
+        <h3>Section 7 - Legislative Process</h3>
+        <span class="interpretation">[Interpretation for Section 1]</span>
+        <p>All Bills for raising Revenue shall originate in the House of Representatives; but the Senate may propose or concur with Amendments as on other Bills.</p>
+        <p>Every Bill which shall have passed the House of Representatives and the Senate, shall, before it become a Law, be presented to the President of the United States; If he approve he shall sign it, but if not he shall return it, with his Objections to that House in which it shall have originated, who shall enter the Objections at large on their Journal, and proceed to reconsider it. If after such Reconsideration two thirds of that House shall agree to pass the Bill, it shall be sent, together with the Objections, to the other House, by which it shall likewise be reconsidered, and if approved by two thirds of that House, it shall become a Law. But in all such Cases the Votes of both Houses shall be determined by yeas and Nays, and the Names of the Persons voting for and against the Bill shall be entered on the Journal of each House respectively. If any Bill shall not be returned by the President within ten Days (Sundays excepted) after it shall have been presented to him, the Same shall be a Law, in like Manner as if he had signed it, unless the Congress by their Adjournment prevent its Return, in which Case it shall not be a Law.</p>
+        <p>Every Order, Resolution, or Vote to which the Concurrence of the Senate and House of Representatives may be necessary (except on a question of Adjournment) shall be presented to the President of the United States; and before the Same shall take Effect, shall be approved by him, or being disapproved by him, shall be repassed by two thirds of the Senate and House of Representatives, according to the Rules and Limitations prescribed in the Case of a Bill.</p>
+        <h3>Section 8 - Powers of Congress</h3>
+        <p>
+          To regulate Commerce with foreign Nations, and among the several States, and with the Indian Tribes;
+          <span class="tidbit-tooltip-wrapper">
+            <span class="tidbit-tooltip-trigger" tabindex="0"><b><u>Naturalization,</u></b></span>
+            <span class="tidbit-tooltip-box" role="tooltip">
+              <img class="tidbit-tooltip-img" src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Johnadamsvp.flipped.jpg" alt="Tid-bit image">
+              <span class="tidbit-tooltip-text">Since 1798 Congress has used this clause in the past to target and deport immigrants based solely on their race or political opinion during times of war or national crisis.</span>
+              <a class="tidbit-tooltip-btn btn-bottom" href="https://constitutionallycurious.weebly.com/blog/immigration-the-constitution" target="_blank">Learn More</a>
+            </span>
+          </span>
+          and uniform Laws on the subject of Bankruptcies throughout the United States;
+        </p>
+        <p>To coin Money, regulate the Value thereof, and of foreign Coin, and fix the Standard of Weights and Measures;</p>
+        <p>To provide for the Punishment of counterfeiting the Securities and current Coin of the United States;</p>
+        <p>To establish Post Offices and post Roads;</p>
+        <p>To promote the Progress of Science and useful Arts, by securing for limited Times to Authors and Inventors the exclusive Right to their respective Writings and Discoveries;</p>
+        <p>To constitute Tribunals inferior to the supreme Court;</p>
+        <p>To define and punish Piracies and Felonies committed on the high Seas, and Offences against the Law of Nations;</p>
+        <p>To declare War, grant Letters of Marque and Reprisal, and make Rules concerning Captures on Land and Water;</p>
+        <p>To raise and support Armies, but no Appropriation of Money to that Use shall be for a longer Term than two Years;</p>
+        <p>To provide and maintain a Navy;</p>
+        <p>To make Rules for the Government and Regulation of the land and naval Forces;</p>
+        <p>To provide for calling forth the Militia to execute the Laws of the Union, suppress Insurrections and repel Invasions;</p>
+        <p>To provide for organizing, arming, and disciplining, the Militia, and for governing such Part of them as may be employed in the Service of the United States, reserving to the States respectively, the Appointment of the Officers, and the Authority of training the Militia according to the discipline prescribed by Congress;</p>
+        <p>To exercise exclusive Legislation in all Cases whatsoever, over such District (not exceeding ten Miles square) as may, by Cession of particular States, and the Acceptance of Congress, become the Seat of the Government of the United States, and to exercise like Authority over all Places purchased by the Consent of the Legislature of the State in which the Same shall be, for the Erection of Forts, Magazines, Arsenals, dock-Yards, and other needful Buildings;—And</p>
+        <p>To make all Laws which shall be necessary and proper for carrying into Execution the foregoing Powers, and all other Powers vested by this Constitution in the Government of the United States, or in any Department or Officer thereof.</p>
+      </section>
+      <section class="card" id="article-ii">
+        <h2>Article II</h2>
+        <p>[Your Article II content here]</p>
+      </section>
+      <section class="card alt-bg" id="article-iii">
+        <h2>Article III</h2>
+        <p>[Your Article III content here]</p>
+      </section>
+      <section class="card" id="amendment-xiii">
+        <h2>Amendment XIII</h2>
+        <p>No Person shall be a Senator who shall not have attained to the Age of thirty Years, and been nine Years a Citizen of the United States, and who shall not, when elected, be an Inhabitant of that State for which he shall be chosen;
+          <span class="tidbit-tooltip-wrapper">
+            <span class="tidbit-tooltip-trigger" tabindex="0"><b><u>involuntary servitude</u></b></span>
+            <span class="tidbit-tooltip-box" role="tooltip">
+              <img class="tidbit-tooltip-img" src="https://designshack.net/wp-content/uploads/placehold.jpg" alt="Tid-bit image">
+              <span class="tidbit-tooltip-text">This is a tid-bit about the Constitution.</span>
+              <a class="tidbit-tooltip-btn btn-bottom" href="https://example.com" target="_blank">Learn More</a>
+            </span>
+          </span>, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
+        </p>
+        <span class="interpretation">[Interpretation for Amendment XIII]</span>
+      </section>
+      <!-- Add more cards as needed, alternating alt-bg/class -->
+      <footer class="footer">
+        <p>© 2025 Constitutionally Curious</p>
+      </footer>
+    </div>
   </div>
-  <main class="container">
-    <!-- Preamble -->
-    <section class="preamble-container" id="preamble" data-section="Preamble">
-      <div class="preamble-title">
-        Preamble
-      </div>
-      <div class="preamble-text">
-        We the People of the United States, in Order to form a more perfect Union, establish Justice,
-        insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.
-      </div>
-    </section>
-    <!-- Article I -->
-    <div class="section-band-odd">
-      <section class="article-card" id="article1" data-section="Article I">
-        <header class="section-header">
-          <span class="section-icon">🏛️</span>
-          <span class="article-title">Article I</span>
-        </header>
-        <div class="clause-text">
-          All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.
-          <span class="tooltip" tabindex="0">
-            (What is Congress?)
-            <span class="tooltip-box">Congress is the legislative branch of the U.S. government, made up of the Senate and the House of Representatives.</span>
-          </span>
-        </div>
-        <div class="clause-text">
-          The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications requisite for Electors of the most numerous Branch of the State Legislature.
-        </div>
-        <!-- Add more original clauses & tooltips here as in your full version -->
-      </section>
-    </div>
-    <!-- Article II -->
-    <div class="section-band-even">
-      <section class="article-card" id="article2" data-section="Article II">
-        <header class="section-header">
-          <span class="section-icon">🏛️</span>
-          <span class="article-title">Article II</span>
-        </header>
-        <div class="clause-text">
-          The executive Power shall be vested in a President of the United States of America. He shall hold his Office during the Term of four Years, and, together with the Vice President, chosen for the same Term, be elected, as follows:
-          <span class="tooltip" tabindex="0">
-            (What's the executive branch?)
-            <span class="tooltip-box">The executive branch enforces federal laws and is headed by the President.</span>
-          </span>
-        </div>
-        <div class="clause-text">
-          Each State shall appoint, in such Manner as the Legislature thereof may direct, a Number of Electors, equal to the whole Number of Senators and Representatives to which the State may be entitled in the Congress.
-        </div>
-      </section>
-    </div>
-    <!-- Article III -->
-    <div class="section-band-odd">
-      <section class="article-card" id="article3" data-section="Article III">
-        <header class="section-header">
-          <span class="section-icon">🏛️</span>
-          <span class="article-title">Article III</span>
-        </header>
-        <div class="clause-text">
-          The judicial Power of the United States, shall be vested in one supreme Court, and in such inferior Courts as the Congress may from time to time ordain and establish.
-          <span class="tooltip" tabindex="0">
-            (What is the judicial branch?)
-            <span class="tooltip-box">The judicial branch interprets the law and is headed by the Supreme Court.</span>
-          </span>
-        </div>
-        <div class="clause-text">
-          The Judges, both of the supreme and inferior Courts, shall hold their Offices during good Behaviour, and shall, at stated Times, receive for their Services, a Compensation, which shall not be diminished during their Continuance in Office.
-        </div>
-      </section>
-    </div>
-    <!-- Amendment I -->
-    <div class="section-band-even">
-      <section class="amendment-card" id="amendment1" data-section="Amendment I">
-        <header class="section-header">
-          <span class="section-icon">⚖️</span>
-          <span class="article-title">Amendment I</span>
-        </header>
-        <div class="clause-text">
-          Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof; or abridging the freedom of speech, or of the press;
-          or the right of the people peaceably to assemble, and to petition the Government for a redress of grievances.
-          <span class="tooltip" tabindex="0">
-            (What is Amendment I?)
-            <span class="tooltip-box">The First Amendment protects freedoms concerning religion, expression, assembly, and the right to petition.</span>
-          </span>
-        </div>
-      </section>
-    </div>
-  </main>
-  <!-- GOOGLE TRANSLATE SCRIPT -->
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,es,fr,de,it,zh-CN,ru,ar,pt,ja,ko',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
-    }
-  </script>
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
+  <!-- JS for Interpretation Toggle -->
   <script>
-    // Table of Contents highlight on scroll
-    document.addEventListener('DOMContentLoaded', function () {
-      const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
-      const sectionIds = ['preamble', 'article1', 'article2', 'article3', 'amendment1'];
-      const sectionTops = sectionIds.map(id => document.getElementById(id));
-      function activateToc() {
-        let closest = 0, minDist = Infinity;
-        for (let i = 0; i < sectionTops.length; ++i) {
-          const rect = sectionTops[i].getBoundingClientRect();
-          const dist = Math.abs(rect.top - 80);
-          if (rect.top - 80 <= 0 && dist < minDist) {
-            closest = i;
-            minDist = dist;
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggleSwitch = document.querySelector('.toggle-switch');
+      const interpretations = document.querySelectorAll('.interpretation');
+      function updateInterpretations() {
+        const show = toggleSwitch.classList.contains('active');
+        interpretations.forEach(el => el.style.display = show ? 'block' : 'none');
+      }
+      toggleSwitch.addEventListener('click', function() {
+        toggleSwitch.classList.toggle('active');
+        updateInterpretations();
+      });
+      updateInterpretations();
+    });
+  </script>
+  <!-- Tooltip sound and mobile tap-to-toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const audio = document.getElementById('tooltip-audio');
+      function isTouchDevice() {
+        return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      }
+      document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
+        function playSound() {
+          if(audio) {
+            audio.currentTime = 0;
+            audio.play();
           }
         }
-        tocLinks.forEach((link, idx) => {
-          if (idx === closest) link.classList.add('active');
-          else link.classList.remove('active');
+        trigger.addEventListener('mouseenter', playSound);
+        trigger.addEventListener('focus', playSound);
+        trigger.addEventListener('click', playSound);
+      });
+      // Mobile tap-to-toggle for tooltips
+      if (isTouchDevice()) {
+        document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
+          trigger.addEventListener('click', function(e) {
+            var parent = trigger.closest('.tidbit-tooltip-wrapper');
+            if(parent.classList.contains('active')) {
+              parent.classList.remove('active');
+            } else {
+              document.querySelectorAll('.tidbit-tooltip-wrapper.active').forEach(function(other) {
+                if(other!==parent) other.classList.remove('active');
+              });
+              parent.classList.add('active');
+            }
+          });
+        });
+        document.addEventListener('click', function(e) {
+          if(!e.target.closest('.tidbit-tooltip-wrapper')) {
+            document.querySelectorAll('.tidbit-tooltip-wrapper.active').forEach(function(el){
+              el.classList.remove('active');
+            });
+          }
         });
       }
-      window.addEventListener('scroll', activateToc, { passive: true });
-      activateToc();
-      // Smooth scroll for sidebar links
+    });
+  </script>
+  <!-- Sidebar: Hamburger menu for mobile, sticky on desktop, highlight current section -->
+  <script>
+    // Hamburger/collapsible menu logic
+    function closeSidebar() {
+      document.querySelector('.sidebar').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function openSidebar() {
+      document.querySelector('.sidebar').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.querySelector('.sidebar');
+      const hamburger = document.querySelector('.hamburger');
+      const closeBtn = sidebar.querySelector('.close-btn');
+      function handleResize() {
+        if(window.innerWidth <= 1000) {
+          hamburger.style.display = 'inline-flex';
+          sidebar.classList.remove('open');
+        } else {
+          hamburger.style.display = 'none';
+          sidebar.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      }
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      if(hamburger) hamburger.addEventListener('click', openSidebar);
+      if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
+      // Clicking a sidebar link closes the menu (mobile)
+      sidebar.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', function() {
+          if(window.innerWidth <= 1000) closeSidebar();
+        });
+      });
+    });
+
+    // Smooth scrolling and active link highlight with IntersectionObserver
+    document.addEventListener('DOMContentLoaded', function() {
+      const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+      const sectionIds = tocLinks.map(link => link.getAttribute('href').replace('#',''));
+      const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+      // Smooth scroll
       tocLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
+        link.addEventListener('click', function(e) {
           const id = this.getAttribute('href').slice(1);
           const target = document.getElementById(id);
           if (target) {
@@ -438,7 +515,37 @@
           }
         });
       });
+      // IntersectionObserver for highlight
+      if ("IntersectionObserver" in window) {
+        let activeIndex = 0;
+        const observer = new IntersectionObserver((entries) => {
+          let visibleSections = entries.filter(e => e.isIntersecting);
+          if (visibleSections.length > 0) {
+            // Find the topmost visible section
+            visibleSections.sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+            let idx = sections.indexOf(visibleSections[0].target);
+            if (idx !== -1) {
+              tocLinks.forEach(l=>l.classList.remove('active'));
+              tocLinks[idx].classList.add('active');
+            }
+          }
+        }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+      }
     });
+  </script>
+  <!-- Google Translate scripts -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'es,zh-CN,zh-TW,ta,te,hi,ar,fr,vi,ko,de,ru,it,pt,ja,pl,fa,gu,ur,tr,bn,ht,el,am,he,th,uk,ro,pa,sr,jv,hu,nl,ckb,sq,yo,ig,so,ha,bg,sw,km,my,hm,om,nav,si,af,sv',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript"
+    src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
   </script>
 </body>
 </html>
