@@ -7,7 +7,15 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Jacquard+24&display=swap" rel="stylesheet">
+    <!-- WeThePeople custom font -->
+    <style>
+        @font-face {
+            font-family: 'WeThePeople';
+            src: url('fonts/WeThePeople.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+    </style>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -16,7 +24,7 @@
             line-height: 1.65;
             margin: 0;
         }
-        h1, .wethepeople {
+        h1 {
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
             font-weight: 900;
@@ -32,16 +40,18 @@
             font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
             font-weight: 700;
-            margin: 1.1rem 0 0.5rem 0;
+            margin: 1.5rem 0 0.5rem 0;
         }
         p {
             font-size: 1.125rem;
             margin-bottom: 1rem;
         }
         .wethepeople {
-            font-family: 'Jacquard 24', cursive;
+            font-family: 'WeThePeople', cursive;
             font-size: 2.5rem;
             letter-spacing: 0.03em;
+            display: inline-block;
+            margin-bottom: 1.5rem;
         }
         .main-container {
             margin-left: 270px;
@@ -59,7 +69,8 @@
             padding: 1.5rem;
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
         }
         .card.alt-bg {
             background: #f9f9f9;
@@ -67,6 +78,11 @@
         .article-section + .article-section {
             margin-top: 1.5rem;
         }
+        /* Ensure enough vertical spacing between cards to avoid tooltip overlap */
+        section.card {
+            margin-bottom: 3.5rem;
+        }
+        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
@@ -153,6 +169,7 @@
                 margin-left: 0;
             }
         }
+        /* Topbar */
         .topbar-nav {
             display: flex;
             justify-content: flex-end;
@@ -221,6 +238,12 @@
             .topbar-interpretation { margin-right: 0; margin-bottom: 1em; }
             .translate-icon-img { width: 24px; height: 24px; }
         }
+        /* Tooltip */
+        .tidbit-tooltip-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
         .tidbit-tooltip-box,
         .tooltip {
             background: #fff;
@@ -237,6 +260,8 @@
             left: 50%;
             top: 110%;
             transform: translateX(-50%) scale(0.97);
+            min-width: 230px;
+            max-width: 300px;
         }
         .tidbit-tooltip-wrapper:hover .tidbit-tooltip-box,
         .tidbit-tooltip-wrapper:focus-within .tidbit-tooltip-box,
@@ -371,6 +396,21 @@
                     <p>The Senate shall chuse their other Officers, and also a President pro tempore, in the Absence of the Vice President, or when he shall exercise the Office of President of the United States.</p>
                     <p>The Senate shall have the sole Power to try all Impeachments. When sitting for that Purpose, they shall be on Oath or Affirmation. When the President of the United States is tried, the Chief Justice shall preside: And no Person shall be convicted without the Concurrence of two thirds of the Members present.</p>
                     <p>Judgment in Cases of Impeachment shall not extend further than to removal from Office, and disqualification to hold and enjoy any Office of honor, Trust or Profit under the United States: but the Party convicted shall nevertheless be liable and subject to Indictment, Trial, Judgment and Punishment, according to Law.</p>
+                </div>
+                <div class="article-section">
+                    <h3>Section 8 - Powers of Congress</h3>
+                    <p>
+                      To regulate Commerce with foreign Nations, and among the several States, and with the Indian Tribes;
+                      <span class="tidbit-tooltip-wrapper">
+                        <span class="tidbit-tooltip-trigger" tabindex="0"><b><u>Naturalization,</u></b></span>
+                        <span class="tidbit-tooltip-box tooltip" role="tooltip">
+                          <img class="tidbit-tooltip-img" src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Johnadamsvp.flipped.jpg" alt="Tid-bit image">
+                          <span class="tidbit-tooltip-text">Since 1798 Congress has used this clause in the past to target and deport immigrants based solely on their race or political opinion during times of war or national crisis.</span>
+                          <a class="tidbit-tooltip-btn btn-bottom" href="https://constitutionallycurious.weebly.com/blog/immigration-the-constitution" target="_blank">Learn More</a>
+                        </span>
+                      </span>
+                      and uniform Laws on the subject of Bankruptcies throughout the United States;
+                    </p>
                 </div>
             </section>
             <section class="card alt-bg" id="amendments">
@@ -532,4 +572,4 @@
       src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
     </script>
 </body>
-</html> 
+</html>
