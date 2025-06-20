@@ -10,14 +10,12 @@
     :root {
       --body-bg: #f9f9f9;
       --card-bg: #fff;
-      --card-alt-bg: #f9f9f9;
       --primary: #004080;
       --primary-dark: #002f5f;
       --text-main: #333333;
       --accent: #004080;
       --shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
       --border-radius: 8px;
-      --spacing: 1.5rem;
       --sidebar-width: 260px;
       --sidebar-bg: #fff;
       --sidebar-border: #e5e5e5;
@@ -162,7 +160,6 @@
       box-shadow: var(--shadow);
       margin-bottom: 2rem;
     }
-    .card.alt-bg { background: var(--card-alt-bg); }
     .card .jacquard { font-family: 'Jacquard 24', cursive; }
     .wethepeople { font-family: 'WeThePeople', cursive; font-size: 3.0em; }
     @font-face {
@@ -185,22 +182,33 @@
       margin-bottom: 1em;
       font-style: italic;
     }
-    /* Tidbit tooltip styles */
+    /* Tidbit tooltip styles - now position: fixed, not cut off */
     .tidbit-tooltip-wrapper { position: relative; display: inline-block; cursor: pointer; }
     .tidbit-tooltip-box {
-      visibility: hidden; opacity: 0;
-      width: 270px; background: #fff; color: #222;
-      border: 1px solid #888; border-radius: 8px;
+      visibility: hidden;
+      opacity: 0;
+      width: 270px;
+      background: #fff;
+      color: #222;
+      border: 1px solid #888;
+      border-radius: 8px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-      padding: 16px; font-size: 16px;
-      position: absolute; z-index: 1000;
-      left: 50%; top: 110%; transform: translateX(-50%);
+      padding: 16px;
+      font-size: 16px;
+      position: fixed;
+      left: 0; /* will be positioned by JS */
+      top: 0;
+      z-index: 2000;
       transition: opacity 0.2s;
-      display: flex; flex-direction: column; align-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
     }
-    .tidbit-tooltip-wrapper:hover .tidbit-tooltip-box,
-    .tidbit-tooltip-wrapper:focus-within .tidbit-tooltip-box {
-      visibility: visible; opacity: 1;
+    .tidbit-tooltip-box.visible {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
     }
     .tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
     .tidbit-tooltip-btn {
@@ -213,7 +221,9 @@
     @media (hover: none) and (pointer: coarse) {
       .tidbit-tooltip-box { pointer-events: none; }
       .tidbit-tooltip-wrapper.active .tidbit-tooltip-box {
-        visibility: visible; opacity: 1; pointer-events: auto;
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
       }
     }
     /* General link styles */
@@ -301,7 +311,7 @@
         </p>
         <span class="interpretation">[Interpretation for the Preamble]</span>
       </section>
-      <section class="card alt-bg" id="article-i">
+      <section class="card" id="article-i">
         <h2>Article I</h2>
         <h3>Section 1 - Congress</h3>
         <span class="interpretation">[Interpretation for Section 1]</span>
@@ -375,7 +385,7 @@
         <h2>Article II</h2>
         <p>[Your Article II content here]</p>
       </section>
-      <section class="card alt-bg" id="article-iii">
+      <section class="card" id="article-iii">
         <h2>Article III</h2>
         <p>[Your Article III content here]</p>
       </section>
@@ -393,12 +403,14 @@
         </p>
         <span class="interpretation">[Interpretation for Amendment XIII]</span>
       </section>
-      <!-- Add more cards as needed, alternating alt-bg/class -->
+      <!-- Add more cards as needed -->
       <footer class="footer">
         <p>© 2025 Constitutionally Curious</p>
       </footer>
     </div>
   </div>
+  <!-- Only one tooltip box for entire page, dynamically filled/positioned -->
+  <div id="tidbit-tooltip" class="tidbit-tooltip-box"></div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
   <!-- JS for Interpretation Toggle -->
   <script>
@@ -416,44 +428,119 @@
       updateInterpretations();
     });
   </script>
-  <!-- Tooltip sound and mobile tap-to-toggle -->
+  <!-- Tooltip sound and mobile tap-to-toggle, improved fixed tooltip logic -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Use only one tooltip box for the page
+      const tooltip = document.getElementById('tidbit-tooltip');
       const audio = document.getElementById('tooltip-audio');
+      let hideTimeout = null;
+
+      function playTooltipSound() {
+        if (audio && audio.paused) {
+          audio.currentTime = 0;
+          audio.play().catch(() => {}); // ignore autoplay errors
+        }
+      }
+
+      // Position the tooltip so it will not get cut off by side/top menus
+      function showTooltip(trigger) {
+        // Fill tooltip with content
+        const box = tooltip;
+        box.innerHTML = ''; // Clear box
+
+        // Find the box in the original trigger
+        const boxData = trigger.closest('.tidbit-tooltip-wrapper').querySelector('.tidbit-tooltip-box');
+        if (!boxData) return;
+
+        // Clone content from the static box (including images/buttons)
+        for (const node of boxData.childNodes) {
+          box.appendChild(node.cloneNode(true));
+        }
+
+        // Show it
+        box.classList.add('visible');
+
+        // Positioning
+        const triggerRect = trigger.getBoundingClientRect();
+        const boxRect = box.getBoundingClientRect();
+        const spacing = 10;
+        let top = triggerRect.bottom + spacing;
+        let left = triggerRect.left + (triggerRect.width - boxRect.width) / 2;
+
+        // If tooltip would overflow right
+        if ((left + boxRect.width) > window.innerWidth - 8) {
+          left = window.innerWidth - boxRect.width - 8;
+        }
+        // If tooltip would overflow left
+        if (left < 8) left = 8;
+
+        // If tooltip would overflow bottom
+        if ((top + boxRect.height) > window.innerHeight - 8) {
+          top = triggerRect.top - boxRect.height - spacing;
+          if (top < 8) top = 8;
+        }
+
+        // Always below topbar
+        const topbar = document.querySelector('.topbar-nav');
+        let topbarHeight = topbar ? topbar.getBoundingClientRect().bottom : 0;
+        if (top < topbarHeight + 5) top = topbarHeight + 5;
+
+        box.style.left = left + window.scrollX + 'px';
+        box.style.top = top + window.scrollY + 'px';
+      }
+
+      // Hide tooltip
+      function hideTooltip() {
+        tooltip.classList.remove('visible');
+        tooltip.innerHTML = '';
+      }
+
+      // Desktop hover/focus logic
+      document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
+        trigger.addEventListener('mouseenter', function(e) {
+          clearTimeout(hideTimeout);
+          playTooltipSound();
+          showTooltip(trigger);
+        });
+        trigger.addEventListener('focus', function(e) {
+          clearTimeout(hideTimeout);
+          playTooltipSound();
+          showTooltip(trigger);
+        });
+        trigger.addEventListener('mouseleave', function(e) {
+          hideTimeout = setTimeout(hideTooltip, 120);
+        });
+        trigger.addEventListener('blur', function(e) {
+          hideTimeout = setTimeout(hideTooltip, 120);
+        });
+        trigger.addEventListener('click', function(e) {
+          playTooltipSound();
+        });
+      });
+
+      // Hide if leaving the tooltip itself
+      tooltip.addEventListener('mouseleave', hideTooltip);
+
+      // If scrolling, always hide tooltip for safety
+      window.addEventListener('scroll', hideTooltip, {passive:true});
+
+      // Mobile tap-to-toggle support (shows fixed box)
       function isTouchDevice() {
         return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
       }
-      document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
-        function playSound() {
-          if(audio) {
-            audio.currentTime = 0;
-            audio.play();
-          }
-        }
-        trigger.addEventListener('mouseenter', playSound);
-        trigger.addEventListener('focus', playSound);
-        trigger.addEventListener('click', playSound);
-      });
-      // Mobile tap-to-toggle for tooltips
       if (isTouchDevice()) {
         document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
           trigger.addEventListener('click', function(e) {
-            var parent = trigger.closest('.tidbit-tooltip-wrapper');
-            if(parent.classList.contains('active')) {
-              parent.classList.remove('active');
-            } else {
-              document.querySelectorAll('.tidbit-tooltip-wrapper.active').forEach(function(other) {
-                if(other!==parent) other.classList.remove('active');
-              });
-              parent.classList.add('active');
-            }
+            e.preventDefault();
+            playTooltipSound();
+            showTooltip(trigger);
           });
         });
+        // Tap outside closes
         document.addEventListener('click', function(e) {
-          if(!e.target.closest('.tidbit-tooltip-wrapper')) {
-            document.querySelectorAll('.tidbit-tooltip-wrapper.active').forEach(function(el){
-              el.classList.remove('active');
-            });
+          if(!e.target.closest('.tidbit-tooltip-trigger') && !e.target.closest('#tidbit-tooltip')) {
+            hideTooltip();
           }
         });
       }
