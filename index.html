@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Constitution</title>
-    <!-- Google Fonts for Jacquard and Material Symbols -->
+    <!-- Google Fonts for Jacquard -->
     <link href="https://fonts.googleapis.com/css2?family=Jacquard+24&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { display: flex; flex-direction: column; font-family: 'Times New Roman', serif; background-color: white; }
@@ -62,21 +61,14 @@
             display: flex;
             align-items: center;
         }
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-variation-settings:
-              'FILL' 0,
-              'wght' 400,
-              'GRAD' 0,
-              'opsz' 48;
-            font-size: 2em;
-            vertical-align: middle;
-            color: #4285f4;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            padding: 0.1em;
+        .translate-icon-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
             margin-right: 0.3em;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
 
         /* Content styles */
@@ -168,8 +160,9 @@
                 margin-right: 0;
                 margin-bottom: 1em;
             }
-            .material-symbols-outlined {
-                font-size: 1.4em;
+            .translate-icon-img {
+                width: 24px;
+                height: 24px;
             }
         }
     </style>
@@ -181,7 +174,7 @@
             <div class="toggle-switch active"></div>
         </div>
         <div class="topbar-translate">
-            <span class="material-symbols-outlined" title="Google Translate">g_translate</span>
+            <img src="translateicon.png" alt="Google Translate" class="translate-icon-img">
             <div id="google_translate_element"></div>
         </div>
     </div>
