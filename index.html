@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Constitution</title>
-  <!-- Google Fonts: Roboto for body, Playfair Display for headings, Jacquard for legacy, WeThePeople custom -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Jacquard+24&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -23,7 +22,7 @@
       --sidebar-link-bg-active: #eaf2fb;
       --z-sidebar: 1001;
       --z-topbar: 1010;
-      --z-tooltip: 9999;
+      --z-tooltip: 2147483647;
     }
     html, body {
       height: 100%;
@@ -36,7 +35,6 @@
       margin: 0;
       padding: 0;
       transition: background 0.3s;
-      /* Prevent scrollbars due to tooltip overflow in iframe by allowing overflow */
       overflow: visible !important;
     }
     .main-layout {
@@ -44,7 +42,6 @@
       min-height: 100vh;
       box-sizing: border-box;
     }
-    /* Sidebar */
     .sidebar {
       position: sticky;
       top: 0;
@@ -102,7 +99,6 @@
     .sidebar .hamburger {
       display: none;
     }
-    /* Topbar nav */
     .topbar-nav {
       position: sticky;
       top: 0;
@@ -148,7 +144,6 @@
     }
     #google_translate_element { background: none !important; }
 
-    /* Main content area */
     .main-content {
       flex: 1 1 auto;
       max-width: 900px;
@@ -157,7 +152,6 @@
       display: flex;
       flex-direction: column;
     }
-    /* Card styling for each article/amendment */
     .card {
       background: var(--card-bg);
       padding: 1.5rem;
@@ -173,7 +167,6 @@
       font-weight: bold;
       font-style: normal;
     }
-    /* Typography overrides */
     h1, .wethepeople { font-family: 'WeThePeople', cursive; font-size: 2.5rem; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-top: 2.5rem; }
     h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 1.7rem; }
@@ -187,7 +180,7 @@
       margin-bottom: 1em;
       font-style: italic;
     }
-    /* Tidbit tooltip styles - position fixed to viewport, always visible on hover, no clipping in iframe */
+
     .tidbit-tooltip-wrapper {
       position: relative;
       display: inline-block;
@@ -196,6 +189,7 @@
       z-index: var(--z-tooltip);
     }
     .tidbit-tooltip-box {
+      /* Initially hidden, but will be positioned and shown via JS */
       visibility: hidden;
       opacity: 0;
       width: 270px;
@@ -207,10 +201,8 @@
       padding: 16px;
       font-size: 16px;
       position: fixed !important;
-      left: 0;
-      top: 0;
-      z-index: 2147483647 !important; /* Maximum, in front of everything */
-      transform: none !important;
+      left: 0; top: 0;
+      z-index: 2147483647 !important;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -218,8 +210,7 @@
       pointer-events: none;
       transition: opacity 0.15s;
     }
-    .tidbit-tooltip-wrapper:hover .tidbit-tooltip-box,
-    .tidbit-tooltip-wrapper:focus-within .tidbit-tooltip-box {
+    .tidbit-tooltip-wrapper.show-tooltip .tidbit-tooltip-box {
       visibility: visible !important;
       opacity: 1 !important;
       pointer-events: auto !important;
@@ -245,7 +236,7 @@
       color: #fff;
     }
     .tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
-    /* Mobile tap-to-toggle */
+
     @media (hover: none) and (pointer: coarse) {
       .tidbit-tooltip-box { pointer-events: none; }
       .tidbit-tooltip-wrapper.active .tidbit-tooltip-box {
@@ -254,10 +245,8 @@
         pointer-events: auto !important;
       }
     }
-    /* General link styles */
     a, .tidbit-tooltip-btn, .toc-link { color: var(--accent); transition: color 0.2s; }
     a:hover, .tidbit-tooltip-btn:hover, .toc-link:hover { color: var(--primary-dark); text-decoration: underline; }
-    /* Responsive for mobile */
     @media (max-width: 1000px) {
       .main-layout { flex-direction: column; }
       .sidebar {
@@ -309,7 +298,6 @@
         height: 100px;
       }
     }
-    /* Amendment XIII images layout */
     .amendment-xiii-header {
       display: flex;
       align-items: flex-start;
@@ -338,7 +326,6 @@
     <svg width="30" height="30" viewBox="0 0 30 30"><rect y="7" width="30" height="3" rx="1.5" fill="#004080"/><rect y="14" width="30" height="3" rx="1.5" fill="#004080"/><rect y="21" width="30" height="3" rx="1.5" fill="#004080"/></svg>
   </button>
   <div class="main-layout">
-    <!-- Sidebar Navigation -->
     <nav class="sidebar" aria-label="Table of Contents">
       <button class="close-btn" aria-label="Close menu" tabindex="0">&times;</button>
       <h2>Contents</h2>
@@ -351,7 +338,6 @@
       </ul>
     </nav>
     <div class="main-content">
-      <!-- Top bar -->
       <div class="topbar-nav">
         <div class="topbar-interpretation">
           <span class="toggle-label">Interpretation</span>
@@ -362,7 +348,6 @@
           <div id="google_translate_element"></div>
         </div>
       </div>
-      <!-- Main Content Cards -->
       <section class="card" id="preamble">
         <p>
           <span class="wethepeople">We the People</span> of the United States, in Order to form a more perfect Union...
@@ -420,7 +405,6 @@
     </div>
   </div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
-  <!-- JS for Interpretation Toggle -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const toggleSwitch = document.querySelector('.toggle-switch');
@@ -436,11 +420,9 @@
       updateInterpretations();
     });
   </script>
-  <!-- Tooltip sound and proper always-on hover logic + fixed tooltip positioning for iframe -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const audio = document.getElementById('tooltip-audio');
-      // always play on hover/focus/click
       document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
         function playSound() {
           if(audio) {
@@ -448,38 +430,46 @@
             audio.play().catch(()=>{});
           }
         }
-        trigger.addEventListener('mouseenter', playSound);
-        trigger.addEventListener('focus', playSound);
-        trigger.addEventListener('click', playSound);
-
-        // Tooltip follow/fit logic for iframe: position .tidbit-tooltip-box near word, never cut off
-        let moveTooltip = function(e) {
-          const wrapper = trigger.closest('.tidbit-tooltip-wrapper');
-          const tooltip = wrapper.querySelector('.tidbit-tooltip-box');
-          if (!tooltip) return;
+        // Tooltip show/hide and positioning logic for iframe
+        let wrapper = trigger.closest('.tidbit-tooltip-wrapper');
+        let tooltip = wrapper.querySelector('.tidbit-tooltip-box');
+        let moveTooltip = function() {
+          if(!tooltip) return;
           // Get rect relative to viewport
           const rect = trigger.getBoundingClientRect();
-          // By default, put it below center of word
+          // Default: below center of word
           let left = rect.left + rect.width/2 - tooltip.offsetWidth/2;
           let top = rect.bottom + 8;
-
-          // Correct for iframe boundaries (viewport)
+          // Correction for boundaries
           if(left < 8) left = 8;
           if(left + tooltip.offsetWidth > window.innerWidth - 8)
             left = window.innerWidth - tooltip.offsetWidth - 8;
           if(top + tooltip.offsetHeight > window.innerHeight - 8)
             top = rect.top - tooltip.offsetHeight - 8;
           if(top < 8) top = 8;
-
           tooltip.style.left = left + "px";
           tooltip.style.top = top + "px";
         };
-
-        trigger.addEventListener('mouseenter', moveTooltip);
-        trigger.addEventListener('focus', moveTooltip);
-        // Move on window resize/scroll so it stays in view
-        window.addEventListener('scroll', moveTooltip, true);
-        window.addEventListener('resize', moveTooltip, true);
+        trigger.addEventListener('mouseenter', function(){
+          playSound();
+          wrapper.classList.add('show-tooltip');
+          moveTooltip();
+        });
+        trigger.addEventListener('focus', function(){
+          playSound();
+          wrapper.classList.add('show-tooltip');
+          moveTooltip();
+        });
+        trigger.addEventListener('mouseleave', function(){
+          wrapper.classList.remove('show-tooltip');
+        });
+        trigger.addEventListener('blur', function(){
+          wrapper.classList.remove('show-tooltip');
+        });
+        trigger.addEventListener('mousemove', moveTooltip);
+        window.addEventListener('scroll', function(){ if(wrapper.classList.contains('show-tooltip')) moveTooltip(); }, true);
+        window.addEventListener('resize', function(){ if(wrapper.classList.contains('show-tooltip')) moveTooltip(); }, true);
+        trigger.addEventListener('click', playSound);
       });
 
       // For mobile tap-to-toggle support
@@ -493,7 +483,6 @@
             if(parent.classList.contains('active')) {
               parent.classList.remove('active');
             } else {
-              // Close others
               document.querySelectorAll('.tidbit-tooltip-wrapper.active').forEach(function(other) {
                 if(other!==parent) other.classList.remove('active');
               });
@@ -501,7 +490,6 @@
             }
           });
         });
-        // Tap outside closes all
         document.addEventListener('click', function(e) {
           if(!e.target.closest('.tidbit-tooltip-wrapper')) {
             document.querySelectorAll('.tidbit-tooltip-wrapper.active').forEach(function(el){
@@ -512,7 +500,6 @@
       }
     });
   </script>
-  <!-- Sidebar: Hamburger menu for mobile, sticky on desktop, highlight current section -->
   <script>
     function closeSidebar() {
       document.querySelector('.sidebar').classList.remove('open');
