@@ -25,20 +25,24 @@
       --z-topbar: 1010;
       --z-tooltip: 9999;
     }
-    html { font-size: 16px; }
-    body {
+    html, body {
+      height: 100%;
+      min-height: 100%;
+      box-sizing: border-box;
       background: var(--body-bg);
       color: var(--text-main);
       font-family: 'Roboto', Arial, sans-serif;
       line-height: 1.65;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
       transition: background 0.3s;
+      /* Prevent scrollbars due to tooltip overflow in iframe by allowing overflow */
+      overflow: visible !important;
     }
     .main-layout {
       display: flex;
       min-height: 100vh;
+      box-sizing: border-box;
     }
     /* Sidebar */
     .sidebar {
@@ -183,7 +187,7 @@
       margin-bottom: 1em;
       font-style: italic;
     }
-    /* Tidbit tooltip styles - position absolute, always visible on hover */
+    /* Tidbit tooltip styles - position fixed to viewport, always visible on hover, no clipping in iframe */
     .tidbit-tooltip-wrapper {
       position: relative;
       display: inline-block;
@@ -202,23 +206,23 @@
       box-shadow: 0 4px 24px rgba(0,0,0,0.12);
       padding: 16px;
       font-size: 16px;
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      z-index: var(--z-tooltip);
-      transform: translate(-50%, 8px);
-      transition: opacity 0.15s;
+      position: fixed !important;
+      left: 0;
+      top: 0;
+      z-index: 2147483647 !important; /* Maximum, in front of everything */
+      transform: none !important;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-width: 200px;
       pointer-events: none;
+      transition: opacity 0.15s;
     }
     .tidbit-tooltip-wrapper:hover .tidbit-tooltip-box,
     .tidbit-tooltip-wrapper:focus-within .tidbit-tooltip-box {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
     }
     .tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
     .tidbit-tooltip-btn {
@@ -245,9 +249,9 @@
     @media (hover: none) and (pointer: coarse) {
       .tidbit-tooltip-box { pointer-events: none; }
       .tidbit-tooltip-wrapper.active .tidbit-tooltip-box {
-        visibility: visible;
-        opacity: 1;
-        pointer-events: auto;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
       }
     }
     /* General link styles */
@@ -291,10 +295,6 @@
         padding-left: 1rem; padding-right: 1rem;
       }
       .topbar-nav { margin-left: 0; margin-right: 0; }
-    }
-    @media (max-width: 600px) {
-      .main-content { padding: 1rem 0.5rem; }
-      .topbar-nav { padding: 0.4em 0.6em; min-width: 120px; font-size: 1em; }
       .amendment-xiii-header {
         flex-direction: column;
         align-items: flex-start;
@@ -436,7 +436,7 @@
       updateInterpretations();
     });
   </script>
-  <!-- Tooltip sound and proper always-on hover logic -->
+  <!-- Tooltip sound and proper always-on hover logic + fixed tooltip positioning for iframe -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const audio = document.getElementById('tooltip-audio');
@@ -451,6 +451,35 @@
         trigger.addEventListener('mouseenter', playSound);
         trigger.addEventListener('focus', playSound);
         trigger.addEventListener('click', playSound);
+
+        // Tooltip follow/fit logic for iframe: position .tidbit-tooltip-box near word, never cut off
+        let moveTooltip = function(e) {
+          const wrapper = trigger.closest('.tidbit-tooltip-wrapper');
+          const tooltip = wrapper.querySelector('.tidbit-tooltip-box');
+          if (!tooltip) return;
+          // Get rect relative to viewport
+          const rect = trigger.getBoundingClientRect();
+          // By default, put it below center of word
+          let left = rect.left + rect.width/2 - tooltip.offsetWidth/2;
+          let top = rect.bottom + 8;
+
+          // Correct for iframe boundaries (viewport)
+          if(left < 8) left = 8;
+          if(left + tooltip.offsetWidth > window.innerWidth - 8)
+            left = window.innerWidth - tooltip.offsetWidth - 8;
+          if(top + tooltip.offsetHeight > window.innerHeight - 8)
+            top = rect.top - tooltip.offsetHeight - 8;
+          if(top < 8) top = 8;
+
+          tooltip.style.left = left + "px";
+          tooltip.style.top = top + "px";
+        };
+
+        trigger.addEventListener('mouseenter', moveTooltip);
+        trigger.addEventListener('focus', moveTooltip);
+        // Move on window resize/scroll so it stays in view
+        window.addEventListener('scroll', moveTooltip, true);
+        window.addEventListener('resize', moveTooltip, true);
       });
 
       // For mobile tap-to-toggle support
