@@ -15,12 +15,6 @@
       --accent: #004080;
       --shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
       --border-radius: 8px;
-      --sidebar-width: 260px;
-      --sidebar-bg: #fff;
-      --sidebar-border: #e5e5e5;
-      --sidebar-link-hover: #002f5f;
-      --sidebar-link-bg-active: #eaf2fb;
-      --z-sidebar: 1001;
       --z-topbar: 1010;
       --z-tooltip: 2147483647;
     }
@@ -37,87 +31,47 @@
       transition: background 0.3s;
       overflow: visible !important;
     }
-    .main-layout {
-      display: flex;
-      min-height: 100vh;
-      box-sizing: border-box;
-    }
-    .sidebar {
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: var(--sidebar-width);
-      min-height: 100vh;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--sidebar-border);
-      box-shadow: 2px 0 8px 0 rgba(0,0,0,0.02);
-      padding: 2rem 1rem 2rem 1.5rem;
-      z-index: var(--z-sidebar);
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .sidebar h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      margin-bottom: 1.25rem;
-      color: var(--primary);
-      font-weight: 700;
-      letter-spacing: 0.03em;
-    }
-    .toc-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      flex: 1 1 auto;
-    }
-    .toc-list li {
-      margin-bottom: 0.7em;
-    }
-    .toc-link {
-      display: block;
-      text-decoration: none;
-      color: var(--text-main);
-      padding: 0.4em 1.2em 0.4em 0.2em;
-      border-radius: 5px;
-      font-size: 1rem;
-      font-family: 'Roboto', Arial, sans-serif;
-      transition: color 0.2s, background 0.2s;
-    }
-    .toc-link.active,
-    .toc-link:focus-visible {
-      background: var(--sidebar-link-bg-active);
-      color: var(--primary);
-      font-weight: bold;
-      outline: none;
-    }
-    .toc-link:hover {
-      color: var(--sidebar-link-hover);
-      text-decoration: underline;
-    }
-    .sidebar .close-btn,
-    .sidebar .hamburger {
-      display: none;
-    }
+    /* Sticky top nav bar */
     .topbar-nav {
       position: sticky;
       top: 0;
       left: 0;
+      width: 100%;
       z-index: var(--z-topbar);
       background: #e0e0e0;
       box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-      border-radius: 2em;
-      padding: 0.6em 1.6em 0.8em 1.6em;
-      margin: 32px auto 32px auto;
-      width: max-content;
-      min-width: 230px;
+      padding: 0.7em 2em 0.7em 2em;
       display: flex;
-      justify-content: center;
       align-items: center;
       gap: 2em;
+      border-radius: 0 0 1.5em 1.5em;
+      flex-wrap: wrap;
     }
-    .topbar-interpretation { display: flex; align-items: center; }
-    .toggle-label { font-size: 18px; font-weight: bold; margin-right: 10px; }
+    .topbar-search {
+      flex: 1 1 200px;
+      max-width: 320px;
+      display: flex;
+      align-items: center;
+    }
+    .topbar-search input[type="search"] {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 1rem;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      outline: none;
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+    .topbar-translate {
+      display: flex; align-items: center;
+      gap: 0.4em;
+    }
+    .translate-icon-img {
+      width: 32px; height: 32px; object-fit: contain; margin-right: 0.2em;
+      background: none; border-radius: 0; box-shadow: none;
+    }
+    .topbar-interpretation { display: flex; align-items: center; gap: 0.5em;}
+    .toggle-label { font-size: 18px; font-weight: bold; margin-right: 3px; }
     .toggle-switch {
       position: relative;
       width: 50px; height: 25px;
@@ -125,6 +79,7 @@
       border-radius: 25px;
       cursor: pointer;
       transition: background-color 0.3s;
+      margin-right: 0.2em;
     }
     .toggle-switch:before {
       content: '';
@@ -135,15 +90,70 @@
     }
     .toggle-switch.active { background: #4caf50; }
     .toggle-switch.active:before { transform: translateX(25px); }
-    .topbar-translate {
-      display: flex; align-items: center;
+    /* Dropdown for Jump to Article */
+    .jump-dropdown {
+      position: relative;
+      display: inline-block;
+      font-size: 1rem;
     }
-    .translate-icon-img {
-      width: 32px; height: 32px; object-fit: contain; margin-right: 0.3em;
-      background: none; border-radius: 0; box-shadow: none;
+    .jump-dropdown-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 22px 8px 14px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: 'Roboto', Arial, sans-serif;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.2em;
+      position: relative;
     }
-    #google_translate_element { background: none !important; }
+    .jump-dropdown-btn:after {
+      content: '▼';
+      font-size: 0.8em;
+      margin-left: 0.5em;
+      pointer-events: none;
+    }
+    .jump-dropdown-list {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 110%;
+      background: #fff;
+      min-width: 200px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      z-index: 9999;
+      padding: 0.5em 0;
+      margin: 0;
+      list-style: none;
+    }
+    .jump-dropdown.open .jump-dropdown-list { display: block; }
+    .jump-dropdown-list li {
+      margin: 0;
+      padding: 0;
+    }
+    .jump-dropdown-list a {
+      display: block;
+      padding: 0.6em 1.2em;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 1rem;
+      border-radius: 0;
+      transition: background 0.18s;
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+    .jump-dropdown-list a:hover, .jump-dropdown-list a:focus {
+      background: var(--primary);
+      color: #fff;
+    }
 
+    /* Main content area */
     .main-content {
       flex: 1 1 auto;
       max-width: 900px;
@@ -159,7 +169,6 @@
       box-shadow: var(--shadow);
       margin-bottom: 2rem;
     }
-    .card .jacquard { font-family: 'Jacquard 24', cursive; }
     .wethepeople { font-family: 'WeThePeople', cursive; font-size: 3.0em; }
     @font-face {
       font-family: 'WeThePeople';
@@ -181,15 +190,56 @@
       font-style: italic;
     }
 
-    .tidbit-tooltip-wrapper {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-      vertical-align: baseline;
-      z-index: var(--z-tooltip);
+    /* Amendment XIII images layout */
+    .amendment-xiii-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 0.5em;
+      gap: 12px;
     }
+    .amendment-xiii-portraits {
+      display: flex;
+      align-items: flex-end;
+      margin-left: auto;
+      gap: 18px;
+    }
+    .amendment-xiii-person {
+      width: 120px;
+      height: 160px;
+      object-fit: contain;
+      background: none;
+      border-radius: 0;
+      margin: 0;
+      box-shadow: none;
+    }
+
+    /* Responsive for mobile */
+    @media (max-width: 1000px) {
+      .topbar-nav { flex-direction: column; gap: 1em; align-items: stretch; }
+      .main-content { padding-left: 1rem; padding-right: 1rem; }
+      .amendment-xiii-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .amendment-xiii-portraits {
+        gap: 4px;
+        margin-left: 0;
+      }
+      .amendment-xiii-person {
+        width: 80px;
+        height: 100px;
+      }
+      .jump-dropdown-list { min-width: 150px; font-size: 0.95em;}
+    }
+    @media (max-width: 600px) {
+      .main-content { padding: 1rem 0.5rem; }
+      .topbar-nav { padding: 0.4em 0.6em; }
+    }
+
+    /* Tooltip styles: unchanged from previous working code */
+    .tidbit-tooltip-wrapper { position: relative; display: inline-block; cursor: pointer; vertical-align: baseline; z-index: var(--z-tooltip);}
     .tidbit-tooltip-box {
-      /* Initially hidden, but will be positioned and shown via JS */
       visibility: hidden;
       opacity: 0;
       width: 270px;
@@ -236,176 +286,97 @@
       color: #fff;
     }
     .tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
-
-    @media (hover: none) and (pointer: coarse) {
-      .tidbit-tooltip-box { pointer-events: none; }
-      .tidbit-tooltip-wrapper.active .tidbit-tooltip-box {
-        visibility: visible !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-      }
-    }
-    a, .tidbit-tooltip-btn, .toc-link { color: var(--accent); transition: color 0.2s; }
-    a:hover, .tidbit-tooltip-btn:hover, .toc-link:hover { color: var(--primary-dark); text-decoration: underline; }
-    @media (max-width: 1000px) {
-      .main-layout { flex-direction: column; }
-      .sidebar {
-        display: none;
-        position: fixed;
-        left: 0; top: 0; height: 100vh;
-        z-index: var(--z-sidebar);
-        background: var(--sidebar-bg);
-        box-shadow: 2px 0 8px 0 rgba(0,0,0,0.08);
-        width: 80vw; max-width: 320px;
-      }
-      .sidebar.open { display: flex; }
-      .sidebar .close-btn {
-        display: block;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: var(--primary);
-        align-self: flex-end;
-        margin-bottom: 1rem;
-        cursor: pointer;
-      }
-      .hamburger {
-        display: inline-flex;
-        position: fixed;
-        top: 1.3rem; left: 1rem;
-        width: 44px; height: 44px;
-        background: #fff; border: 1px solid #e0e0e0;
-        border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        z-index: var(--z-topbar) !important;
-        align-items: center; justify-content: center;
-        cursor: pointer;
-      }
-      .main-content {
-        padding-left: 1rem; padding-right: 1rem;
-      }
-      .topbar-nav { margin-left: 0; margin-right: 0; }
-      .amendment-xiii-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-      }
-      .amendment-xiii-portraits {
-        gap: 4px;
-        margin-left: 0;
-      }
-      .amendment-xiii-person {
-        width: 80px;
-        height: 100px;
-      }
-    }
-    .amendment-xiii-header {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 0.5em;
-      gap: 12px;
-    }
-    .amendment-xiii-portraits {
-      display: flex;
-      align-items: flex-end;
-      margin-left: auto;
-      gap: 18px;
-    }
-    .amendment-xiii-person {
-      width: 120px;
-      height: 160px;
-      object-fit: contain;
-      background: none;
-      border-radius: 0;
-      margin: 0;
-      box-shadow: none;
-    }
   </style>
 </head>
 <body>
-  <button class="hamburger" aria-label="Open menu" tabindex="0" style="display:none;">
-    <svg width="30" height="30" viewBox="0 0 30 30"><rect y="7" width="30" height="3" rx="1.5" fill="#004080"/><rect y="14" width="30" height="3" rx="1.5" fill="#004080"/><rect y="21" width="30" height="3" rx="1.5" fill="#004080"/></svg>
-  </button>
-  <div class="main-layout">
-    <nav class="sidebar" aria-label="Table of Contents">
-      <button class="close-btn" aria-label="Close menu" tabindex="0">&times;</button>
-      <h2>Contents</h2>
-      <ul class="toc-list">
-        <li><a href="#preamble" class="toc-link">We the People</a></li>
-        <li><a href="#article-i" class="toc-link">Article I</a></li>
-        <li><a href="#article-ii" class="toc-link">Article II</a></li>
-        <li><a href="#article-iii" class="toc-link">Article III</a></li>
-        <li><a href="#amendment-xiii" class="toc-link">Amendment XIII</a></li>
+  <!-- Sticky Topbar Navigation -->
+  <nav class="topbar-nav" aria-label="Main Navigation">
+    <!-- Search -->
+    <div class="topbar-search">
+      <input type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution">
+    </div>
+    <!-- Translation -->
+    <div class="topbar-translate">
+      <img src="Translateicon.png" alt="Google Translate" class="translate-icon-img">
+      <div id="google_translate_element"></div>
+    </div>
+    <!-- Interpretation Toggle -->
+    <div class="topbar-interpretation">
+      <span class="toggle-label">Interpretation</span>
+      <div class="toggle-switch active" tabindex="0" role="button" aria-pressed="true"></div>
+    </div>
+    <!-- Jump to Article Dropdown -->
+    <div class="jump-dropdown" tabindex="0">
+      <button class="jump-dropdown-btn" aria-haspopup="true" aria-expanded="false">Jump to Article</button>
+      <ul class="jump-dropdown-list" role="menu">
+        <li><a href="#preamble" role="menuitem">We the People</a></li>
+        <li><a href="#article-i" role="menuitem">Article I</a></li>
+        <li><a href="#article-ii" role="menuitem">Article II</a></li>
+        <li><a href="#article-iii" role="menuitem">Article III</a></li>
+        <li><a href="#amendment-xiii" role="menuitem">Amendment XIII</a></li>
       </ul>
-    </nav>
-    <div class="main-content">
-      <div class="topbar-nav">
-        <div class="topbar-interpretation">
-          <span class="toggle-label">Interpretation</span>
-          <div class="toggle-switch active"></div>
-        </div>
-        <div class="topbar-translate">
-          <img src="Translateicon.png" alt="Google Translate" class="translate-icon-img">
-          <div id="google_translate_element"></div>
+    </div>
+  </nav>
+  <!-- Main Content -->
+  <div class="main-content">
+    <section class="card" id="preamble">
+      <p>
+        <span class="wethepeople">We the People</span> of the United States, in Order to form a more perfect Union...
+      </p>
+      <span class="interpretation">[Interpretation for the Preamble]</span>
+    </section>
+    <section class="card" id="article-i">
+      <h2>Article I</h2>
+      <p>
+        To regulate Commerce with foreign Nations, and among the several States, and with the Indian Tribes;
+        <span class="tidbit-tooltip-wrapper">
+          <span class="tidbit-tooltip-trigger" tabindex="0"><b><u>Naturalization,</u></b></span>
+          <span class="tidbit-tooltip-box" role="tooltip">
+            <img class="tidbit-tooltip-img" src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Johnadamsvp.flipped.jpg" alt="Tid-bit image">
+            <span class="tidbit-tooltip-text">Since 1798 Congress has used this clause in the past to target and deport immigrants based solely on their race or political opinion during times of war or national crisis.</span>
+            <a class="tidbit-tooltip-btn btn-bottom" href="https://constitutionallycurious.weebly.com/blog/immigration-the-constitution" target="_blank">Learn More</a>
+          </span>
+        </span>
+        and uniform Laws on the subject of Bankruptcies throughout the United States;
+      </p>
+    </section>
+    <section class="card" id="article-ii">
+      <h2>Article II</h2>
+      <p>[Your Article II content here]</p>
+    </section>
+    <section class="card" id="article-iii">
+      <h2>Article III</h2>
+      <p>[Your Article III content here]</p>
+    </section>
+    <section class="card" id="amendment-xiii">
+      <div class="amendment-xiii-header">
+        <h2 style="display:inline-block;vertical-align:middle;margin:0 0 0 10px;">Amendment XIII</h2>
+        <div class="amendment-xiii-portraits">
+          <img src="harriettubman.png" alt="Harriet Tubman" class="amendment-xiii-person harriettubman">
+          <img src="frederickdouglass.png" alt="Frederick Douglass" class="amendment-xiii-person frederickdouglass">
+          <img src="abrahamlincoln.png" alt="Abraham Lincoln" class="amendment-xiii-person abrahamlincoln">
         </div>
       </div>
-      <section class="card" id="preamble">
-        <p>
-          <span class="wethepeople">We the People</span> of the United States, in Order to form a more perfect Union...
-        </p>
-        <span class="interpretation">[Interpretation for the Preamble]</span>
-      </section>
-      <section class="card" id="article-i">
-        <h2>Article I</h2>
-        <p>
-          To regulate Commerce with foreign Nations, and among the several States, and with the Indian Tribes;
-          <span class="tidbit-tooltip-wrapper">
-            <span class="tidbit-tooltip-trigger" tabindex="0"><b><u>Naturalization,</u></b></span>
-            <span class="tidbit-tooltip-box" role="tooltip">
-              <img class="tidbit-tooltip-img" src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Johnadamsvp.flipped.jpg" alt="Tid-bit image">
-              <span class="tidbit-tooltip-text">Since 1798 Congress has used this clause in the past to target and deport immigrants based solely on their race or political opinion during times of war or national crisis.</span>
-              <a class="tidbit-tooltip-btn btn-bottom" href="https://constitutionallycurious.weebly.com/blog/immigration-the-constitution" target="_blank">Learn More</a>
-            </span>
+      <p>
+        No Person shall be a Senator who shall not have attained to the Age of thirty Years, and been nine Years a Citizen of the United States, and who shall not, when elected, be an Inhabitant of that State for which he shall be chosen;
+        <span class="tidbit-tooltip-wrapper">
+          <span class="tidbit-tooltip-trigger" tabindex="0"><b><u>involuntary servitude</u></b></span>
+          <span class="tidbit-tooltip-box" role="tooltip">
+            <img class="tidbit-tooltip-img" src="https://designshack.net/wp-content/uploads/placehold.jpg" alt="Tid-bit image">
+            <span class="tidbit-tooltip-text">This is a tid-bit about the Constitution.</span>
+            <a class="tidbit-tooltip-btn btn-bottom" href="https://example.com" target="_blank">Learn More</a>
           </span>
-          and uniform Laws on the subject of Bankruptcies throughout the United States;
-        </p>
-      </section>
-      <section class="card" id="article-ii">
-        <h2>Article II</h2>
-        <p>[Your Article II content here]</p>
-      </section>
-      <section class="card" id="article-iii">
-        <h2>Article III</h2>
-        <p>[Your Article III content here]</p>
-      </section>
-      <section class="card" id="amendment-xiii">
-        <div class="amendment-xiii-header">
-          <h2 style="display:inline-block;vertical-align:middle;margin:0 0 0 10px;">Amendment XIII</h2>
-          <div class="amendment-xiii-portraits">
-            <img src="harriettubman.png" alt="Harriet Tubman" class="amendment-xiii-person harriettubman">
-            <img src="frederickdouglass.png" alt="Frederick Douglass" class="amendment-xiii-person frederickdouglass">
-            <img src="abrahamlincoln.png" alt="Abraham Lincoln" class="amendment-xiii-person abrahamlincoln">
-          </div>
-        </div>
-        <p>
-          No Person shall be a Senator who shall not have attained to the Age of thirty Years, and been nine Years a Citizen of the United States, and who shall not, when elected, be an Inhabitant of that State for which he shall be chosen;
-          <span class="tidbit-tooltip-wrapper">
-            <span class="tidbit-tooltip-trigger" tabindex="0"><b><u>involuntary servitude</u></b></span>
-            <span class="tidbit-tooltip-box" role="tooltip">
-              <img class="tidbit-tooltip-img" src="https://designshack.net/wp-content/uploads/placehold.jpg" alt="Tid-bit image">
-              <span class="tidbit-tooltip-text">This is a tid-bit about the Constitution.</span>
-              <a class="tidbit-tooltip-btn btn-bottom" href="https://example.com" target="_blank">Learn More</a>
-            </span>
-          </span>, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
-        </p>
-        <span class="interpretation">[Interpretation for Amendment XIII]</span>
-      </section>
-      <footer class="footer">
-        <p>© 2025 Constitutionally Curious</p>
-      </footer>
-    </div>
+        </span>, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...
+      </p>
+      <span class="interpretation">[Interpretation for Amendment XIII]</span>
+    </section>
+    <footer class="footer">
+      <p>© 2025 Constitutionally Curious</p>
+    </footer>
   </div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
   <script>
+    // Interpretation toggle
     document.addEventListener('DOMContentLoaded', function() {
       const toggleSwitch = document.querySelector('.toggle-switch');
       const interpretations = document.querySelectorAll('.interpretation');
@@ -415,12 +386,72 @@
       }
       toggleSwitch.addEventListener('click', function() {
         toggleSwitch.classList.toggle('active');
+        toggleSwitch.setAttribute('aria-pressed', toggleSwitch.classList.contains('active'));
         updateInterpretations();
       });
       updateInterpretations();
     });
-  </script>
-  <script>
+    // Jump to Article dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+      const dropdown = document.querySelector('.jump-dropdown');
+      const button = dropdown.querySelector('.jump-dropdown-btn');
+      const list = dropdown.querySelector('.jump-dropdown-list');
+      button.addEventListener('click', function(e) {
+        dropdown.classList.toggle('open');
+        button.setAttribute('aria-expanded', dropdown.classList.contains('open'));
+        if (dropdown.classList.contains('open')) {
+          list.querySelector('a').focus();
+        }
+      });
+      // Close on outside click
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+      // Keyboard nav
+      button.addEventListener('keydown', function(e) {
+        if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          dropdown.classList.add('open');
+          button.setAttribute('aria-expanded', 'true');
+          list.querySelector('a').focus();
+        }
+      });
+      list.addEventListener('keydown', function(e) {
+        const links = Array.from(list.querySelectorAll('a'));
+        let idx = links.indexOf(document.activeElement);
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          links[(idx+1)%links.length].focus();
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          links[(idx-1+links.length)%links.length].focus();
+        } else if (e.key === "Escape") {
+          dropdown.classList.remove('open');
+          button.setAttribute('aria-expanded', 'false');
+          button.focus();
+        }
+      });
+      // Smooth scroll
+      list.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const id = this.getAttribute('href').slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            e.preventDefault();
+            dropdown.classList.remove('open');
+            button.setAttribute('aria-expanded', 'false');
+            window.scrollTo({
+              top: target.getBoundingClientRect().top + window.scrollY - 32,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+    // Tooltip logic (fixed in iframe)
     document.addEventListener('DOMContentLoaded', function () {
       const audio = document.getElementById('tooltip-audio');
       document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
@@ -430,17 +461,13 @@
             audio.play().catch(()=>{});
           }
         }
-        // Tooltip show/hide and positioning logic for iframe
         let wrapper = trigger.closest('.tidbit-tooltip-wrapper');
         let tooltip = wrapper.querySelector('.tidbit-tooltip-box');
         let moveTooltip = function() {
           if(!tooltip) return;
-          // Get rect relative to viewport
           const rect = trigger.getBoundingClientRect();
-          // Default: below center of word
           let left = rect.left + rect.width/2 - tooltip.offsetWidth/2;
           let top = rect.bottom + 8;
-          // Correction for boundaries
           if(left < 8) left = 8;
           if(left + tooltip.offsetWidth > window.innerWidth - 8)
             left = window.innerWidth - tooltip.offsetWidth - 8;
@@ -471,8 +498,7 @@
         window.addEventListener('resize', function(){ if(wrapper.classList.contains('show-tooltip')) moveTooltip(); }, true);
         trigger.addEventListener('click', playSound);
       });
-
-      // For mobile tap-to-toggle support
+      // Mobile tap-to-toggle support
       function isTouchDevice() {
         return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
       }
@@ -499,75 +525,7 @@
         });
       }
     });
-  </script>
-  <script>
-    function closeSidebar() {
-      document.querySelector('.sidebar').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    function openSidebar() {
-      document.querySelector('.sidebar').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-      const sidebar = document.querySelector('.sidebar');
-      const hamburger = document.querySelector('.hamburger');
-      const closeBtn = sidebar.querySelector('.close-btn');
-      function handleResize() {
-        if(window.innerWidth <= 1000) {
-          hamburger.style.display = 'inline-flex';
-          sidebar.classList.remove('open');
-        } else {
-          hamburger.style.display = 'none';
-          sidebar.classList.remove('open');
-          document.body.style.overflow = '';
-        }
-      }
-      handleResize();
-      window.addEventListener('resize', handleResize);
-      if(hamburger) hamburger.addEventListener('click', openSidebar);
-      if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
-      sidebar.querySelectorAll('.toc-link').forEach(link => {
-        link.addEventListener('click', function() {
-          if(window.innerWidth <= 1000) closeSidebar();
-        });
-      });
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-      const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
-      const sectionIds = tocLinks.map(link => link.getAttribute('href').replace('#',''));
-      const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
-      tocLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          const id = this.getAttribute('href').slice(1);
-          const target = document.getElementById(id);
-          if (target) {
-            e.preventDefault();
-            window.scrollTo({
-              top: target.getBoundingClientRect().top + window.scrollY - 32,
-              behavior: 'smooth'
-            });
-          }
-        });
-      });
-      if ("IntersectionObserver" in window) {
-        let activeIndex = 0;
-        const observer = new IntersectionObserver((entries) => {
-          let visibleSections = entries.filter(e => e.isIntersecting);
-          if (visibleSections.length > 0) {
-            visibleSections.sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
-            let idx = sections.indexOf(visibleSections[0].target);
-            if (idx !== -1) {
-              tocLinks.forEach(l=>l.classList.remove('active'));
-              tocLinks[idx].classList.add('active');
-            }
-          }
-        }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.1 });
-        sections.forEach(section => observer.observe(section));
-      }
-    });
-  </script>
-  <script type="text/javascript">
+    // Google Translate (unchanged)
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'en',
