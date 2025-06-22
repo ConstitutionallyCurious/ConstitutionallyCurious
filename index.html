@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=985, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>The Constitution</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@700&family=Playfair+Display:wght@700&family=Jacquard+24&display=swap" rel="stylesheet">
   <style>
@@ -21,7 +21,9 @@
     }
     html, body {
       height: 100%;
+      width: 100%;
       min-height: 100%;
+      min-width: 100%;
       box-sizing: border-box;
       background: var(--body-bg);
       color: var(--text-main);
@@ -31,22 +33,41 @@
       padding: 0;
       transition: background 0.3s;
       overflow-x: hidden;
-      width: 100%;
     }
-    /* Intro screen - responsive and fits frame/parent */
-    #intro-screen {
+
+    /* Intro screen and mask */
+    #intro-mask {
       position: fixed;
-      z-index: 50000 !important;
+      z-index: 49999;
       inset: 0;
       width: 100vw;
       height: 100vh;
-      min-width: 0;
-      min-height: 0;
-      background: #000;
+      background: rgba(60, 60, 60, 0.55);
+      pointer-events: none;
+      transition: opacity 0.6s;
+    }
+    #intro-mask.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #intro-screen {
+      position: fixed;
+      z-index: 50000 !important;
+      left: 50%;
+      top: 50%;
+      width: 985px;
+      height: 680px;
+      max-width: 98vw;
+      max-height: 98vh;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 6px 32px rgba(0,0,0,0.25);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      background: #000;
+      border-radius: 18px;
+      overflow: hidden;
       transition: opacity 0.6s;
     }
     #intro-screen.hide {
@@ -56,15 +77,11 @@
     }
     #intro-video-wrapper {
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       overflow: hidden;
       z-index: 1;
       background: #000;
-      display: flex;
-      align-items: stretch;
-      justify-content: stretch;
+      display: flex; align-items: stretch; justify-content: stretch;
     }
     #intro-video {
       width: 100%;
@@ -113,6 +130,24 @@
     #lets-go-btn:active, #lets-go-btn:focus {
       background: var(--primary-dark);
     }
+    @media (max-width: 1024px) {
+      #intro-screen {
+        width: 98vw;
+        height: 98vw;
+        max-width: 98vw;
+        max-height: 98vh;
+        aspect-ratio: 985/680;
+      }
+    }
+    @media (max-width: 985px), (max-height: 700px) {
+      #intro-screen {
+        width: 98vw;
+        height: 98vh;
+        max-width: 98vw;
+        max-height: 98vh;
+        aspect-ratio: 985/680;
+      }
+    }
     @media (max-width: 800px) {
       #lets-go-btn {
         font-size: 1rem;
@@ -132,7 +167,7 @@
       display: flex;
       align-items: center;
       gap: 2em;
-      border-radius: 0; /* No rounded corners */
+      border-radius: 0;
       flex-wrap: wrap;
     }
     .topbar-hamburger { display: none; }
@@ -439,7 +474,6 @@
       padding: 0;
       border-radius: 3px;
     }
-    /* Ensure overlays are always above tooltip triggers */
     #intro-screen,
     .topbar-nav {
       z-index: 50000 !important;
@@ -447,6 +481,8 @@
   </style>
 </head>
 <body>
+  <!-- Introscreen Mask -->
+  <div id="intro-mask"></div>
   <!-- Introductory Screen -->
   <div id="intro-screen">
     <div id="intro-video-wrapper">
@@ -554,15 +590,18 @@
   </div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
   <script>
-    // Intro Screen logic
+    // Intro Screen logic with mask
     document.addEventListener('DOMContentLoaded', function() {
       var introScreen = document.getElementById('intro-screen');
+      var introMask = document.getElementById('intro-mask');
       var letsGoBtn = document.getElementById('lets-go-btn');
-      if (letsGoBtn && introScreen) {
+      if (letsGoBtn && introScreen && introMask) {
         letsGoBtn.addEventListener('click', function() {
           introScreen.classList.add('hide');
+          introMask.classList.add('hide');
           setTimeout(function() {
             introScreen.style.display = 'none';
+            introMask.style.display = 'none';
           }, 750);
         });
         // Optional: allow Enter to trigger
