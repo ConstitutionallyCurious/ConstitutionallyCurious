@@ -47,6 +47,32 @@
       border-radius: 0 0 1.5em 1.5em;
       flex-wrap: wrap;
     }
+    /* Hamburger Icon */
+    .topbar-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 8px;
+      margin-right: 0.5em;
+      z-index: 1011;
+    }
+    .topbar-hamburger span {
+      display: block;
+      width: 28px;
+      height: 3px;
+      margin: 5px 0;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    .topbar-nav .topbar-links {
+      display: flex;
+      align-items: center;
+      gap: 2em;
+      flex-wrap: wrap;
+      flex: 1 1 auto;
+    }
     .topbar-search {
       flex: 1 1 200px;
       max-width: 320px;
@@ -232,6 +258,37 @@
       }
       .jump-dropdown-list { min-width: 150px; font-size: 0.95em;}
     }
+    @media (max-width: 800px) {
+      .topbar-nav {
+        flex-wrap: wrap;
+        flex-direction: row;
+        gap: 0;
+        padding: 0.4em 0.6em;
+      }
+      .topbar-hamburger {
+        display: block;
+      }
+      .topbar-nav .topbar-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 1em;
+        background: #e0e0e0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        border-radius: 0 0 1.5em 1.5em;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+        z-index: 1010;
+        padding: 1em 0;
+      }
+      .topbar-nav.open .topbar-links {
+        display: flex;
+      }
+      .topbar-search {
+        max-width: 100%;
+      }
+    }
     @media (max-width: 600px) {
       .main-content { padding: 1rem 0.5rem; }
       .topbar-nav { padding: 0.4em 0.6em; }
@@ -291,30 +348,37 @@
 <body>
   <!-- Sticky Topbar Navigation -->
   <nav class="topbar-nav" aria-label="Main Navigation">
-    <!-- Search -->
-    <div class="topbar-search">
-      <input type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution">
-    </div>
-    <!-- Translation -->
-    <div class="topbar-translate">
-      <img src="Translateicon.png" alt="Google Translate" class="translate-icon-img">
-      <div id="google_translate_element"></div>
-    </div>
-    <!-- Interpretation Toggle -->
-    <div class="topbar-interpretation">
-      <span class="toggle-label">Interpretation</span>
-      <div class="toggle-switch active" tabindex="0" role="button" aria-pressed="true"></div>
-    </div>
-    <!-- Jump to Article Dropdown -->
-    <div class="jump-dropdown" tabindex="0">
-      <button class="jump-dropdown-btn" aria-haspopup="true" aria-expanded="false">Jump to Article</button>
-      <ul class="jump-dropdown-list" role="menu">
-        <li><a href="#preamble" role="menuitem">We the People</a></li>
-        <li><a href="#article-i" role="menuitem">Article I</a></li>
-        <li><a href="#article-ii" role="menuitem">Article II</a></li>
-        <li><a href="#article-iii" role="menuitem">Article III</a></li>
-        <li><a href="#amendment-xiii" role="menuitem">Amendment XIII</a></li>
-      </ul>
+    <button class="topbar-hamburger" aria-label="Open menu" aria-controls="topbar-links" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="topbar-links" id="topbar-links">
+      <!-- Search -->
+      <div class="topbar-search">
+        <input type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution">
+      </div>
+      <!-- Translation -->
+      <div class="topbar-translate">
+        <img src="Translateicon.png" alt="Google Translate" class="translate-icon-img">
+        <div id="google_translate_element"></div>
+      </div>
+      <!-- Interpretation Toggle -->
+      <div class="topbar-interpretation">
+        <span class="toggle-label">Interpretation</span>
+        <div class="toggle-switch active" tabindex="0" role="button" aria-pressed="true"></div>
+      </div>
+      <!-- Jump to Article Dropdown -->
+      <div class="jump-dropdown" tabindex="0">
+        <button class="jump-dropdown-btn" aria-haspopup="true" aria-expanded="false">Jump to Article</button>
+        <ul class="jump-dropdown-list" role="menu">
+          <li><a href="#preamble" role="menuitem">We the People</a></li>
+          <li><a href="#article-i" role="menuitem">Article I</a></li>
+          <li><a href="#article-ii" role="menuitem">Article II</a></li>
+          <li><a href="#article-iii" role="menuitem">Article III</a></li>
+          <li><a href="#amendment-xiii" role="menuitem">Amendment XIII</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
   <!-- Main Content -->
@@ -376,6 +440,30 @@
   </div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
   <script>
+    // Hamburger menu for responsive nav
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.topbar-hamburger');
+      const nav = document.querySelector('.topbar-nav');
+      const topbarLinks = document.getElementById('topbar-links');
+      hamburger.addEventListener('click', function() {
+        const open = nav.classList.toggle('open');
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      // Close menu when clicking outside or selecting a link (on mobile)
+      document.addEventListener('click', function(e) {
+        if (!nav.contains(e.target) && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        }
+      });
+      // Close on resize up
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 800 && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
     // Interpretation toggle
     document.addEventListener('DOMContentLoaded', function() {
       const toggleSwitch = document.querySelector('.toggle-switch');
@@ -533,6 +621,32 @@
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE
       }, 'google_translate_element');
     }
+
+    // Simple client-side search for main content
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('site-search');
+      const cards = Array.from(document.querySelectorAll('.main-content .card'));
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          const q = searchInput.value.trim().toLowerCase();
+          if (!q) {
+            cards.forEach(card => card.style.display = '');
+            return;
+          }
+          cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = text.includes(q) ? '' : 'none';
+          });
+        });
+        // Optional: allow pressing "Escape" to clear
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            searchInput.value = '';
+            cards.forEach(card => card.style.display = '');
+          }
+        });
+      }
+    });
   </script>
   <script type="text/javascript"
     src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
