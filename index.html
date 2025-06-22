@@ -17,6 +17,7 @@
       --border-radius: 8px;
       --z-topbar: 1010;
       --z-tooltip: 2147483647;
+      --highlight-bg: #ffe066;
     }
     html, body {
       height: 100%;
@@ -31,7 +32,6 @@
       transition: background 0.3s;
       overflow: visible !important;
     }
-    /* Sticky top nav bar */
     .topbar-nav {
       position: sticky;
       top: 0;
@@ -47,7 +47,6 @@
       border-radius: 0 0 1.5em 1.5em;
       flex-wrap: wrap;
     }
-    /* Hamburger Icon */
     .topbar-hamburger {
       display: none;
       background: none;
@@ -78,6 +77,7 @@
       max-width: 320px;
       display: flex;
       align-items: center;
+      gap: 0.5em;
     }
     .topbar-search input[type="search"] {
       width: 100%;
@@ -87,6 +87,22 @@
       border-radius: 5px;
       outline: none;
       font-family: 'Roboto', Arial, sans-serif;
+    }
+    .topbar-search button {
+      border: none;
+      background: transparent;
+      font-size: 1.45em;
+      cursor: pointer;
+      line-height: 1;
+      padding: 5px 8px 3px 8px;
+      transition: background 0.15s;
+      border-radius: 5px;
+      margin-left: 0.1em;
+      user-select: none;
+    }
+    .topbar-search button:active, .topbar-search button:focus {
+      background: #e0e0e0;
+      outline: none;
     }
     .topbar-translate {
       display: flex; align-items: center;
@@ -116,7 +132,6 @@
     }
     .toggle-switch.active { background: #4caf50; }
     .toggle-switch.active:before { transform: translateX(25px); }
-    /* Dropdown for Jump to Article */
     .jump-dropdown {
       position: relative;
       display: inline-block;
@@ -178,8 +193,6 @@
       background: var(--primary);
       color: #fff;
     }
-
-    /* Main content area */
     .main-content {
       flex: 1 1 auto;
       max-width: 900px;
@@ -215,8 +228,6 @@
       margin-bottom: 1em;
       font-style: italic;
     }
-
-    /* Amendment XIII images layout */
     .amendment-xiii-header {
       display: flex;
       align-items: flex-start;
@@ -238,8 +249,6 @@
       margin: 0;
       box-shadow: none;
     }
-
-    /* Responsive for mobile */
     @media (max-width: 1000px) {
       .topbar-nav { flex-direction: column; gap: 1em; align-items: stretch; }
       .main-content { padding-left: 1rem; padding-right: 1rem; }
@@ -293,8 +302,6 @@
       .main-content { padding: 1rem 0.5rem; }
       .topbar-nav { padding: 0.4em 0.6em; }
     }
-
-    /* Tooltip styles: unchanged from previous working code */
     .tidbit-tooltip-wrapper { position: relative; display: inline-block; cursor: pointer; vertical-align: baseline; z-index: var(--z-tooltip);}
     .tidbit-tooltip-box {
       visibility: hidden;
@@ -343,6 +350,13 @@
       color: #fff;
     }
     .tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
+    /* Highlight for search results */
+    mark.search-highlight {
+      background: var(--highlight-bg);
+      color: inherit;
+      padding: 0;
+      border-radius: 3px;
+    }
   </style>
 </head>
 <body>
@@ -355,9 +369,10 @@
     </button>
     <div class="topbar-links" id="topbar-links">
       <!-- Search -->
-      <div class="topbar-search">
-        <input type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution">
-      </div>
+      <form class="topbar-search" id="site-search-form" autocomplete="off" role="search">
+        <input type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution" autocomplete="off">
+        <button type="submit" aria-label="Search">🔍</button>
+      </form>
       <!-- Translation -->
       <div class="topbar-translate">
         <img src="Translateicon.png" alt="Google Translate" class="translate-icon-img">
@@ -444,19 +459,16 @@
     document.addEventListener('DOMContentLoaded', function() {
       const hamburger = document.querySelector('.topbar-hamburger');
       const nav = document.querySelector('.topbar-nav');
-      const topbarLinks = document.getElementById('topbar-links');
       hamburger.addEventListener('click', function() {
         const open = nav.classList.toggle('open');
         hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
-      // Close menu when clicking outside or selecting a link (on mobile)
       document.addEventListener('click', function(e) {
         if (!nav.contains(e.target) && nav.classList.contains('open')) {
           nav.classList.remove('open');
           hamburger.setAttribute('aria-expanded', 'false');
         }
       });
-      // Close on resize up
       window.addEventListener('resize', function() {
         if (window.innerWidth > 800 && nav.classList.contains('open')) {
           nav.classList.remove('open');
@@ -491,14 +503,12 @@
           list.querySelector('a').focus();
         }
       });
-      // Close on outside click
       document.addEventListener('click', function(e) {
         if (!dropdown.contains(e.target)) {
           dropdown.classList.remove('open');
           button.setAttribute('aria-expanded', 'false');
         }
       });
-      // Keyboard nav
       button.addEventListener('keydown', function(e) {
         if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -522,7 +532,6 @@
           button.focus();
         }
       });
-      // Smooth scroll
       list.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', function(e) {
           const id = this.getAttribute('href').slice(1);
@@ -586,7 +595,6 @@
         window.addEventListener('resize', function(){ if(wrapper.classList.contains('show-tooltip')) moveTooltip(); }, true);
         trigger.addEventListener('click', playSound);
       });
-      // Mobile tap-to-toggle support
       function isTouchDevice() {
         return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
       }
@@ -622,30 +630,100 @@
       }, 'google_translate_element');
     }
 
-    // Simple client-side search for main content
+    // Search functionality: submit or Enter triggers, highlight matches
     document.addEventListener('DOMContentLoaded', function() {
       const searchInput = document.getElementById('site-search');
+      const searchForm = document.getElementById('site-search-form');
       const cards = Array.from(document.querySelectorAll('.main-content .card'));
-      if (searchInput) {
-        searchInput.addEventListener('input', function() {
-          const q = searchInput.value.trim().toLowerCase();
-          if (!q) {
-            cards.forEach(card => card.style.display = '');
-            return;
-          }
-          cards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            card.style.display = text.includes(q) ? '' : 'none';
-          });
+
+      // Save original content for restoration when search is cleared
+      cards.forEach(card => {
+        card.setAttribute('data-original-html', card.innerHTML);
+      });
+
+      function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+      function highlightText(node, query) {
+        if (!query || !node || node.nodeType !== 1) return;
+
+        // Remove previous highlights
+        Array.from(node.querySelectorAll('mark.search-highlight')).forEach(mark => {
+          mark.replaceWith(document.createTextNode(mark.textContent));
         });
-        // Optional: allow pressing "Escape" to clear
-        searchInput.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') {
-            searchInput.value = '';
-            cards.forEach(card => card.style.display = '');
+
+        if (!query.trim()) return;
+
+        // Walk all text nodes and replace matches
+        const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null, false);
+        const ranges = [];
+        const regex = new RegExp(escapeRegExp(query), 'gi');
+        let textNode;
+        while ((textNode = walker.nextNode())) {
+          let match;
+          let start = 0;
+          while ((match = regex.exec(textNode.textContent)) !== null) {
+            ranges.push({
+              node: textNode,
+              start: match.index,
+              length: match[0].length
+            });
+            start = match.index + match[0].length;
+          }
+        }
+
+        // Replace matches in reverse order to not mess up indexes
+        for (let i = ranges.length - 1; i >= 0; i--) {
+          const { node, start, length } = ranges[i];
+          const span = document.createElement('mark');
+          span.className = 'search-highlight';
+          span.textContent = node.textContent.substr(start, length);
+          const after = node.splitText(start + length);
+          const matchNode = node.splitText(start);
+          matchNode.parentNode.replaceChild(span, matchNode);
+        }
+      }
+
+      function clearHighlights(card) {
+        card.innerHTML = card.getAttribute('data-original-html');
+      }
+
+      function performSearch(q) {
+        const query = q.trim().toLowerCase();
+        if (!query) {
+          cards.forEach(card => {
+            card.style.display = '';
+            clearHighlights(card);
+          });
+          return;
+        }
+        cards.forEach(card => {
+          clearHighlights(card);
+          const text = card.textContent.toLowerCase();
+          if (text.includes(query)) {
+            card.style.display = '';
+            highlightText(card, q);
+          } else {
+            card.style.display = 'none';
           }
         });
       }
+
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        performSearch(searchInput.value);
+      });
+
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          performSearch(searchInput.value);
+        } else if (e.key === 'Escape') {
+          searchInput.value = '';
+          performSearch('');
+        }
+      });
     });
   </script>
   <script type="text/javascript"
