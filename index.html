@@ -30,13 +30,18 @@
       margin: 0;
       padding: 0;
       transition: background 0.3s;
-      overflow: visible !important;
+      overflow-x: hidden;
+      width: 100%;
     }
-    /* Intro screen */
+    /* Intro screen - responsive and fits frame/parent */
     #intro-screen {
       position: fixed;
-      z-index: 50000;
-      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 50000 !important;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      min-width: 0;
+      min-height: 0;
       background: #000;
       display: flex;
       align-items: center;
@@ -51,34 +56,42 @@
     }
     #intro-video-wrapper {
       position: absolute;
-      top: 0; left: 0; width: 100vw; height: 100vh;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       z-index: 1;
       background: #000;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
     }
     #intro-video {
-      min-width: 100vw;
-      min-height: 100vh;
-      width: auto;
-      height: auto;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      position: absolute;
-      top: 0; left: 0;
-      z-index: 1;
+      object-position: center center;
+      display: block;
+      min-width: 0;
+      min-height: 0;
       background: #000;
+      border: none;
     }
     #intro-content {
-      position: relative;
+      position: absolute;
       z-index: 2;
-      width: 100vw;
-      height: 100vh;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      pointer-events: none;
     }
     #lets-go-btn {
+      pointer-events: auto;
       font-family: 'Montserrat', Arial, sans-serif;
       font-weight: 700;
       text-transform: uppercase;
@@ -90,46 +103,40 @@
       color: #fff;
       padding: 18px 48px;
       cursor: pointer;
-      margin-top: 32px;
+      margin-top: 0;
       box-shadow: 0 2px 8px rgba(0,0,0,0.09);
       transition: background 0.2s, color 0.2s, transform 0.1s;
       outline: none;
+      position: relative;
+      z-index: 3;
     }
     #lets-go-btn:active, #lets-go-btn:focus {
       background: var(--primary-dark);
     }
-    /* Responsive video scaling for mobile */
     @media (max-width: 800px) {
-      #intro-video {
-        min-width: 100vw;
-        min-height: 100vh;
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
-      }
       #lets-go-btn {
         font-size: 1rem;
         padding: 14px 32px;
       }
     }
-    /* Everything else below is unchanged */
+    /* Navbar: Remove rounded corners, make sure above tooltips etc */
     .topbar-nav {
       position: sticky;
       top: 0;
       left: 0;
       width: 100%;
-      z-index: var(--z-topbar);
+      z-index: 50000 !important;
       background: #e0e0e0;
       box-shadow: 0 2px 8px rgba(0,0,0,0.09);
       padding: 0.7em 2em 0.7em 2em;
       display: flex;
       align-items: center;
       gap: 2em;
-      border-radius: 0 0 1.5em 1.5em;
+      border-radius: 0; /* No rounded corners */
       flex-wrap: wrap;
     }
-    .topbar-hamburger { /* ... unchanged ... */ display: none; }
-    .topbar-hamburger span { /* ... unchanged ... */ }
+    .topbar-hamburger { display: none; }
+    .topbar-hamburger span {}
     .topbar-nav .topbar-links {
       display: flex;
       align-items: center;
@@ -265,6 +272,8 @@
       padding: 2.5rem 2rem 3rem 2rem;
       display: flex;
       flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
     }
     .card {
       background: var(--card-bg);
@@ -272,6 +281,8 @@
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
       margin-bottom: 2rem;
+      width: 100%;
+      box-sizing: border-box;
     }
     .wethepeople { font-family: 'WeThePeople', cursive; font-size: 3.0em; }
     @font-face {
@@ -367,7 +378,14 @@
       .main-content { padding: 1rem 0.5rem; }
       .topbar-nav { padding: 0.4em 0.6em; }
     }
-    .tidbit-tooltip-wrapper { position: relative; display: inline-block; cursor: pointer; vertical-align: baseline; z-index: var(--z-tooltip);}
+    /* Tooltip styles: ensures trigger is under overlays */
+    .tidbit-tooltip-wrapper { 
+      position: relative; 
+      display: inline-block; 
+      cursor: pointer; 
+      vertical-align: baseline; 
+      z-index: 0 !important; /* ENSURE UNDER NAV & INTRO */
+    }
     .tidbit-tooltip-box {
       visibility: hidden;
       opacity: 0;
@@ -420,6 +438,11 @@
       color: inherit;
       padding: 0;
       border-radius: 3px;
+    }
+    /* Ensure overlays are always above tooltip triggers */
+    #intro-screen,
+    .topbar-nav {
+      z-index: 50000 !important;
     }
   </style>
 </head>
@@ -555,7 +578,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       const hamburger = document.querySelector('.topbar-hamburger');
       const nav = document.querySelector('.topbar-nav');
-      hamburger.addEventListener('click', function() {
+      hamburger && hamburger.addEventListener('click', function() {
         const open = nav.classList.toggle('open');
         hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
@@ -580,7 +603,7 @@
         const show = toggleSwitch.classList.contains('active');
         interpretations.forEach(el => el.style.display = show ? 'block' : 'none');
       }
-      toggleSwitch.addEventListener('click', function() {
+      toggleSwitch && toggleSwitch.addEventListener('click', function() {
         toggleSwitch.classList.toggle('active');
         toggleSwitch.setAttribute('aria-pressed', toggleSwitch.classList.contains('active'));
         updateInterpretations();
@@ -592,7 +615,7 @@
       const dropdown = document.querySelector('.jump-dropdown');
       const button = dropdown.querySelector('.jump-dropdown-btn');
       const list = dropdown.querySelector('.jump-dropdown-list');
-      button.addEventListener('click', function(e) {
+      button && button.addEventListener('click', function(e) {
         dropdown.classList.toggle('open');
         button.setAttribute('aria-expanded', dropdown.classList.contains('open'));
         if (dropdown.classList.contains('open')) {
@@ -605,7 +628,7 @@
           button.setAttribute('aria-expanded', 'false');
         }
       });
-      button.addEventListener('keydown', function(e) {
+      button && button.addEventListener('keydown', function(e) {
         if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           dropdown.classList.add('open');
@@ -613,7 +636,7 @@
           list.querySelector('a').focus();
         }
       });
-      list.addEventListener('keydown', function(e) {
+      list && list.addEventListener('keydown', function(e) {
         const links = Array.from(list.querySelectorAll('a'));
         let idx = links.indexOf(document.activeElement);
         if (e.key === "ArrowDown") {
@@ -628,7 +651,7 @@
           button.focus();
         }
       });
-      list.querySelectorAll('a').forEach(link => {
+      list && list.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', function(e) {
           const id = this.getAttribute('href').slice(1);
           const target = document.getElementById(id);
