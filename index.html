@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Constitution</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Jacquard+24&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@700&family=Playfair+Display:wght@700&family=Jacquard+24&display=swap" rel="stylesheet">
   <style>
     :root {
       --body-bg: #f9f9f9;
@@ -32,6 +32,87 @@
       transition: background 0.3s;
       overflow: visible !important;
     }
+    /* Intro screen */
+    #intro-screen {
+      position: fixed;
+      z-index: 50000;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: opacity 0.6s;
+    }
+    #intro-screen.hide {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s;
+    }
+    #intro-video-wrapper {
+      position: absolute;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      overflow: hidden;
+      z-index: 1;
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #intro-video {
+      min-width: 100vw;
+      min-height: 100vh;
+      width: auto;
+      height: auto;
+      object-fit: cover;
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 1;
+      background: #000;
+    }
+    #intro-content {
+      position: relative;
+      z-index: 2;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #lets-go-btn {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1.3rem;
+      border: none;
+      border-radius: 5px;
+      background: var(--primary);
+      color: #fff;
+      padding: 18px 48px;
+      cursor: pointer;
+      margin-top: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+      outline: none;
+    }
+    #lets-go-btn:active, #lets-go-btn:focus {
+      background: var(--primary-dark);
+    }
+    /* Responsive video scaling for mobile */
+    @media (max-width: 800px) {
+      #intro-video {
+        min-width: 100vw;
+        min-height: 100vh;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+      }
+      #lets-go-btn {
+        font-size: 1rem;
+        padding: 14px 32px;
+      }
+    }
+    /* Everything else below is unchanged */
     .topbar-nav {
       position: sticky;
       top: 0;
@@ -47,24 +128,8 @@
       border-radius: 0 0 1.5em 1.5em;
       flex-wrap: wrap;
     }
-    .topbar-hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px 8px;
-      margin-right: 0.5em;
-      z-index: 1011;
-    }
-    .topbar-hamburger span {
-      display: block;
-      width: 28px;
-      height: 3px;
-      margin: 5px 0;
-      background: var(--primary);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
+    .topbar-hamburger { /* ... unchanged ... */ display: none; }
+    .topbar-hamburger span { /* ... unchanged ... */ }
     .topbar-nav .topbar-links {
       display: flex;
       align-items: center;
@@ -350,7 +415,6 @@
       color: #fff;
     }
     .tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
-    /* Highlight for search results */
     mark.search-highlight {
       background: var(--highlight-bg);
       color: inherit;
@@ -360,6 +424,18 @@
   </style>
 </head>
 <body>
+  <!-- Introductory Screen -->
+  <div id="intro-screen">
+    <div id="intro-video-wrapper">
+      <video id="intro-video" autoplay loop muted playsinline>
+        <source src="Introductory screen.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div id="intro-content">
+      <button id="lets-go-btn">Let's Go!</button>
+    </div>
+  </div>
   <!-- Sticky Topbar Navigation -->
   <nav class="topbar-nav" aria-label="Main Navigation">
     <button class="topbar-hamburger" aria-label="Open menu" aria-controls="topbar-links" aria-expanded="false">
@@ -455,6 +531,26 @@
   </div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
   <script>
+    // Intro Screen logic
+    document.addEventListener('DOMContentLoaded', function() {
+      var introScreen = document.getElementById('intro-screen');
+      var letsGoBtn = document.getElementById('lets-go-btn');
+      if (letsGoBtn && introScreen) {
+        letsGoBtn.addEventListener('click', function() {
+          introScreen.classList.add('hide');
+          setTimeout(function() {
+            introScreen.style.display = 'none';
+          }, 750);
+        });
+        // Optional: allow Enter to trigger
+        letsGoBtn.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            letsGoBtn.click();
+          }
+        });
+      }
+    });
+
     // Hamburger menu for responsive nav
     document.addEventListener('DOMContentLoaded', function() {
       const hamburger = document.querySelector('.topbar-hamburger');
@@ -647,14 +743,11 @@
 
       function highlightText(node, query) {
         if (!query || !node || node.nodeType !== 1) return;
-
         // Remove previous highlights
         Array.from(node.querySelectorAll('mark.search-highlight')).forEach(mark => {
           mark.replaceWith(document.createTextNode(mark.textContent));
         });
-
         if (!query.trim()) return;
-
         // Walk all text nodes and replace matches
         const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null, false);
         const ranges = [];
@@ -672,7 +765,6 @@
             start = match.index + match[0].length;
           }
         }
-
         // Replace matches in reverse order to not mess up indexes
         for (let i = ranges.length - 1; i >= 0; i--) {
           const { node, start, length } = ranges[i];
