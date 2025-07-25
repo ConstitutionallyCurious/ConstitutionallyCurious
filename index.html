@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Constitution</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght=700&family=Playfair+Display:wght=700&family=Jacquard+24&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@700&family=Playfair+Display:wght@700&family=Jacquard+24&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"/> 
   <style> 
     /* ===== Overall Theme Variables ===== */
@@ -35,7 +35,7 @@
       box-sizing: border-box;
       min-height: 100%;
       width: 100%;
-      overflow-x: hidden;
+      overflow-x: hidden; /* Default to hidden to prevent body scroll */
       transition: background 0.3s;
     }
 
@@ -135,7 +135,7 @@
       background: var(--primary-dark);
     }
 
-    /* ===== Topbar Navigation ===== */
+    /* ===== Topbar Navigation (UPDATED) ===== */
     .topbar-nav {
       position: sticky;
       top: 0;
@@ -147,11 +147,13 @@
       padding: var(--toolbar-padding);
       display: flex;
       align-items: center;
-      justify-content: center; /* Default to center for larger screens */
-      gap: var(--toolbar-gap);
+      justify-content: space-between; /* Distribute items with equal space between */
+      gap: var(--toolbar-gap); /* Gap between elements when they don't fill space */
       border-radius: 0;
-      flex-wrap: wrap; /* Allow wrapping on smaller screens */
-      position: relative; /* For positioning mobile menu */
+      /* Removed flex-wrap to prevent squishing and force horizontal layout */
+      overflow-x: auto; /* Allow horizontal scrolling if content overflows */
+      min-width: 0; /* Ensure it can shrink */
+      white-space: nowrap; /* Prevent text wrapping within items */
     }
 
     /* Styles for the hamburger button (hidden by default) */
@@ -172,14 +174,16 @@
     .nav-items-wrapper {
       display: flex; /* Always flex on desktop */
       align-items: center;
-      justify-content: center;
+      /* Removed flex-wrap to prevent squishing and force horizontal layout */
+      flex-shrink: 0; /* Prevent shrinking */
+      flex-grow: 1; /* Allow to take available space */
+      justify-content: flex-end; /* Push items to the right within the wrapper */
       gap: var(--toolbar-gap);
-      flex-wrap: wrap; /* Allows items to wrap if needed on desktop */
-      width: auto; /* Allow content to dictate width */
+      padding-left: var(--toolbar-gap); /* Add some padding if it's pushed right */
     }
 
     .toolbar-item,
-    .interpretation-container, /* Changed from .interpretation-toggle to .interpretation-container */
+    .interpretation-container, 
     .jump-dropdown-btn {
       background: var(--card-bg);
       border: 1px solid var(--primary);
@@ -193,12 +197,13 @@
       color: var(--primary);
       transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
       outline: none;
+      flex-shrink: 0; /* Prevent individual items from squishing */
     }
 
     .toolbar-item:focus,
     .toolbar-item:hover,
-    .interpretation-container:hover, /* Changed from .interpretation-toggle:hover */
-    .interpretation-container:focus, /* Changed from .interpretation-toggle:focus */
+    .interpretation-container:hover, 
+    .interpretation-container:focus, 
     .jump-dropdown-btn:hover,
     .jump-dropdown-btn:focus {
       background: var(--input-hover-bg);
@@ -210,6 +215,7 @@
       border: none;
       background: transparent;
       width: 180px;
+      min-width: 120px; /* Ensure search bar has a minimum width */
       font-size: 15px;
       color: var(--primary);
       outline: none;
@@ -324,6 +330,7 @@
       display: inline-block;
       font-size: 15px;
       cursor: pointer;
+      flex-shrink: 0; /* Prevent shrinking */
     }
     .jump-dropdown-btn {
       background: var(--card-bg);
@@ -529,16 +536,17 @@
     /* Tablet/iPad-level (768px to 991px) - Horizontal, smaller buttons */
     @media (min-width: 768px) and (max-width: 991px) {
       .topbar-nav {
-        justify-content: space-around; /* Distribute items */
+        justify-content: space-between; /* Maintain space-between */
         padding: 6px 10px; /* Slightly less padding */
         gap: 8px; /* Reduced gap */
       }
       .nav-items-wrapper {
-        justify-content: center; /* Center items within wrapper */
-        flex-grow: 1; /* Allow wrapper to take available space */
+        justify-content: flex-end; /* Push items to the right */
+        gap: 8px; /* Reduced gap */
+        padding-left: 8px;
       }
       .toolbar-item,
-      .interpretation-container, /* Apply to container */
+      .interpretation-container, 
       .jump-dropdown-btn {
         padding: 4px 8px; /* Smaller padding */
         font-size: 14px; /* Smaller font */
@@ -551,6 +559,7 @@
       }
       .search-bar {
         width: 120px; /* Smaller search bar */
+        min-width: 90px;
         font-size: 14px;
       }
       .jump-dropdown-list {
@@ -582,9 +591,10 @@
     @media (max-width: 767px) {
       .topbar-nav {
         flex-direction: row; /* Keep row for hamburger and potential title */
-        justify-content: space-between; /* Hamburger to one side, perhaps title to other */
+        justify-content: space-between; /* Hamburger to one side */
         padding: 8px 16px;
         align-items: center; /* Align items vertically */
+        overflow-x: hidden; /* Hide overflow when menu is collapsed */
       }
 
       .hamburger-menu {
@@ -604,6 +614,9 @@
         border-top: 1px solid rgba(0,0,0,0.1);
         z-index: 999; /* Ensure it's above content */
         box-sizing: border-box; /* Include padding/border in width calculation */
+        align-items: center; /* Center items within the column */
+        white-space: normal; /* Allow text to wrap within menu items */
+        flex-shrink: 1; /* Allow shrinking in this vertical layout */
       }
 
       .nav-items-wrapper.active {
@@ -611,8 +624,8 @@
       }
 
       .toolbar-item,
-      .interpretation-container, /* Target the container */
-      .jump-dropdown, /* Target the dropdown container */
+      .interpretation-container, 
+      .jump-dropdown, 
       #google_translate_element {
         width: calc(100% - 32px); /* Full width minus 16px padding on each side */
         margin: 4px 16px; /* Center with padding */
@@ -622,6 +635,7 @@
       }
       .search-bar {
         width: 100%; /* Occupy full width of its parent toolbar-item */
+        min-width: unset; /* Remove min-width constraint in mobile menu */
       }
       .jump-dropdown-list {
         position: static; /* Within the flow of the menu */
@@ -646,8 +660,10 @@
   </style> 
 </head>
 <body>
-  <div id="intro-mask"></div>
-  <div id="intro-screen">
+  
+<div id="intro-mask"></div>
+  
+<div id="intro-screen">
     <div id="intro-video-wrapper">
       <video id="intro-video" autoplay loop muted playsinline>
         <source src="Introductory screen.mp4" type="video/mp4">
@@ -658,37 +674,46 @@
       <button id="lets-go-btn">Let's Go!</button>
     </div>
   </div>
-  <nav class="topbar-nav" aria-label="Main Navigation">
-    <button class="hamburger-menu" aria-label="Open navigation menu" aria-expanded="false">
+  
+<nav class="topbar-nav" aria-label="Main Navigation">
+    
+<button class="hamburger-menu" aria-label="Open navigation menu" aria-expanded="false">
         <span class="material-symbols-outlined">menu</span>
     </button>
 
-    <div class="nav-items-wrapper">
-        <form class="toolbar-item" id="site-search-form" autocomplete="off" role="search">
+    
+<div class="nav-items-wrapper">
+        
+<form class="toolbar-item" id="site-search-form" autocomplete="off" role="search">
             <img src="Search.svg" alt="Search" class="icon-search" aria-hidden="true" width="22" height="22" />
             <input class="search-bar" type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution" autocomplete="off">
         </form>
 
-        <div class="interpretation-container" id="interpretation-container" tabindex="0">
+        
+<div class="interpretation-container" id="interpretation-container" tabindex="0">
             <img src="Translate.svg" alt="Interpretation" class="icon-translate" aria-hidden="true" width="22" height="22" />
             <span>Interpretation</span>
-            <label class="interpretation-switch">
+            
+<label class="interpretation-switch">
                 <input type="checkbox" id="interpretation-toggle" checked aria-label="Toggle interpretation display">
                 <span class="interpretation-slider"></span>
             </label>
             <span class="tooltip">Show a summarized plain-English version!</span>
         </div>
 
-        <div id="google_translate_element"></div>
+        
+<div id="google_translate_element"></div>
 
-        <div class="jump-dropdown" id="articleDropdown">
+        
+<div class="jump-dropdown" id="articleDropdown">
             <button class="jump-dropdown-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Go to Article or Amendment">
                 <img src="Article.svg" alt="Go to Article" class="icon-article" aria-hidden="true" width="22" height="22" />
                 Go to Article
                 <span class="material-symbols-outlined dropdown-icon">expand_more</span>
             </button>
             <ul class="jump-dropdown-list" role="menu" aria-labelledby="articleDropdown">
-                </ul>
+                
+</ul>
         </div>
     </div>
   </nav>
@@ -738,7 +763,8 @@
         and uniform Laws on the subject of Bankruptcies throughout the United States;
       </p>
       <span class="interpretation">[Interpretation for the above paragraph]</span>
-      <h3>Section 1</h3>
+      
+<h3>Section 1</h3>
       <p>
         All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.
       </p>
