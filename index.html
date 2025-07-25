@@ -294,6 +294,28 @@ html, body {
   background: var(--primary-dark);
   box-shadow: 0 4px 12px rgba(0, 64, 128, 0.18);
 }
+  /* Add this to your CSS (or within your <style> block): */
+.go-btn.alt-btn {
+  background: #fff;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  box-shadow: var(--shadow);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  transition: background 0.2s, box-shadow 0.2s, border-color 0.2s, color 0.2s;
+  outline: none;
+  gap: 8px;
+}
+.go-btn.alt-btn:hover, .go-btn.alt-btn:focus {
+  background: var(--input-hover-bg);
+  box-shadow: 0 4px 12px rgba(0, 64, 128, 0.18);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
+}
 
 /* ===== Main Content ===== */
 .main-content {
@@ -662,10 +684,11 @@ mark.search-highlight {
   <div id="google_translate_element"></div>
 
   <!-- Go to Article Button -->
-  <button class="go-btn" id="goToArticleBtn" type="button">
-    <img src="Article.svg" alt="Go to Article" class="icon-article" aria-hidden="true" width="22" height="22" />
-    Go to Article
-  </button>
+  <!-- Replace your existing Go to Article button in the navbar with the following code: -->
+<button class="go-btn alt-btn" id="goToArticleBtn" type="button">
+  <img src="Article.svg" alt="Go to Article" class="icon-article" aria-hidden="true" width="22" height="22" />
+  Go to Article
+</button>
 </nav>
 <!-- Google Translate V1 scripts: Place just before closing </body> tag or below your navbar -->
 <script type="text/javascript">
@@ -1332,15 +1355,23 @@ mark.search-highlight {
   });
 
   // Go to Article Button
+  // Replace your existing "Go to Article" button JS with this:
+document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('goToArticleBtn').addEventListener('click', function() {
-    const mainContent = document.querySelector('.main-content');
-    const firstArticle = mainContent.querySelector('section, .card, .article, #article');
-    if (firstArticle) {
-      firstArticle.scrollIntoView({ behavior: 'smooth' });
+    // Scroll to the first Article section, or fallback to main content
+    var articleSection = document.querySelector('[id^="article-i"], [id^="article-ii"], [id^="article-iii"], [id^="article-iv"], [id^="article-v"], [id^="article"]');
+    if (articleSection) {
+      articleSection.scrollIntoView({ behavior: 'smooth' });
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      var mainContent = document.querySelector('.main-content');
+      if (mainContent) {
+        mainContent.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   });
+});
 </script>
   <script type="text/javascript">
   function googleTranslateElementInit() {
