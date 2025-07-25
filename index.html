@@ -2,668 +2,657 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=985, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>The Constitution</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@700&family=Playfair+Display:wght@700&family=Jacquard+24&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"/> 
-  <style> 
-    /* ===== Overall Theme Variables ===== */
-    :root {
-      --body-bg: #f9f9f9;
-      --card-bg: #fff;
-      --primary: #004080;
-      --primary-dark: #002f5f;
-      --text-main: #333333;
-      --accent: #004080;
-      --shadow: 0 2px 6px rgba(0, 64, 128, 0.12);
-      --border-radius: 8px;
-      --highlight-bg: #ffe066;
-      --taskbar-bg: #e0e0e0;
-      --input-hover-bg: #f3f8ff;
-      --toolbar-padding: 8px 16px;
-      --toolbar-gap: 14px;
-    }
+/* ===== Overall Theme Variables ===== */
+<style> 
+  :root {
+  --body-bg: #f9f9f9;
+  --card-bg: #fff;
+  --primary: #004080;
+  --primary-dark: #002f5f;
+  --text-main: #333333;
+  --accent: #004080;
+  --shadow: 0 2px 6px rgba(0, 64, 128, 0.12);
+  --border-radius: 8px;
+  --highlight-bg: #ffe066;
+  --taskbar-bg: #e0e0e0;
+  --input-hover-bg: #f3f8ff;
+  --toolbar-padding: 8px 16px;
+  --toolbar-gap: 14px;
+}
 
-    /* ===== Base ===== */
-    html, body {
-      background: var(--body-bg);
-      color: var(--text-main);
-      font-family: 'Roboto', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1.65;
-      box-sizing: border-box;
-      min-height: 100%;
-      width: 100%;
-      overflow-x: hidden; /* Default to hidden to prevent body scroll */
-      transition: background 0.3s;
-    }
+/* ===== Base ===== */
+html, body {
+  background: var(--body-bg);
+  color: var(--text-main);
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.65;
+  box-sizing: border-box;
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  transition: background 0.3s;
+}
 
-    /* ===== Intro Screen ===== */
-    #intro-mask {
-      position: fixed;
-      z-index: 49999;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(60, 60, 60, 0.55);
-      pointer-events: none;
-      transition: opacity 0.6s;
-    }
-    #intro-mask.hide {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #intro-screen {
-      position: fixed;
-      z-index: 50000 !important;
-      left: 50%;
-      top: 50%;
-      width: 985px; /* This width will be responsive with the new viewport meta */
-      height: 680px; /* This height will be responsive with the new viewport meta */
-      max-width: 98vw;
-      max-height: 98vh;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 6px 32px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      background: #000;
-      border-radius: 18px;
-      overflow: hidden;
-      transition: opacity 0.6s;
-    }
-    #intro-screen.hide {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.7s;
-    }
-    #intro-video-wrapper {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      overflow: hidden;
-      z-index: 1;
-      background: #000;
-      display: flex; align-items: stretch; justify-content: stretch;
-    }
-    #intro-video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      display: block;
-      min-width: 0;
-      min-height: 0;
-      background: #000;
-      border: none;
-    }
-    #intro-content {
-      position: absolute;
-      z-index: 2;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      pointer-events: none;
-    }
-    #lets-go-btn {
-      pointer-events: auto;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 5px;
-      background: var(--primary);
-      color: #fff;
-      padding: 14px 32px;
-      cursor: pointer;
-      margin-top: 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-      transition: background 0.2s, color 0.2s, transform 0.1s;
-      outline: none;
-      position: relative;
-      z-index: 3;
-    }
-    #lets-go-btn:active, #lets-go-btn:focus {
-      background: var(--primary-dark);
-    }
+/* ===== Intro Screen ===== */
+#intro-mask {
+  position: fixed;
+  z-index: 49999;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(60, 60, 60, 0.55);
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+#intro-mask.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+#intro-screen {
+  position: fixed;
+  z-index: 50000 !important;
+  left: 50%;
+  top: 50%;
+  width: 985px;
+  height: 680px;
+  max-width: 98vw;
+  max-height: 98vh;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 6px 32px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #000;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: opacity 0.6s;
+}
+#intro-screen.hide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s;
+}
+#intro-video-wrapper {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  background: #000;
+  display: flex; align-items: stretch; justify-content: stretch;
+}
+#intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  background: #000;
+  border: none;
+}
+#intro-content {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  pointer-events: none;
+}
+#lets-go-btn {
+  pointer-events: auto;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  background: var(--primary);
+  color: #fff;
+  padding: 14px 32px;
+  cursor: pointer;
+  margin-top: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+  outline: none;
+  position: relative;
+  z-index: 3;
+}
+#lets-go-btn:active, #lets-go-btn:focus {
+  background: var(--primary-dark);
+}
 
-    /* ===== Topbar Navigation (UPDATED) ===== */
-    .topbar-nav {
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 9999;
-      background: var(--taskbar-bg);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-      padding: var(--toolbar-padding);
-      display: flex;
-      align-items: center;
-      justify-content: space-between; /* Distribute items with equal space between */
-      gap: var(--toolbar-gap); /* Gap between elements when they don't fill space */
-      border-radius: 0;
-      /* Removed flex-wrap to prevent squishing and force horizontal layout */
-      overflow-x: auto; /* Allow horizontal scrolling if content overflows */
-      min-width: 0; /* Ensure it can shrink */
-      white-space: nowrap; /* Prevent text wrapping within items */
-    }
+/* ===== Topbar Navigation ===== */
+.topbar-nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background: var(--taskbar-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+  padding: var(--toolbar-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centered horizontally */
+  gap: var(--toolbar-gap);
+  border-radius: 0;
+  flex-wrap: wrap;
+}
 
-    /* Styles for the hamburger button (hidden by default) */
-    .hamburger-menu {
-      display: none; /* Hidden on large screens */
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      margin: 0;
-      color: var(--primary);
-    }
-    .hamburger-menu .material-symbols-outlined {
-      font-size: 28px; /* Larger icon for mobile */
-    }
+.toolbar-item,
+.interpretation-toggle,
+.dropdown {
+  background: var(--card-bg);
+  border: 1px solid var(--primary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--primary);
+  transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+  outline: none;
+}
 
-    /* Wrapper for navigation items (flex by default for desktop) */
-    .nav-items-wrapper {
-      display: flex; /* Always flex on desktop */
-      align-items: center;
-      /* Removed flex-wrap to prevent squishing and force horizontal layout */
-      flex-shrink: 0; /* Prevent shrinking */
-      flex-grow: 1; /* Allow to take available space */
-      justify-content: flex-end; /* Push items to the right within the wrapper */
-      gap: var(--toolbar-gap);
-      padding-left: var(--toolbar-gap); /* Add some padding if it's pushed right */
-    }
+.toolbar-item:focus,
+.toolbar-item:hover,
+.interpretation-toggle:hover,
+.interpretation-toggle:focus,
+.dropdown:hover,
+.dropdown:focus {
+  background: var(--input-hover-bg);
+  box-shadow: 0 4px 12px rgba(0, 64, 128, 0.15);
+  border-color: var(--primary-dark);
+}
 
-    .toolbar-item,
-    .interpretation-container, 
-    .jump-dropdown-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--primary);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      padding: 6px 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 15px;
-      color: var(--primary);
-      transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
-      outline: none;
-      flex-shrink: 0; /* Prevent individual items from squishing */
-    }
+.search-bar {
+  border: none;
+  background: transparent;
+  width: 180px;
+  font-size: 15px;
+  color: var(--primary);
+  outline: none;
+  padding-left: 8px;
+}
 
-    .toolbar-item:focus,
-    .toolbar-item:hover,
-    .interpretation-container:hover, 
-    .interpretation-container:focus, 
-    .jump-dropdown-btn:hover,
-    .jump-dropdown-btn:focus {
-      background: var(--input-hover-bg);
-      box-shadow: 0 4px 12px rgba(0, 64, 128, 0.15);
-      border-color: var(--primary-dark);
-    }
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-size: 22px;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 22;
+  line-height: 1;
+  vertical-align: middle;
+  color: var(--primary);
+  letter-spacing: normal;
+  font-style: normal;
+  font-weight: normal;
+  display: inline-block;
+}
 
-    .search-bar {
-      border: none;
-      background: transparent;
-      width: 180px;
-      min-width: 120px; /* Ensure search bar has a minimum width */
-      font-size: 15px;
-      color: var(--primary);
-      outline: none;
-      padding-left: 8px;
-    }
+/* ===== Interpretation Toggle ===== */
+.interpretation-toggle {
+  position: relative;
+  cursor: pointer;
+}
+.interpretation-toggle .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.18s;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.96rem;
+  white-space: nowrap;
+  z-index: 99999;
+}
+.interpretation-toggle:hover .tooltip,
+.interpretation-toggle:focus .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
 
-    .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined' !important;
-      font-size: 22px;
-      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 22;
-      line-height: 1;
-      vertical-align: middle;
-      color: var(--primary);
-      letter-spacing: normal;
-      font-style: normal;
-      font-weight: normal;
-      display: inline-block;
-    }
-    /* Icons - consistent sizing */
-    .icon-search,
-    .icon-translate,
-    .icon-article {
-      width: 22px;
-      height: 22px;
-      vertical-align: middle;
-      display: inline-block;
-    }
-    .dropdown-icon { /* For the expand_more icon in the dropdown */
-      font-size: 22px !important;
-      width: 22px !important;
-      height: 22px !important;
-    }
+/* ===== Dropdown ===== */
+.dropdown {
+  position: relative;
+  min-width: 140px;
+  cursor: pointer;
+}
+.dropdown .dropdown-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 22px;
+  color: var(--primary);
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--primary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  z-index: 10000; /* Increased z-index to be above other elements */
+  min-width: 100%;
+  padding: 6px 0;
+  color: var(--primary);
+}
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+.dropdown-menu-item {
+  padding: 10px 18px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--primary);
+  background: transparent;
+  border: none;
+  text-align: left;
+}
+.dropdown-menu-item:hover, .dropdown-menu-item:focus {
+  background: var(--input-hover-bg);
+}
 
-    /* ===== Interpretation Toggle (UPDATED STYLES) ===== */
-    .interpretation-container {
-      position: relative;
-      cursor: default; /* Container itself is not a button */
-      padding-right: 12px; /* Add space for the toggle */
-    }
-    .interpretation-container .tooltip {
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.18s;
-      position: absolute;
-      bottom: 120%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: #fff;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 0.96rem;
-      white-space: nowrap;
-      z-index: 99999;
-    }
-    .interpretation-container:hover .tooltip,
-    .interpretation-container:focus-within .tooltip { /* Use focus-within for accessibility */
-      visibility: visible;
-      opacity: 1;
-    }
+/* ===== Go to Article Button ===== */
+.go-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  transition: background 0.2s, box-shadow 0.2s;
+  outline: none;
+  gap: 8px;
+}
+.go-btn:hover, .go-btn:focus {
+  background: var(--primary-dark);
+  box-shadow: 0 4-6px 12px rgba(0, 64, 128, 0.18);
+}
+  /* Add this to your CSS (or within your <style> block): */
+.go-btn.alt-btn {
+  background: #fff;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  box-shadow: var(--shadow);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  transition: background 0.2s, box-shadow 0.2s, border-color 0.2s, color 0.2s;
+  outline: none;
+  gap: 8px;
+}
+.go-btn.alt-btn:hover, .go-btn.alt-btn:focus {
+  background: var(--input-hover-bg);
+  box-shadow: 0 4px 12px rgba(0, 64, 128, 0.18);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
+}
 
-    /* Style for the actual toggle switch */
-    .interpretation-switch {
-      position: relative;
-      display: inline-block;
-      width: 34px; /* Width of the switch */
-      height: 20px; /* Height of the switch */
-      margin-left: auto; /* Push to the right */
-      flex-shrink: 0; /* Prevent shrinking */
-      cursor: pointer;
-    }
-    .interpretation-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .interpretation-slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 20px; /* Rounded slider */
-    }
-    .interpretation-slider:before {
-      position: absolute;
-      content: "";
-      height: 16px;
-      width: 16px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%; /* Circular handle */
-    }
-    .interpretation-switch input:checked + .interpretation-slider {
-      background-color: var(--primary);
-    }
-    .interpretation-switch input:focus + .interpretation-slider {
-      box-shadow: 0 0 1px var(--primary);
-    }
-    .interpretation-switch input:checked + .interpretation-slider:before {
-      transform: translateX(14px); /* Move handle to the right */
-    }
+/* ===== Main Content ===== */
+.main-content {
+  flex: 1 1 auto;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+.card {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-    /* ===== Jump Dropdown (Go to Article) ===== */
-    .jump-dropdown {
-      position: relative;
-      display: inline-block;
-      font-size: 15px;
-      cursor: pointer;
-      flex-shrink: 0; /* Prevent shrinking */
-    }
-    .jump-dropdown-btn {
-      background: var(--card-bg);
-      color: var(--primary);
-      border: 1px solid var(--primary);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      padding: 6px 16px 6px 10px;
-      font-size: 15px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: background 0.2s, box-shadow 0.2s, border-color 0.2s, color 0.2s;
-      outline: none;
-    }
-    .jump-dropdown-btn:hover, .jump-dropdown-btn:focus {
-      background: var(--input-hover-bg);
-      box-shadow: 0 4px 12px rgba(0, 64, 128, 0.18);
-      border-color: var(--primary-dark);
-      color: var(--primary-dark);
-    }
-    .jump-dropdown-list {
-      display: none;
-      position: absolute;
-      left: 0;
-      top: 110%;
-      background: var(--card-bg);
-      min-width: 180px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-      border-radius: var(--border-radius);
-      border: 1px solid var(--primary);
-      z-index: 9999;
-      padding: 6px 0;
-      margin: 0;
-      list-style: none;
-      font-family: 'Roboto', Arial, sans-serif;
-    }
-    .jump-dropdown.open .jump-dropdown-list {
-      display: block;
-    }
-    .jump-dropdown-list li {
-      margin: 0;
-      padding: 0;
-    }
-    .jump-dropdown-list a {
-      display: block;
-      padding: 0.6em 1.2em;
-      color: var(--text-main);
-      text-decoration: none;
-      font-size: 15px;
-      border-radius: 0;
-      transition: background 0.18s;
-    }
-    .jump-dropdown-list a:hover, .jump-dropdown-list a:focus {
-      background: var(--primary);
-      color: #fff;
-    }
+/* ===== Typography ===== */
+.wethepeople { font-family: 'WeThePeople', cursive; font-size: 3.0em; }
+@font-face {
+  font-family: 'WeThePeople';
+  src: url('fonts/WeThePeople.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+h1, .wethepeople { font-family: 'WeThePeople', cursive; font-size: 2.5rem; }
+h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-top: 2.5rem; }
+h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 1.7rem; }
+p { font-size: 1.125rem; }
+.card h2, .card h3, .card h4, .card h5 { font-family: 'Playfair Display', serif; }
 
-    /* ===== Main Content ===== */
-    .main-content {
-      flex: 1 1 auto;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2.5rem 2rem 3rem 2rem;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .card {
-      background: var(--card-bg);
-      padding: 1.5rem;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 2rem;
-      width: 100%;
-      box-sizing: border-box;
-    }
+.interpretation {
+  font-size: 1rem;
+  color: #666;
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  font-style: italic;
+}
 
-    /* ===== Typography ===== */
-    .wethepeople { font-family: 'WeThePeople', cursive; font-size: 3.0em; }
-    @font-face {
-      font-family: 'WeThePeople';
-      src: url('fonts/WeThePeople.ttf') format('truetype');
-      font-weight: bold;
-      font-style: normal;
-    }
-    h1, .wethepeople { font-family: 'WeThePeople', cursive; font-size: 2.5rem; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-top: 2.5rem; }
-    h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 1.7rem; }
-    p { font-size: 1.125rem; }
-    .card h2, .card h3, .card h4, .card h5 { font-family: 'Playfair Display', serif; }
+/* ===== Amendment XIII Portraits ===== */
+.amendment-xiii-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5em;
+  gap: 12px;
+}
+.amendment-xiii-portraits {
+  display: flex;
+  align-items: flex-end;
+  margin-left: auto;
+  gap: 18px;
+}
+.amendment-xiii-person {
+  width: 120px;
+  height: 160px;
+  object-fit: contain;
+  background: none;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+}
 
-    .interpretation {
-      font-size: 1rem;
-      color: #666;
-      display: block;
-      margin-top: 0.5em;
-      margin-bottom: 1em;
-      font-style: italic;
-    }
+/* ===== Tooltip for Tidbit ===== */
+.tidbit-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  vertical-align: baseline;
+  z-index: 0 !important;
+}
+.tidbit-tooltip-box {
+  display: none;
+  position: fixed !important;
+  left: 0; top: 0;
+  z-index: 2147483647 !important;
+  width: 270px;
+  min-width: 200px;
+  background: #fff;
+  color: #222;
+  border: 1px solid #888;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  padding: 16px;
+  font-size: 16px;
+  transition: opacity 0.15s;
+  opacity: 0;
+  pointer-events: auto;
+  flex-direction: column;
+  align-items: center;
+}
+.tidbit-tooltip-wrapper.tooltip-visible .tidbit-tooltip-box {
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+.tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
+.tidbit-tooltip-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: 700;
+}
+.tidbit-tooltip-btn:hover {
+  background: var(--primary-dark);
+  color: #fff;
+}
+.tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
 
-    /* ===== Amendment XIII Portraits ===== */
-    .amendment-xiii-header {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 0.5em;
-      gap: 12px;
-    }
-    .amendment-xiii-portraits {
-      display: flex;
-      align-items: flex-end;
-      margin-left: auto;
-      gap: 18px;
-    }
-    .amendment-xiii-person {
-      width: 120px;
-      height: 160px;
-      object-fit: contain;
-      background: none;
-      border-radius: 0;
-      margin: 0;
-      box-shadow: none;
-    }
+/* ===== Search Highlight ===== */
+mark.search-highlight {
+  background: var(--highlight-bg);
+  color: inherit;
+  padding: 0;
+  border-radius: 3px;
+}
 
-    /* ===== Tooltip for Tidbit ===== */
-    .tidbit-tooltip-wrapper {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-      vertical-align: baseline;
-      z-index: 0 !important;
-    }
-    .tidbit-tooltip-box {
-      display: none;
-      position: fixed !important;
-      left: 0; top: 0;
-      z-index: 2147483647 !important;
-      width: 270px;
-      min-width: 200px;
-      background: #fff;
-      color: #222;
-      border: 1px solid #888;
-      border-radius: 8px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-      padding: 16px;
-      font-size: 16px;
-      transition: opacity 0.15s;
-      opacity: 0;
-      pointer-events: auto;
-      flex-direction: column;
-      align-items: center;
-    }
-    .tidbit-tooltip-wrapper.tooltip-visible .tidbit-tooltip-box {
-      display: flex !important;
-      opacity: 1 !important;
-      pointer-events: auto !important;
-      visibility: visible !important;
-    }
-    .tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
-    .tidbit-tooltip-btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      padding: 6px 18px;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 6px;
-      transition: background 0.2s, color 0.2s;
-      text-decoration: none;
-      display: inline-block;
-      font-family: 'Roboto', Arial, sans-serif;
-      font-weight: 700;
-    }
-    .tidbit-tooltip-btn:hover {
-      background: var(--primary-dark);
-      color: #fff;
-    }
-    .tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
+/* ===== Footer ===== */
+.footer {
+  margin-top: 40px;
+  padding: 24px 0 0 0;
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+}
 
-    /* ===== Search Highlight ===== */
-    mark.search-highlight {
-      background: var(--highlight-bg);
-      color: inherit;
-      padding: 0;
-      border-radius: 3px;
-    }
+/* ===== Responsive ===== */
+@media (max-width: 1000px) {
+  .topbar-nav { flex-direction: column; gap: 8px; align-items: stretch; }
+  .main-content { padding-left: 1rem; padding-right: 1rem; }
+  .amendment-xiii-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .amendment-xiii-portraits { gap: 4px; margin-left: 0; }
+  .amendment-xiii-person { width: 80px; height: 100px; }
+  .dropdown-menu { min-width: 150px; font-size: 0.95em;}
+}
+@media (max-width: 800px) {
+  .topbar-nav {
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 0;
+    padding: 6px 4px;
+  }
+  .toolbar-item, .dropdown, .interpretation-toggle, .go-btn { width: 100%; font-size: 14px;}
+  .main-content { padding: 1.4rem 0.5rem; }
+}
+@media (max-width: 600px) {
+  .main-content { padding: 1rem 0.5rem; }
+  .topbar-nav { padding: 4px 2px; }
+  .card { padding: 1rem; }
+}
+/* Material Symbols Outlined: make icons work everywhere */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  color: #004080;
+  vertical-align: middle;
+}
 
-    /* ===== Footer ===== */
-    .footer {
-      margin-top: 40px;
-      padding: 24px 0 0 0;
-      text-align: center;
-      color: #888;
-      font-size: 1rem;
-    }
+/* Topbar layout */
+.topbar-nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background: #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centered horizontally */
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.topbar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #004080;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 64, 128, 0.12);
+  padding: 6px 12px;
+}
+.search-bar {
+  border: none;
+  background: transparent;
+  width: 160px;
+  font-size: 15px;
+  color: #004080;
+  outline: none;
+  padding-left: 8px;
+}
+.topbar-translate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #004080;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 64, 128, 0.12);
+  padding: 6px 12px;
+}
+.topbar-interpretation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #004080;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 64, 128, 0.12);
+  padding: 6px 12px;
+}
+.toggle-label {
+  font-size: 15px;
+  font-weight: bold;
+  margin-right: 3px;
+}
+.toggle-switch {
+  position: relative;
+  width: 38px; height: 20px;
+  background-color: #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.toggle-switch:before {
+  content: '';
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  background: #fff; border-radius: 50%;
+  transition: transform 0.3s;
+}
+.toggle-switch.active { background: #4caf50; }
+.toggle-switch.active:before { transform: translateX(18px); }
 
-    /* ===== Responsive (UPDATED MEDIA QUERIES) ===== */
+.jump-dropdown {
+  position: relative;
+  display: inline-block;
+  font-size: 15px;
+  z-index: 10000; /* Increased z-index for the dropdown */
+}
+.jump-dropdown-btn {
+  background: #fff;
+  color: #004080;
+  border: 1px solid #004080;
+  border-radius: 8px;
+  padding: 6px 16px 6px 10px;
+  font-size: 15px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.jump-dropdown-list {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 110%;
+  background: #fff;
+  min-width: 180px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  border-radius: 8px;
+  border: 1px solid #004080;
+  z-index: 10000; /* Increased z-index to be above other elements */
+  padding: 6px 0;
+  margin: 0;
+  list-style: none;
+}
+.jump-dropdown.open .jump-dropdown-list { display: block; }
+.jump-dropdown-list li {
+  margin: 0;
+  padding: 0;
+}
+.jump-dropdown-list a {
+  display: block;
+  padding: 0.6em 1.2em;
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 15px;
+  border-radius: 0;
+  transition: background 0.18s;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+.jump-dropdown-list a:hover, .jump-dropdown-list a:focus {
+  background: var(--primary);
+  color: #fff;
+}
 
-    /* Tablet/iPad-level (768px to 991px) - Horizontal, smaller buttons */
-    @media (min-width: 768px) and (max-width: 991px) {
-      .topbar-nav {
-        justify-content: space-between; /* Maintain space-between */
-        padding: 6px 10px; /* Slightly less padding */
-        gap: 8px; /* Reduced gap */
-      }
-      .nav-items-wrapper {
-        justify-content: flex-end; /* Push items to the right */
-        gap: 8px; /* Reduced gap */
-        padding-left: 8px;
-      }
-      .toolbar-item,
-      .interpretation-container, 
-      .jump-dropdown-btn {
-        padding: 4px 8px; /* Smaller padding */
-        font-size: 14px; /* Smaller font */
-        gap: 6px; /* Smaller gap */
-      }
-      .material-symbols-outlined, .icon-search, .icon-translate, .icon-article, .dropdown-icon {
-        font-size: 18px !important; /* Smaller icons */
-        width: 18px !important; /* Match icon size */
-        height: 18px !important; /* Match icon size */
-      }
-      .search-bar {
-        width: 120px; /* Smaller search bar */
-        min-width: 90px;
-        font-size: 14px;
-      }
-      .jump-dropdown-list {
-        min-width: 150px; /* Adjust dropdown menu width */
-        font-size: 0.9em;
-      }
-      /* Ensure Google Translate widget scales down if it doesn't fit */
-      #google_translate_element {
-        transform: scale(0.9);
-        transform-origin: left center;
-        white-space: nowrap;
-        margin-left: -5px; /* Adjust for scale */
-      }
-      /* Adjust interpretation switch for tablet */
-      .interpretation-switch {
-        width: 30px;
-        height: 18px;
-      }
-      .interpretation-slider:before {
-        height: 14px;
-        width: 14px;
-      }
-      .interpretation-switch input:checked + .interpretation-slider:before {
-        transform: translateX(12px);
-      }
-    }
-
-    /* Mobile (iPhone-level, up to 767px) - Hamburger menu */
-    @media (max-width: 767px) {
-      .topbar-nav {
-        flex-direction: row; /* Keep row for hamburger and potential title */
-        justify-content: space-between; /* Hamburger to one side */
-        padding: 8px 16px;
-        align-items: center; /* Align items vertically */
-        overflow-x: hidden; /* Hide overflow when menu is collapsed */
-      }
-
-      .hamburger-menu {
-        display: block; /* Show hamburger icon */
-      }
-
-      .nav-items-wrapper {
-        display: none; /* Hide nav items by default */
-        flex-direction: column; /* Stack items vertically */
-        position: absolute; /* Position relative to topbar-nav */
-        top: 100%; /* Below the topbar */
-        left: 0;
-        width: 100%;
-        background: var(--taskbar-bg); /* Match topbar background */
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        padding: 10px 0;
-        border-top: 1px solid rgba(0,0,0,0.1);
-        z-index: 999; /* Ensure it's above content */
-        box-sizing: border-box; /* Include padding/border in width calculation */
-        align-items: center; /* Center items within the column */
-        white-space: normal; /* Allow text to wrap within menu items */
-        flex-shrink: 1; /* Allow shrinking in this vertical layout */
-      }
-
-      .nav-items-wrapper.active {
-        display: flex; /* Show when active */
-      }
-
-      .toolbar-item,
-      .interpretation-container, 
-      .jump-dropdown, 
-      #google_translate_element {
-        width: calc(100% - 32px); /* Full width minus 16px padding on each side */
-        margin: 4px 16px; /* Center with padding */
-        box-sizing: border-box; /* Include padding/border in width */
-        font-size: 16px; /* Slightly larger font for readability */
-        padding: 10px 12px; /* More padding for tap targets */
-      }
-      .search-bar {
-        width: 100%; /* Occupy full width of its parent toolbar-item */
-        min-width: unset; /* Remove min-width constraint in mobile menu */
-      }
-      .jump-dropdown-list {
-        position: static; /* Within the flow of the menu */
-        width: auto; /* Adjust to content */
-        max-height: 250px; /* If too many items */
-        overflow-y: auto;
-        border: none;
-        box-shadow: none;
-        padding: 0;
-        margin: 8px 0; /* Add some vertical spacing */
-      }
-      .jump-dropdown-list a {
-        padding: 10px 20px; /* Larger tap target */
-        font-size: 16px;
-      }
-
-      /* Adjust general main content padding for very thin screens */
-      .main-content {
-        padding: 1rem 0.8rem;
-      }
-    }
-  </style> 
+/* Responsive tweaks for topbar */
+@media (max-width: 900px) {
+  .topbar-nav { flex-direction: column; gap: 8px; align-items: stretch; }
+  .topbar-search, .topbar-translate, .topbar-interpretation, .jump-dropdown { width: 100%; }
+}
+  .icon-search,
+.icon-translate,
+.icon-article {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+  display: inline-block;
+}
+.icon-dropdown svg {
+  vertical-align: middle;
+}
+</style> 
+/* ===== End of CSS ===== */
 </head>
 <body>
-  
-<div id="intro-mask"></div>
-  
-<div id="intro-screen">
+  <div id="intro-mask"></div>
+  <div id="intro-screen">
     <div id="intro-video-wrapper">
       <video id="intro-video" autoplay loop muted playsinline>
         <source src="Introductory screen.mp4" type="video/mp4">
@@ -674,50 +663,36 @@
       <button id="lets-go-btn">Let's Go!</button>
     </div>
   </div>
-  
-<nav class="topbar-nav" aria-label="Main Navigation">
-    
-<button class="hamburger-menu" aria-label="Open navigation menu" aria-expanded="false">
-        <span class="material-symbols-outlined">menu</span>
-    </button>
+  <nav class="topbar-nav" aria-label="Main Navigation">
+  <form class="toolbar-item" id="site-search-form" autocomplete="off" role="search" style="gap: 8px;">
+    <img src="Search.svg" alt="Search" class="icon-search" aria-hidden="true" width="22" height="22" />
+    <input class="search-bar" type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution" autocomplete="off">
+  </form>
 
-    
-<div class="nav-items-wrapper">
-        
-<form class="toolbar-item" id="site-search-form" autocomplete="off" role="search">
-            <img src="Search.svg" alt="Search" class="icon-search" aria-hidden="true" width="22" height="22" />
-            <input class="search-bar" type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution" autocomplete="off">
-        </form>
+  <button class="interpretation-toggle" id="interpretation-toggle" type="button" tabindex="0" aria-pressed="true">
+    <img src="Translate.svg" alt="Interpretation" class="icon-translate" aria-hidden="true" width="22" height="22" />
+    <span>Interpretation</span>
+    <span class="tooltip">Show a summarized plain-English version!</span>
+  </button>
 
-        
-<div class="interpretation-container" id="interpretation-container" tabindex="0">
-            <img src="Translate.svg" alt="Interpretation" class="icon-translate" aria-hidden="true" width="22" height="22" />
-            <span>Interpretation</span>
-            
-<label class="interpretation-switch">
-                <input type="checkbox" id="interpretation-toggle" checked aria-label="Toggle interpretation display">
-                <span class="interpretation-slider"></span>
-            </label>
-            <span class="tooltip">Show a summarized plain-English version!</span>
-        </div>
+  <div id="google_translate_element"></div>
 
-        
-<div id="google_translate_element"></div>
-
-        
-<div class="jump-dropdown" id="articleDropdown">
-            <button class="jump-dropdown-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Go to Article or Amendment">
-                <img src="Article.svg" alt="Go to Article" class="icon-article" aria-hidden="true" width="22" height="22" />
-                Go to Article
-                <span class="material-symbols-outlined dropdown-icon">expand_more</span>
-            </button>
-            <ul class="jump-dropdown-list" role="menu" aria-labelledby="articleDropdown">
-                
-</ul>
-        </div>
-    </div>
-  </nav>
-
+  <button class="go-btn alt-btn" id="goToArticleBtn" type="button">
+  <img src="Article.svg" alt="Go to Article" class="icon-article" aria-hidden="true" width="22" height="22" />
+  Go to Article
+</button>
+</nav>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+      includedLanguages: 'af,sq,ar,hy,az,eu,be,bn,bg,ca,zh-CN,zh-TW,hr,cs,da,nl,en,et,tl,fi,fr,gl,ka,de,el,gu,ht,iw,hi,hu,is,id,ga,it,ja,kn,ko,la,lv,lt,mk,ms,mt,no,fa,pl,pt,ro,ru,sr,sk,sl,es,sw,sv,ta,te,th,tr,uk,ur,vi,cy'
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <div class="main-content">
     <section class="card" id="preamble">
       <p>
@@ -763,8 +738,7 @@
         and uniform Laws on the subject of Bankruptcies throughout the United States;
       </p>
       <span class="interpretation">[Interpretation for the above paragraph]</span>
-      
-<h3>Section 1</h3>
+      <h3>Section 1</h3>
       <p>
         All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.
       </p>
@@ -1024,22 +998,12 @@
     </footer>
   </div>
   <audio id="tooltip-audio" src="selection.mp3" preload="auto"></audio>
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <script>
-    // Google Translate Initialization
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        includedLanguages: 'af,sq,ar,hy,az,eu,be,bn,bg,ca,zh-CN,zh-TW,hr,cs,da,nl,en,et,tl,fi,fr,gl,ka,de,el,gu,ht,iw,hi,hu,is,id,ga,it,ja,kn,ko,la,lv,lt,mk,ms,mt,no,fa,pl,pt,ro,ru,sr,sk,sl,es,sw,sv,ta,te,th,tr,uk,ur,vi,cy'
-      }, 'google_translate_element');
-    }
-
+    // (JavaScript unchanged from previous answer)
     document.addEventListener('DOMContentLoaded', function() {
-      // Intro Screen Logic
-      const introScreen = document.getElementById('intro-screen');
-      const introMask = document.getElementById('intro-mask');
-      const letsGoBtn = document.getElementById('lets-go-btn');
+      var introScreen = document.getElementById('intro-screen');
+      var introMask = document.getElementById('intro-mask');
+      var letsGoBtn = document.getElementById('lets-go-btn');
       if (letsGoBtn && introScreen && introMask) {
         letsGoBtn.addEventListener('click', function() {
           introScreen.classList.add('hide');
@@ -1055,156 +1019,105 @@
           }
         });
       }
-
-      // Hamburger Menu Logic for Responsive Navigation
-      const hamburger = document.querySelector('.hamburger-menu');
-      const navItemsWrapper = document.querySelector('.nav-items-wrapper');
-
-      if (hamburger && navItemsWrapper) {
-        hamburger.addEventListener('click', function() {
-          const isOpen = navItemsWrapper.classList.toggle('active');
-          hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          // Optionally change icon from 'menu' to 'close'
-          hamburger.querySelector('.material-symbols-outlined').textContent = isOpen ? 'close' : 'menu';
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-          if (!navItemsWrapper.contains(e.target) && !hamburger.contains(e.target) && navItemsWrapper.classList.contains('active')) {
-            navItemsWrapper.classList.remove('active');
-            hamburger.setAttribute('aria-expanded', 'false');
-            hamburger.querySelector('.material-symbols-outlined').textContent = 'menu';
-          }
-        });
-
-        // Close menu on resize if it's open and larger than mobile breakpoint
-        window.addEventListener('resize', function() {
-          // Check if the current window width is above the mobile breakpoint (767px)
-          if (window.innerWidth > 767 && navItemsWrapper.classList.contains('active')) {
-            navItemsWrapper.classList.remove('active');
-            hamburger.setAttribute('aria-expanded', 'false');
-            hamburger.querySelector('.material-symbols-outlined').textContent = 'menu';
-          }
-        });
-      }
-
-      // Interpretation Toggle Logic (UPDATED)
-      const interpretationToggle = document.getElementById('interpretation-toggle'); // This is now the checkbox input
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.topbar-hamburger');
+      const nav = document.querySelector('.topbar-nav');
+      hamburger && hamburger.addEventListener('click', function() {
+        const open = nav.classList.toggle('open');
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function(e) {
+        if (!nav.contains(e.target) && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        }
+      });
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 800 && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggleSwitch = document.querySelector('.toggle-switch');
       const interpretations = document.querySelectorAll('.interpretation');
-      let interpretationActive = true; // Default to active/visible
-
-      function updateInterpretationsDisplay() {
-        const show = interpretationActive;
+      function updateInterpretations() {
+        const show = toggleSwitch.classList.contains('active');
         interpretations.forEach(el => el.style.display = show ? 'block' : 'none');
       }
-
-      if (interpretationToggle) {
-        // Set initial state of the checkbox based on interpretationActive
-        interpretationToggle.checked = interpretationActive; 
-
-        interpretationToggle.addEventListener('change', function() { // Listen for 'change' event on the checkbox
-          interpretationActive = interpretationToggle.checked; // Update state based on checkbox
-          updateInterpretationsDisplay();
-          // The aria-pressed attribute is now implicitly handled by the checkbox's checked state
-          // For a custom switch, you might still set an aria-checked attribute on the associated label/container
-        });
-        // Initial state update
-        updateInterpretationsDisplay();
-      }
-
-      // Go to Article Dropdown Logic
-      const articleDropdown = document.getElementById('articleDropdown');
-      const jumpDropdownBtn = articleDropdown ? articleDropdown.querySelector('.jump-dropdown-btn') : null;
-      const jumpDropdownList = articleDropdown ? articleDropdown.querySelector('.jump-dropdown-list') : null;
-      const articleLinks = [
-          { text: "Preamble", href: "#preamble" },
-          { text: "Article I", href: "#article-i" },
-          { text: "Article II", href: "#article-ii" },
-          { text: "Article III", href: "#article-iii" },
-          { text: "Amendment XIII", href: "#amendment-xiii" }
-      ];
-
-      // Populate dropdown
-      if (jumpDropdownList) {
-          jumpDropdownList.innerHTML = articleLinks.map(link =>
-              `<li><a href="${link.href}" role="menuitem">${link.text}</a></li>`
-          ).join('');
-      }
-
-      // Dropdown toggle
-      if (jumpDropdownBtn) {
-          jumpDropdownBtn.addEventListener('click', function(e) {
-              const isOpen = articleDropdown.classList.toggle('open');
-              jumpDropdownBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-              if (isOpen && jumpDropdownList) {
-                  jumpDropdownList.focus(); // Focus the list
-              }
-              e.stopPropagation(); // Prevent document click from immediately closing
-          });
-      }
-      // Close on outside click
-      document.addEventListener('click', function(e) {
-          if (articleDropdown && !articleDropdown.contains(e.target)) {
-              articleDropdown.classList.remove('open');
-              if (jumpDropdownBtn) {
-                  jumpDropdownBtn.setAttribute('aria-expanded', 'false');
-              }
-          }
+      toggleSwitch && toggleSwitch.addEventListener('click', function() {
+        toggleSwitch.classList.toggle('active');
+        toggleSwitch.setAttribute('aria-pressed', toggleSwitch.classList.contains('active'));
+        updateInterpretations();
       });
-      // Keyboard navigation for dropdown
-      if (jumpDropdownList) {
-          jumpDropdownList.addEventListener('keydown', function(e) {
-              const currentFocus = document.activeElement;
-              const items = Array.from(jumpDropdownList.querySelectorAll('a'));
-              let index = items.indexOf(currentFocus);
-
-              if (e.key === 'ArrowDown') {
-                  e.preventDefault();
-                  if (index < items.length - 1) {
-                      items[index + 1].focus();
-                  } else {
-                      items[0].focus(); // Loop to first
-                  }
-              } else if (e.key === 'ArrowUp') {
-                  e.preventDefault();
-                  if (index > 0) {
-                      items[index - 1].focus();
-                  } else {
-                      items[items.length - 1].focus(); // Loop to last
-                  }
-              } else if (e.key === 'Escape') {
-                  e.preventDefault();
-                  articleDropdown.classList.remove('open');
-                  if (jumpDropdownBtn) {
-                      jumpDropdownBtn.setAttribute('aria-expanded', 'false');
-                      jumpDropdownBtn.focus(); // Return focus to button
-                  }
-              }
-          });
-          // Handle clicks on dropdown items
-          jumpDropdownList.addEventListener('click', function(e) {
-              if (e.target.tagName === 'A') {
-                  const targetId = e.target.getAttribute('href').substring(1);
-                  const targetElement = document.getElementById(targetId);
-                  if (targetElement) {
-                      e.preventDefault();
-                      targetElement.scrollIntoView({ behavior: 'smooth' });
-                      articleDropdown.classList.remove('open');
-                      jumpDropdownBtn.setAttribute('aria-expanded', 'false');
-                  }
-              }
-          });
-      }
-
-      // Tidbit Tooltip Logic
-      const tooltipAudio = document.getElementById('tooltip-audio');
+      updateInterpretations();
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      const dropdown = document.querySelector('.jump-dropdown');
+      const button = dropdown.querySelector('.jump-dropdown-btn');
+      const list = dropdown.querySelector('.jump-dropdown-list');
+      button && button.addEventListener('click', function(e) {
+        dropdown.classList.toggle('open');
+        button.setAttribute('aria-expanded', dropdown.classList.contains('open'));
+        if (dropdown.classList.contains('open')) {
+          list.querySelector('a').focus();
+        }
+      });
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+      button && button.addEventListener('keydown', function(e) {
+        if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          dropdown.classList.add('open');
+          button.setAttribute('aria-expanded', 'true');
+          list.querySelector('a').focus();
+        }
+      });
+      list && list.addEventListener('keydown', function(e) {
+        const links = Array.from(list.querySelectorAll('a'));
+        let idx = links.indexOf(document.activeElement);
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          links[(idx+1)%links.length].focus();
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          links[(idx-1+links.length)%links.length].focus();
+        } else if (e.key === "Escape") {
+          dropdown.classList.remove('open');
+          button.setAttribute('aria-expanded', 'false');
+          button.focus();
+        }
+      });
+      list && list.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const id = this.getAttribute('href').slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            e.preventDefault();
+            dropdown.classList.remove('open');
+            button.setAttribute('aria-expanded', 'false');
+            window.scrollTo({
+              top: target.getBoundingClientRect().top + window.scrollY - 32,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+      const audio = document.getElementById('tooltip-audio');
       document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(function(wrapper) {
         let trigger = wrapper.querySelector('.tidbit-tooltip-trigger');
         let tooltip = wrapper.querySelector('.tidbit-tooltip-box');
         let hoverOnTrigger = false;
         let hoverOnTooltip = false;
         let hideTimeout;
-
         function moveTooltip() {
           if(!tooltip || !trigger) return;
           const rect = trigger.getBoundingClientRect();
@@ -1219,17 +1132,15 @@
           tooltip.style.left = left + "px";
           tooltip.style.top = top + "px";
         }
-
         function showTooltip() {
           clearTimeout(hideTimeout);
           wrapper.classList.add('tooltip-visible');
           moveTooltip();
-          if(tooltipAudio) {
-            tooltipAudio.currentTime = 0;
-            tooltipAudio.play().catch(()=>{});
+          if(audio) {
+            audio.currentTime = 0;
+            audio.play().catch(()=>{});
           }
         }
-
         function hideTooltip() {
           hideTimeout = setTimeout(function() {
             if (!hoverOnTrigger && !hoverOnTooltip) {
@@ -1237,7 +1148,6 @@
             }
           }, 100);
         }
-
         trigger.addEventListener('mouseenter', function() {
           hoverOnTrigger = true;
           showTooltip();
@@ -1263,50 +1173,53 @@
           hoverOnTooltip = false;
           hideTooltip();
         });
-
         window.addEventListener('scroll', function(){ 
           if(wrapper.classList.contains('tooltip-visible')) moveTooltip();
         }, true);
         window.addEventListener('resize', function(){ 
           if(wrapper.classList.contains('tooltip-visible')) moveTooltip();
         }, true);
-
-        // Click event for accessibility/touch devices
-        trigger.addEventListener('click', function(e) {
-          if (!isTouchDevice()) return; // Only for touch devices if hover is also enabled
-          
-          if(wrapper.classList.contains('tooltip-visible')) {
-            wrapper.classList.remove('tooltip-visible');
-          } else {
-            // Close other tooltips when opening a new one
-            document.querySelectorAll('.tidbit-tooltip-wrapper.tooltip-visible').forEach(function(other) {
-              if(other !== wrapper) other.classList.remove('tooltip-visible');
-            });
-            wrapper.classList.add('tooltip-visible');
-            if(tooltipAudio) {
-              tooltipAudio.currentTime = 0;
-              tooltipAudio.play().catch(()=>{});
-            }
+        trigger.addEventListener('click', function() {
+          if(audio) {
+            audio.currentTime = 0;
+            audio.play().catch(()=>{});
           }
-          e.stopPropagation(); // Prevent document click from immediately closing
         });
-        // Close tooltip when clicking anywhere else on touch devices
-        if (isTouchDevice()) {
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.tidbit-tooltip-wrapper')) {
-                    document.querySelectorAll('.tidbit-tooltip-wrapper.tooltip-visible').forEach(function(el){
-                        el.classList.remove('tooltip-visible');
-                    });
-                }
-            });
-        }
       });
-      // Helper to detect touch devices
       function isTouchDevice() {
         return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
       }
-
-      // Search Functionality
+      if (isTouchDevice()) {
+        document.querySelectorAll('.tidbit-tooltip-trigger').forEach(function(trigger) {
+          trigger.addEventListener('click', function(e) {
+            var parent = trigger.closest('.tidbit-tooltip-wrapper');
+            if(parent.classList.contains('tooltip-visible')) {
+              parent.classList.remove('tooltip-visible');
+            } else {
+              document.querySelectorAll('.tidbit-tooltip-wrapper.tooltip-visible').forEach(function(other) {
+                if(other!==parent) other.classList.remove('tooltip-visible');
+              });
+              parent.classList.add('tooltip-visible');
+            }
+          });
+        });
+        document.addEventListener('click', function(e) {
+          if(!e.target.closest('.tidbit-tooltip-wrapper')) {
+            document.querySelectorAll('.tidbit-tooltip-wrapper.tooltip-visible').forEach(function(el){
+              el.classList.remove('tooltip-visible');
+            });
+          }
+        });
+      }
+    });
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'es,zh-CN,zh-TW,ta,te,hi,ar,fr,vi,ko,de,ru,it,pt,ja,pl,fa,gu,ur,tr,bn,ht,el,am,he,th,uk,ro,pa,sr,jv,hu,nl,ckb,sq,yo,ig,so,ha,bg,sw,km,my,hm,om,nav,si,af,sv',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+    document.addEventListener('DOMContentLoaded', function() {
       const searchInput = document.getElementById('site-search');
       const searchForm = document.getElementById('site-search-form');
       const cards = Array.from(document.querySelectorAll('.main-content .card'));
@@ -1386,5 +1299,72 @@
       });
     });
   </script>
+  <script type="text/javascript"
+    src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+  </script>
+  <script>
+  // Search form
+  document.getElementById('site-search-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Add your search logic here if needed
+  });
+
+  // Interpretation Toggle
+  const interpretationToggle = document.getElementById('interpretation-toggle');
+  function updateInterpretations(show) {
+    document.querySelectorAll('.interpretation').forEach(el => {
+      el.style.display = show ? 'block' : 'none';
+    });
+  }
+  let interpretationActive = true;
+  interpretationToggle.addEventListener('click', function() {
+    interpretationActive = !interpretationActive;
+    interpretationToggle.setAttribute('aria-pressed', interpretationActive ? 'true' : 'false');
+    updateInterpretations(interpretationActive);
+  });
+  updateInterpretations(interpretationActive);
+
+  // Custom Dropdown for Language Selection
+  const dropdown = document.getElementById('google_translate_element'); // Targeting the Google Translate widget container
+  // This part of the script might conflict with Google Translate's own JS.
+  // Google Translate widget handles its own display and language selection.
+  // The provided HTML doesn't have a custom dropdown for language selection
+  // that uses the .dropdown class. The Google Translate widget (div id="google_translate_element")
+  // is a self-contained unit.
+  // If you want a custom dropdown, you'd need to implement it fully and then
+  // call the Google Translate API to change the language based on your custom dropdown's selection.
+  // For now, I will remove the conflicting JS for the custom dropdown.
+  // If you intended to implement a custom dropdown, let me know, and I can
+  // provide a more tailored solution.
+
+  // Go to Article Button
+  // Replace your existing "Go to Article" button JS with this:
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('goToArticleBtn').addEventListener('click', function() {
+    // Scroll to the first Article section, or fallback to main content
+    var articleSection = document.querySelector('[id^="article-i"], [id^="article-ii"], [id^="article-iii"], [id^="article-iv"], [id^="article-v"], [id^="article"]');
+    if (articleSection) {
+      articleSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      var mainContent = document.querySelector('.main-content');
+      if (mainContent) {
+        mainContent.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  });
+});
+</script>
+  <script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+      includedLanguages: 'af,sq,ar,hy,az,eu,be,bn,bg,ca,zh-CN,zh-TW,hr,cs,da,nl,en,et,tl,fi,fr,gl,ka,de,el,gu,ht,iw,hi,hu,is,id,ga,it,ja,kn,ko,la,lv,lt,mk,ms,mt,no,fa,pl,pt,ro,ru,sr,sk,sl,es,sw,sv,ta,te,th,tr,uk,ur,vi,cy'
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
