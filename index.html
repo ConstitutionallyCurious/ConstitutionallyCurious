@@ -5,538 +5,205 @@
   <meta name="viewport" content="width=985, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>The Constitution</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@700&family=Playfair+Display:wght@700&family=Jacquard+24&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --body-bg: #f9f9f9;
-      --card-bg: #fff;
-      --primary: #004080;
-      --primary-dark: #002f5f;
-      --text-main: #333333;
-      --accent: #004080;
-      --shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      --border-radius: 8px;
-      --z-topbar: 1010;
-      --z-tooltip: 2147483647;
-      --highlight-bg: #ffe066;
-    }
-    html, body {
-      height: 100%;
-      width: 100%;
-      min-height: 100%;
-      min-width: 100%;
-      box-sizing: border-box;
-      background: var(--body-bg);
-      color: var(--text-main);
-      font-family: 'Roboto', Arial, sans-serif;
-      line-height: 1.65;
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s;
-      overflow-x: hidden;
-    }
-    #intro-mask {
-      position: fixed;
-      z-index: 49999;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(60, 60, 60, 0.55);
-      pointer-events: none;
-      transition: opacity 0.6s;
-    }
-    #intro-mask.hide {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #intro-screen {
-      position: fixed;
-      z-index: 50000 !important;
-      left: 50%;
-      top: 50%;
-      width: 985px;
-      height: 680px;
-      max-width: 98vw;
-      max-height: 98vh;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 6px 32px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      background: #000;
-      border-radius: 18px;
-      overflow: hidden;
-      transition: opacity 0.6s;
-    }
-    #intro-screen.hide {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.7s;
-    }
-    #intro-video-wrapper {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      overflow: hidden;
-      z-index: 1;
-      background: #000;
-      display: flex; align-items: stretch; justify-content: stretch;
-    }
-    #intro-video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      display: block;
-      min-width: 0;
-      min-height: 0;
-      background: #000;
-      border: none;
-    }
-    #intro-content {
-      position: absolute;
-      z-index: 2;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      pointer-events: none;
-    }
-    #lets-go-btn {
-      pointer-events: auto;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 1.3rem;
-      border: none;
-      border-radius: 5px;
-      background: var(--primary);
-      color: #fff;
-      padding: 18px 48px;
-      cursor: pointer;
-      margin-top: 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-      transition: background 0.2s, color 0.2s, transform 0.1s;
-      outline: none;
-      position: relative;
-      z-index: 3;
-    }
-    #lets-go-btn:active, #lets-go-btn:focus {
-      background: var(--primary-dark);
-    }
-    @media (max-width: 1024px) {
-      #intro-screen {
-        width: 98vw;
-        height: 98vw;
-        max-width: 98vw;
-        max-height: 98vh;
-        aspect-ratio: 985/680;
-      }
-    }
-    @media (max-width: 985px), (max-height: 700px) {
-      #intro-screen {
-        width: 98vw;
-        height: 98vh;
-        max-width: 98vw;
-        max-height: 98vh;
-        aspect-ratio: 985/680;
-      }
-    }
-    @media (max-width: 800px) {
-      #lets-go-btn {
-        font-size: 1rem;
-        padding: 14px 32px;
-      }
-    }
-    .topbar-nav {
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 50000 !important;
-      background: #e0e0e0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-      padding: 0.7em 2em 0.7em 2em;
-      display: flex;
-      align-items: center;
-      gap: 2em;
-      border-radius: 0;
-      flex-wrap: wrap;
-    }
-    .topbar-hamburger { display: none; }
-    .topbar-hamburger span {}
-    .topbar-nav .topbar-links {
-      display: flex;
-      align-items: center;
-      gap: 2em;
-      flex-wrap: wrap;
-      flex: 1 1 auto;
-    }
-    .topbar-search {
-      flex: 1 1 200px;
-      max-width: 320px;
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-    }
-    .topbar-search input[type="search"] {
-      width: 100%;
-      padding: 8px 12px;
-      font-size: 1rem;
-      border: 1px solid #bbb;
-      border-radius: 5px;
-      outline: none;
-      font-family: 'Roboto', Arial, sans-serif;
-    }
-    .topbar-search button {
-      border: none;
-      background: transparent;
-      font-size: 1.45em;
-      cursor: pointer;
-      line-height: 1;
-      padding: 5px 8px 3px 8px;
-      transition: background 0.15s;
-      border-radius: 5px;
-      margin-left: 0.1em;
-      user-select: none;
-    }
-    .topbar-search button:active, .topbar-search button:focus {
-      background: #e0e0e0;
-      outline: none;
-    }
-    .topbar-translate {
-      display: flex; align-items: center;
-      gap: 0.4em;
-    }
-    .translate-icon-img {
-      width: 32px; height: 32px; object-fit: contain; margin-right: 0.2em;
-      background: none; border-radius: 0; box-shadow: none;
-    }
-    .topbar-interpretation { display: flex; align-items: center; gap: 0.5em;}
-    .toggle-label { font-size: 18px; font-weight: bold; margin-right: 3px; }
-    .toggle-switch {
-      position: relative;
-      width: 50px; height: 25px;
-      background-color: #ccc;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      margin-right: 0.2em;
-    }
-    .toggle-switch:before {
-      content: '';
-      position: absolute; top: 3px; left: 3px;
-      width: 19px; height: 19px;
-      background: #fff; border-radius: 50%;
-      transition: transform 0.3s;
-    }
-    .toggle-switch.active { background: #4caf50; }
-    .toggle-switch.active:before { transform: translateX(25px); }
-    .jump-dropdown {
-      position: relative;
-      display: inline-block;
-      font-size: 1rem;
-    }
-    .jump-dropdown-btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 22px 8px 14px;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-      font-family: 'Roboto', Arial, sans-serif;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.2em;
-      position: relative;
-    }
-    .jump-dropdown-btn:after {
-      content: '▼';
-      font-size: 0.8em;
-      margin-left: 0.5em;
-      pointer-events: none;
-    }
-    .jump-dropdown-list {
-      display: none;
-      position: absolute;
-      left: 0;
-      top: 110%;
-      background: #fff;
-      min-width: 200px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      z-index: 9999;
-      padding: 0.5em 0;
-      margin: 0;
-      list-style: none;
-    }
-    .jump-dropdown.open .jump-dropdown-list { display: block; }
-    .jump-dropdown-list li {
-      margin: 0;
-      padding: 0;
-    }
-    .jump-dropdown-list a {
-      display: block;
-      padding: 0.6em 1.2em;
-      color: var(--text-main);
-      text-decoration: none;
-      font-size: 1rem;
-      border-radius: 0;
-      transition: background 0.18s;
-      font-family: 'Roboto', Arial, sans-serif;
-    }
-    .jump-dropdown-list a:hover, .jump-dropdown-list a:focus {
-      background: var(--primary);
-      color: #fff;
-    }
-    .main-content {
-      flex: 1 1 auto;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2.5rem 2rem 3rem 2rem;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .card {
-      background: var(--card-bg);
-      padding: 1.5rem;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 2rem;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .wethepeople { font-family: 'WeThePeople', cursive; font-size: 3.0em; }
-    @font-face {
-      font-family: 'WeThePeople';
-      src: url('fonts/WeThePeople.ttf') format('truetype');
-      font-weight: bold;
-      font-style: normal;
-    }
-    h1, .wethepeople { font-family: 'WeThePeople', cursive; font-size: 2.5rem; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-top: 2.5rem; }
-    h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 1.7rem; }
-    p { font-size: 1.125rem; }
-    .card h2, .card h3, .card h4, .card h5 { font-family: 'Playfair Display', serif; }
-    .interpretation {
-      font-size: 1rem;
-      color: #666;
-      display: block;
-      margin-top: 0.5em;
-      margin-bottom: 1em;
-      font-style: italic;
-    }
-    .amendment-xiii-header {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 0.5em;
-      gap: 12px;
-    }
-    .amendment-xiii-portraits {
-      display: flex;
-      align-items: flex-end;
-      margin-left: auto;
-      gap: 18px;
-    }
-    .amendment-xiii-person {
-      width: 120px;
-      height: 160px;
-      object-fit: contain;
-      background: none;
-      border-radius: 0;
-      margin: 0;
-      box-shadow: none;
-    }
-    @media (max-width: 1000px) {
-      .topbar-nav { flex-direction: column; gap: 1em; align-items: stretch; }
-      .main-content { padding-left: 1rem; padding-right: 1rem; }
-      .amendment-xiii-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-      }
-      .amendment-xiii-portraits {
-        gap: 4px;
-        margin-left: 0;
-      }
-      .amendment-xiii-person {
-        width: 80px;
-        height: 100px;
-      }
-      .jump-dropdown-list { min-width: 150px; font-size: 0.95em;}
-    }
-    @media (max-width: 800px) {
-      .topbar-nav {
-        flex-wrap: wrap;
-        flex-direction: row;
-        gap: 0;
-        padding: 0.4em 0.6em;
-      }
-      .topbar-hamburger {
-        display: block;
-      }
-      .topbar-nav .topbar-links {
-        display: none;
-        width: 100%;
-        flex-direction: column;
-        gap: 1em;
-        background: #e0e0e0;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        border-radius: 0 0 1.5em 1.5em;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-        z-index: 1010;
-        padding: 1em 0;
-      }
-      .topbar-nav.open .topbar-links {
-        display: flex;
-      }
-      .topbar-search {
-        max-width: 100%;
-      }
-    }
-    @media (max-width: 600px) {
-      .main-content { padding: 1rem 0.5rem; }
-      .topbar-nav { padding: 0.4em 0.6em; }
-    }
-    .tidbit-tooltip-wrapper {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-      vertical-align: baseline;
-      z-index: 0 !important;
-    }
-    .tidbit-tooltip-box {
-      display: none;
-      position: fixed !important;
-      left: 0; top: 0;
-      z-index: 2147483647 !important;
-      width: 270px;
-      min-width: 200px;
-      background: #fff;
-      color: #222;
-      border: 1px solid #888;
-      border-radius: 8px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-      padding: 16px;
-      font-size: 16px;
-      transition: opacity 0.15s;
-      opacity: 0;
-      pointer-events: auto;
-      flex-direction: column;
-      align-items: center;
-    }
-    .tidbit-tooltip-wrapper.tooltip-visible .tidbit-tooltip-box {
-      display: flex !important;
-      opacity: 1 !important;
-      pointer-events: auto !important;
-      visibility: visible !important;
-    }
-    .tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
-    .tidbit-tooltip-btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      padding: 6px 18px;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 6px;
-      transition: background 0.2s, color 0.2s;
-      text-decoration: none;
-      display: inline-block;
-      font-family: 'Roboto', Arial, sans-serif;
-      font-weight: 700;
-    }
-    .tidbit-tooltip-btn:hover {
-      background: var(--primary-dark);
-      color: #fff;
-    }
-    .tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
-    mark.search-highlight {
-      background: var(--highlight-bg);
-      color: inherit;
-      padding: 0;
-      border-radius: 3px;
-    }
-    #intro-screen,
-    .topbar-nav {
-      z-index: 50000 !important;
-    }
-    /* === New Topbar Styles === */
+/* ===== Overall Theme Variables ===== */
+<style> 
+  :root {
+  --body-bg: #f9f9f9;
+  --card-bg: #fff;
+  --primary: #004080;
+  --primary-dark: #002f5f;
+  --text-main: #333333;
+  --accent: #004080;
+  --shadow: 0 2px 6px rgba(0, 64, 128, 0.12);
+  --border-radius: 8px;
+  --highlight-bg: #ffe066;
+  --taskbar-bg: #e0e0e0;
+  --input-hover-bg: #f3f8ff;
+  --toolbar-padding: 8px 16px;
+  --toolbar-gap: 14px;
+}
+
+/* ===== Base ===== */
+html, body {
+  background: var(--body-bg);
+  color: var(--text-main);
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.65;
+  box-sizing: border-box;
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  transition: background 0.3s;
+}
+
+/* ===== Intro Screen ===== */
+#intro-mask {
+  position: fixed;
+  z-index: 49999;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(60, 60, 60, 0.55);
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+#intro-mask.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+#intro-screen {
+  position: fixed;
+  z-index: 50000 !important;
+  left: 50%;
+  top: 50%;
+  width: 985px;
+  height: 680px;
+  max-width: 98vw;
+  max-height: 98vh;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 6px 32px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #000;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: opacity 0.6s;
+}
+#intro-screen.hide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s;
+}
+#intro-video-wrapper {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  background: #000;
+  display: flex; align-items: stretch; justify-content: stretch;
+}
+#intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  background: #000;
+  border: none;
+}
+#intro-content {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  pointer-events: none;
+}
+#lets-go-btn {
+  pointer-events: auto;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  background: var(--primary);
+  color: #fff;
+  padding: 14px 32px;
+  cursor: pointer;
+  margin-top: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+  outline: none;
+  position: relative;
+  z-index: 3;
+}
+#lets-go-btn:active, #lets-go-btn:focus {
+  background: var(--primary-dark);
+}
+
+/* ===== Topbar Navigation ===== */
 .topbar-nav {
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 9999;
-  background: #e0e0e0; /* gray background */
+  background: var(--taskbar-bg);
   box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-  padding: 14px 30px;
+  padding: var(--toolbar-padding);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: var(--toolbar-gap);
   border-radius: 0;
   flex-wrap: wrap;
 }
+
 .toolbar-item,
 .interpretation-toggle,
-.dropdown,
-.go-btn {
-  background: #fff;
-  border: 1px solid #004080;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 64, 128, 0.12);
-  padding: 10px 18px;
+.dropdown {
+  background: var(--card-bg);
+  border: 1px solid var(--primary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 6px 12px;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1rem;
-  color: #004080;
+  font-size: 15px;
+  color: var(--primary);
   transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
   outline: none;
 }
+
 .toolbar-item:focus,
 .toolbar-item:hover,
 .interpretation-toggle:hover,
 .interpretation-toggle:focus,
 .dropdown:hover,
-.dropdown:focus,
-.go-btn:hover,
-.go-btn:focus {
-  background: #f3f8ff;
+.dropdown:focus {
+  background: var(--input-hover-bg);
   box-shadow: 0 4px 12px rgba(0, 64, 128, 0.15);
-  border-color: #002f5f;
+  border-color: var(--primary-dark);
 }
+
 .search-bar {
   border: none;
   background: transparent;
   width: 180px;
-  font-size: 1rem;
-  color: #004080;
+  font-size: 15px;
+  color: var(--primary);
   outline: none;
   padding-left: 8px;
 }
+
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
-  font-size: 24px;
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-  color: #004080;
+  font-size: 22px;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 22;
+  line-height: 1;
   vertical-align: middle;
-  user-select: none;
+  color: var(--primary);
+  letter-spacing: normal;
+  font-style: normal;
+  font-weight: normal;
+  display: inline-block;
 }
+
+/* ===== Interpretation Toggle ===== */
 .interpretation-toggle {
   position: relative;
   cursor: pointer;
@@ -562,6 +229,8 @@
   visibility: visible;
   opacity: 1;
 }
+
+/* ===== Dropdown ===== */
 .dropdown {
   position: relative;
   min-width: 140px;
@@ -570,21 +239,21 @@
 .dropdown .dropdown-icon {
   font-family: 'Material Symbols Outlined';
   font-size: 22px;
-  color: #004080;
+  color: var(--primary);
 }
 .dropdown-menu {
   display: none;
   position: absolute;
   top: 110%;
   left: 0;
-  background: #fff;
-  border: 1px solid #004080;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 64, 128, 0.12);
+  background: var(--card-bg);
+  border: 1px solid var(--primary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
   z-index: 9999;
   min-width: 100%;
   padding: 6px 0;
-  color: #004080;
+  color: var(--primary);
 }
 .dropdown.open .dropdown-menu {
   display: block;
@@ -593,30 +262,203 @@
   padding: 10px 18px;
   cursor: pointer;
   font-size: 1rem;
-  color: #004080;
+  color: var(--primary);
   background: transparent;
   border: none;
   text-align: left;
 }
 .dropdown-menu-item:hover, .dropdown-menu-item:focus {
-  background: #f3f8ff;
+  background: var(--input-hover-bg);
 }
+
+/* ===== Go to Article Button ===== */
 .go-btn {
-  background: #004080;
+  background: var(--primary);
   color: #fff;
   border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  padding: 10px 22px;
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
   transition: background 0.2s, box-shadow 0.2s;
   outline: none;
   gap: 8px;
 }
 .go-btn:hover, .go-btn:focus {
-  background: #002f5f;
+  background: var(--primary-dark);
   box-shadow: 0 4px 12px rgba(0, 64, 128, 0.18);
 }
-  </style>
+
+/* ===== Main Content ===== */
+.main-content {
+  flex: 1 1 auto;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+.card {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== Typography ===== */
+.wethepeople { font-family: 'WeThePeople', cursive; font-size: 3.0em; }
+@font-face {
+  font-family: 'WeThePeople';
+  src: url('fonts/WeThePeople.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+h1, .wethepeople { font-family: 'WeThePeople', cursive; font-size: 2.5rem; }
+h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-top: 2.5rem; }
+h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 1.7rem; }
+p { font-size: 1.125rem; }
+.card h2, .card h3, .card h4, .card h5 { font-family: 'Playfair Display', serif; }
+
+.interpretation {
+  font-size: 1rem;
+  color: #666;
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  font-style: italic;
+}
+
+/* ===== Amendment XIII Portraits ===== */
+.amendment-xiii-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5em;
+  gap: 12px;
+}
+.amendment-xiii-portraits {
+  display: flex;
+  align-items: flex-end;
+  margin-left: auto;
+  gap: 18px;
+}
+.amendment-xiii-person {
+  width: 120px;
+  height: 160px;
+  object-fit: contain;
+  background: none;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+/* ===== Tooltip for Tidbit ===== */
+.tidbit-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  vertical-align: baseline;
+  z-index: 0 !important;
+}
+.tidbit-tooltip-box {
+  display: none;
+  position: fixed !important;
+  left: 0; top: 0;
+  z-index: 2147483647 !important;
+  width: 270px;
+  min-width: 200px;
+  background: #fff;
+  color: #222;
+  border: 1px solid #888;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  padding: 16px;
+  font-size: 16px;
+  transition: opacity 0.15s;
+  opacity: 0;
+  pointer-events: auto;
+  flex-direction: column;
+  align-items: center;
+}
+.tidbit-tooltip-wrapper.tooltip-visible .tidbit-tooltip-box {
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+.tidbit-tooltip-img { width: 100%; height: 96px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
+.tidbit-tooltip-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: 700;
+}
+.tidbit-tooltip-btn:hover {
+  background: var(--primary-dark);
+  color: #fff;
+}
+.tidbit-tooltip-trigger { border-bottom: 2px dotted #333; outline: none; }
+
+/* ===== Search Highlight ===== */
+mark.search-highlight {
+  background: var(--highlight-bg);
+  color: inherit;
+  padding: 0;
+  border-radius: 3px;
+}
+
+/* ===== Footer ===== */
+.footer {
+  margin-top: 40px;
+  padding: 24px 0 0 0;
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1000px) {
+  .topbar-nav { flex-direction: column; gap: 8px; align-items: stretch; }
+  .main-content { padding-left: 1rem; padding-right: 1rem; }
+  .amendment-xiii-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .amendment-xiii-portraits { gap: 4px; margin-left: 0; }
+  .amendment-xiii-person { width: 80px; height: 100px; }
+  .dropdown-menu { min-width: 150px; font-size: 0.95em;}
+}
+@media (max-width: 800px) {
+  .topbar-nav {
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 0;
+    padding: 6px 4px;
+  }
+  .toolbar-item, .dropdown, .interpretation-toggle, .go-btn { width: 100%; font-size: 14px;}
+  .main-content { padding: 1.4rem 0.5rem; }
+}
+@media (max-width: 600px) {
+  .main-content { padding: 1rem 0.5rem; }
+  .topbar-nav { padding: 4px 2px; }
+  .card { padding: 1rem; }
+}
+</style> 
+/* ===== End of CSS ===== */
 </head>
 <body>
   <!-- Introscreen Mask -->
@@ -637,20 +479,22 @@
   <nav class="topbar-nav" aria-label="Main Navigation">
   <!-- Search Bar -->
   <form class="toolbar-item" id="site-search-form" autocomplete="off" role="search" style="gap: 8px;">
-    <span class="material-symbols-outlined">search</span>
+    <span class="material-symbols-outlined" aria-hidden="true">search</span>
     <input class="search-bar" type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution" autocomplete="off">
   </form>
+  
   <!-- Interpretation Toggle with tooltip -->
   <button class="interpretation-toggle" id="interpretation-toggle" type="button" tabindex="0" aria-pressed="true">
-    <span class="material-symbols-outlined">translate</span>
+    <span class="material-symbols-outlined" aria-hidden="true">translate</span>
     <span>Interpretation</span>
     <span class="tooltip">Show a summarized plain-English version!</span>
   </button>
+  
   <!-- Custom Dropdown for Language Selection -->
   <div class="dropdown" id="languageDropdown" tabindex="0">
-    <span class="material-symbols-outlined">translate</span>
+    <span class="material-symbols-outlined" aria-hidden="true">translate</span>
     <span>Language</span>
-    <span class="dropdown-icon material-symbols-outlined">expand_more</span>
+    <span class="dropdown-icon material-symbols-outlined" aria-hidden="true">expand_more</span>
     <div class="dropdown-menu">
       <div class="dropdown-menu-item" data-lang="en">English</div>
       <div class="dropdown-menu-item" data-lang="es">Spanish</div>
@@ -659,9 +503,10 @@
       <div class="dropdown-menu-item" data-lang="zh-CN">Chinese</div>
     </div>
   </div>
+  
   <!-- Go to Article Button -->
   <button class="go-btn" id="goToArticleBtn" type="button">
-    <span class="material-symbols-outlined">article</span>
+    <span class="material-symbols-outlined" aria-hidden="true">article</span>
     Go to Article
   </button>
 </nav>
