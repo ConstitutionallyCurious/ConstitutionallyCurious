@@ -658,7 +658,7 @@ mark.search-highlight {
     <span class="tooltip">Show a summarized plain-English version!</span>
   </button>
 
-  <!-- Google Translate V1 Widget (replaces custom language dropdown) -->
+  <!-- Google Translate V1 Widget (this is the language selector!) -->
   <div id="google_translate_element"></div>
 
   <!-- Go to Article Button -->
@@ -667,7 +667,6 @@ mark.search-highlight {
     Go to Article
   </button>
 </nav>
-
 <!-- Google Translate V1 scripts: Place just before closing </body> tag or below your navbar -->
 <script type="text/javascript">
   function googleTranslateElementInit() {
@@ -1343,5 +1342,15 @@ mark.search-highlight {
     }
   });
 </script>
+  <script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+      includedLanguages: 'af,sq,ar,hy,az,eu,be,bn,bg,ca,zh-CN,zh-TW,hr,cs,da,nl,en,et,tl,fi,fr,gl,ka,de,el,gu,ht,iw,hi,hu,is,id,ga,it,ja,kn,ko,la,lv,lt,mk,ms,mt,no,fa,pl,pt,ro,ru,sr,sk,sl,es,sw,sv,ta,te,th,tr,uk,ur,vi,cy'
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
