@@ -635,37 +635,47 @@ mark.search-highlight {
   <!-- Sticky Topbar Navigation -->
  <nav class="topbar-nav" aria-label="Main Navigation">
   <!-- Search Bar -->
-  <form class="topbar-search" id="site-search-form" autocomplete="off" role="search">
-    <span class="material-symbols-outlined" aria-hidden="true">search</span>
-    <input type="search" id="site-search" class="search-bar" placeholder="Search the Constitution..." aria-label="Search the Constitution" autocomplete="off">
-    <button type="submit" aria-label="Search" style="background:none;border:none;padding:0;margin-left:5px;">
-      <span class="material-symbols-outlined" aria-hidden="true">search</span>
-    </button>
+  <form class="toolbar-item" id="site-search-form" autocomplete="off" role="search" style="gap: 8px;">
+    <span class="icon-search" aria-hidden="true">
+      <!-- Paste your Search.svg code here -->
+    </span>
+    <input class="search-bar" type="search" id="site-search" placeholder="Search the Constitution..." aria-label="Search the Constitution" autocomplete="off">
   </form>
-  <!-- Translate -->
-  <div class="topbar-translate">
-    <span class="material-symbols-outlined" aria-hidden="true">translate</span>
-    <div id="google_translate_element"></div>
+
+  <!-- Interpretation Toggle with tooltip -->
+  <button class="interpretation-toggle" id="interpretation-toggle" type="button" tabindex="0" aria-pressed="true">
+    <span class="icon-translate" aria-hidden="true">
+      <!-- Paste your Translate.svg code here -->
+    </span>
+    <span>Interpretation</span>
+    <span class="tooltip">Show a summarized plain-English version!</span>
+  </button>
+
+  <!-- Custom Dropdown for Language Selection -->
+  <div class="dropdown" id="languageDropdown" tabindex="0">
+    <span class="icon-translate" aria-hidden="true">
+      <!-- Paste your Translate.svg code here -->
+    </span>
+    <span>Language</span>
+    <span class="icon-dropdown" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z" fill="#004080"/></svg>
+    </span>
+    <div class="dropdown-menu">
+      <div class="dropdown-menu-item" data-lang="en">English</div>
+      <div class="dropdown-menu-item" data-lang="es">Spanish</div>
+      <div class="dropdown-menu-item" data-lang="fr">French</div>
+      <div class="dropdown-menu-item" data-lang="de">German</div>
+      <div class="dropdown-menu-item" data-lang="zh-CN">Chinese</div>
+    </div>
   </div>
-  <!-- Interpretation Toggle Switch -->
-  <div class="topbar-interpretation">
-    <span class="toggle-label">Interpretation</span>
-    <div class="toggle-switch active" tabindex="0" role="button" aria-pressed="true"></div>
-  </div>
-  <!-- Jump to Article Dropdown -->
-  <div class="jump-dropdown" tabindex="0">
-    <button class="jump-dropdown-btn" aria-haspopup="true" aria-expanded="false">
-      <span class="material-symbols-outlined" aria-hidden="true">article</span>
-      Jump to Article
-    </button>
-    <ul class="jump-dropdown-list" role="menu">
-      <li><a href="#preamble" role="menuitem">We the People</a></li>
-      <li><a href="#article-i" role="menuitem">Article I</a></li>
-      <li><a href="#article-ii" role="menuitem">Article II</a></li>
-      <li><a href="#article-iii" role="menuitem">Article III</a></li>
-      <li><a href="#amendment-xiii" role="menuitem">Amendment XIII</a></li>
-    </ul>
-  </div>
+
+  <!-- Go to Article Button -->
+  <button class="go-btn" id="goToArticleBtn" type="button">
+    <span class="icon-article" aria-hidden="true">
+      <!-- Paste your Article.svg code here -->
+    </span>
+    Go to Article
+  </button>
 </nav>
   <div class="main-content">
     <section class="card" id="preamble">
