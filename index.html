@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=985, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Constitution</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"/>
@@ -164,10 +164,10 @@
     padding: var(--toolbar-padding);
     display: flex;
     align-items: center;
-    justify-content: center; /* Centered horizontally */
+    justify-content: center;
     gap: var(--toolbar-gap);
     border-radius: 0;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Allows items to wrap to the next line */
   }
 
   .toolbar-item,
@@ -187,12 +187,28 @@
     outline: none;
   }
 
+  /* This container makes the Google Translate element a proper flex item */
+  #google_translate_container {
+    background: var(--card-bg);
+    border: 1px solid var(--primary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 2px 8px; /* Fine-tuned padding for google widget */
+    display: flex;
+    align-items: center;
+    transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  #google_translate_container:hover {
+     background: var(--input-hover-bg);
+  }
+
   .toolbar-item:focus-within,
   .toolbar-item:hover,
   .interpretation-toggle:hover,
   .interpretation-toggle:focus-within,
   .jump-dropdown-btn:hover,
-  .jump-dropdown-btn:focus {
+  .jump-dropdown-btn:focus,
+  #google_translate_container:hover {
     background: var(--input-hover-bg);
     box-shadow: 0 4px 12px rgba(0, 64, 128, 0.15);
     border-color: var(--primary-dark);
@@ -472,23 +488,17 @@
   }
   /* ===== Responsive ===== */
   @media (max-width: 1000px) {
-    .topbar-nav { flex-direction: column; gap: 8px; align-items: stretch; }
+    /* On smaller screens, reduce padding and gap to fit more items per line */
+    .topbar-nav {
+        gap: 8px;
+        padding: 8px;
+    }
     .main-content { padding-left: 1rem; padding-right: 1rem; }
     .amendment-xiii-header { flex-direction: column; align-items: flex-start; gap: 6px; }
     .amendment-xiii-portraits { gap: 4px; margin-left: 0; }
     .amendment-xiii-person { width: 80px; height: 100px; }
   }
-  @media (max-width: 800px) {
-    .main-content { padding: 1.4rem 0.5rem; }
-    .topbar-nav {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .toolbar-item, .interpretation-toggle, .jump-dropdown {
-        width: 100%;
-        box-sizing: border-box;
-    }
-  }
+
   @media (max-width: 600px) {
     #intro-heading {
       font-size: 24px;
@@ -526,7 +536,9 @@
         <div class="toggle-switch active" id="interpretation-switch" role="switch" aria-checked="true" tabindex="0"></div>
     </div>
 
-    <div id="google_translate_element"></div>
+    <div id="google_translate_container">
+      <div id="google_translate_element"></div>
+    </div>
 
     <div class="jump-dropdown" id="goToArticleDropdown">
         <button class="jump-dropdown-btn" id="goToArticleBtn" type="button" aria-haspopup="true" aria-expanded="false">
