@@ -237,6 +237,18 @@
     display: inline-block;
   }
 
+  /* Specific styles for SVG icons in the toolbar */
+  .icon-search,
+  .icon-translate,
+  .icon-article,
+  .icon-dropdown, /* Added .icon-dropdown */
+  .icon-interpretation { /* Added .icon-interpretation */
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    display: inline-block;
+  }
+
   /* ===== Interpretation Toggle Switch ===== */
   .interpretation-toggle {
       cursor: default; /* The button itself isn't clickable, the switch is */
@@ -475,17 +487,6 @@
     color: #888;
     font-size: 1rem;
   }
-    .icon-search,
-  .icon-translate,
-  .icon-article {
-    width: 22px;
-    height: 22px;
-    vertical-align: middle;
-    display: inline-block;
-  }
-  .icon-dropdown svg {
-    vertical-align: middle;
-  }
   /* ===== Responsive ===== */
   @media (max-width: 1000px) {
     /* On smaller screens, reduce padding and gap to fit more items per line */
@@ -548,12 +549,15 @@
     </form>
 
     <div class="interpretation-toggle" id="interpretation-toggle-container">
-        <img src="Translate.svg" alt="" class="icon-translate" aria-hidden="true" width="22" height="22" />
+        <!-- New Brain.svg icon for Interpretation -->
+        <img src="Brain.svg" alt="Interpretation icon" class="icon-interpretation" aria-hidden="true" width="22" height="22" />
         <span class="toggle-label">Interpretation</span>
         <div class="toggle-switch active" id="interpretation-switch" role="switch" aria-checked="true" tabindex="0"></div>
     </div>
 
-    <div id="google_translate_container">
+    <div id="google_translate_container" class="toolbar-item"> <!-- Added toolbar-item class for consistent styling -->
+      <!-- Translate.svg icon for Translation -->
+      <img src="Translate.svg" alt="Translate" class="icon-translate" aria-hidden="true" width="22" height="22" />
       <div id="google_translate_element"></div>
     </div>
 
@@ -561,7 +565,8 @@
         <button class="jump-dropdown-btn" id="goToArticleBtn" type="button" aria-haspopup="true" aria-expanded="false">
             <img src="Article.svg" alt="" class="icon-article" aria-hidden="true" width="22" height="22" />
             <span>Go to Article</span>
-             <span class="material-symbols-outlined">expand_more</span>
+             <!-- Replaced Material Symbols Outlined with SVG image -->
+             <img src="dropdown.svg" alt="Dropdown arrow" class="icon-dropdown" aria-hidden="true" width="22" height="22" />
         </button>
         <ul class="jump-dropdown-list" role="menu" aria-labelledby="goToArticleBtn">
             <li role="none"><a href="#article-i" role="menuitem">Article I</a></li>
@@ -914,6 +919,7 @@
       // --- INTERPRETATION TOGGLE ---
       const toggleSwitch = document.getElementById('interpretation-switch');
       const interpretations = document.querySelectorAll('.interpretation');
+      let interpretationActive = true; // Initial state
       const updateInterpretations = () => {
         const show = toggleSwitch.classList.contains('active');
         interpretations.forEach(el => {
@@ -925,14 +931,16 @@
         toggleSwitch.classList.toggle('active');
         updateInterpretations();
       };
-      toggleSwitch.addEventListener('click', toggleInterpretation);
-      toggleSwitch.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggleInterpretation();
-        }
-      });
-      updateInterpretations(); // Initial state
+      if (toggleSwitch) {
+        toggleSwitch.addEventListener('click', toggleInterpretation);
+        toggleSwitch.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggleInterpretation();
+          }
+        });
+        updateInterpretations(); // Set initial state on load
+      }
 
       // --- GO TO ARTICLE DROPDOWN ---
       const dropdown = document.getElementById('goToArticleDropdown');
@@ -971,13 +979,28 @@
 
 
       // --- TOOLTIP LOGIC ---
-      const audio = document.getElementById('tooltip-audio');
+      const tooltipAudio = document.getElementById('tooltip-audio');
+      let canPlayTooltipSound = true; // Flag to prevent rapid playback
+      const tooltipSoundCooldown = 200; // Milliseconds cooldown
+
       document.querySelectorAll('.tidbit-tooltip-wrapper').forEach(function(wrapper) {
         let trigger = wrapper.querySelector('.tidbit-tooltip-trigger');
         let tooltip = wrapper.querySelector('.tidbit-tooltip-box');
         let hoverOnTrigger = false;
         let hoverOnTooltip = false;
         let hideTimeout;
+
+        function playTooltipSound() {
+          if (tooltipAudio && canPlayTooltipSound) {
+            tooltipAudio.currentTime = 0; // Rewind to start
+            tooltipAudio.play().catch(e => console.error("Error playing sound:", e));
+            canPlayTooltipSound = false; // Prevent immediate replay
+            setTimeout(() => {
+              canPlayTooltipSound = true; // Reset after cooldown
+            }, tooltipSoundCooldown);
+          }
+        }
+
         function moveTooltip() {
           if(!tooltip || !trigger) return;
           const rect = trigger.getBoundingClientRect();
@@ -992,15 +1015,14 @@
           tooltip.style.left = left + "px";
           tooltip.style.top = top + "px";
         }
+
         function showTooltip() {
           clearTimeout(hideTimeout);
           wrapper.classList.add('tooltip-visible');
           moveTooltip();
-          if(audio) {
-            audio.currentTime = 0;
-            audio.play().catch(()=>{});
-          }
+          playTooltipSound(); // Play sound when showing tooltip
         }
+
         function hideTooltip() {
           hideTimeout = setTimeout(function() {
             if (!hoverOnTrigger && !hoverOnTooltip) {
@@ -1008,6 +1030,7 @@
             }
           }, 100);
         }
+
         trigger.addEventListener('mouseenter', function() { hoverOnTrigger = true; showTooltip(); });
         trigger.addEventListener('mouseleave', function() { hoverOnTrigger = false; hideTooltip(); });
         trigger.addEventListener('focus', function() { hoverOnTrigger = true; showTooltip(); });
